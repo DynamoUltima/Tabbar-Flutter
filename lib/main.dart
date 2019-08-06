@@ -12,77 +12,97 @@ class MyApp extends StatelessWidget {
         
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home:DefaultTabController(
+        length: 2,
+       child: Scaffold(
+         appBar: AppBar(
+           bottom: TabBar(
+             tabs: <Widget>[
+              Icon(Icons.home,color: Colors.black,),
+              Icon(Icons.accessible_forward,color: Colors.black,)
+             ],
+
+           ),
+
+         ),
+         body: TabBarView(children: <Widget>[
+           Icon(Icons.home,color: Colors.black,),
+            Icon(Icons.accessible_forward,color: Colors.black,)
+
+         ],),
+       )
+      // MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+// class MyHomePage extends StatefulWidget {
+//   MyHomePage({Key key, this.title}) : super(key: key);
 
-  final String title;
+//   final String title;
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
+//   @override
+//   _MyHomePageState createState() => _MyHomePageState();
+// }
 
-class _MyHomePageState extends State<MyHomePage> {
+// class _MyHomePageState extends State<MyHomePage> {
   
 
  
 
-  @override
-  Widget build(BuildContext context) {
+//   @override
+// //   Widget build(BuildContext context) {
     
-    return Scaffold(
+// //     return Scaffold(
+      
       
     
-      body: Container(
+// //       body: Container(
         
-        child: Padding(
-          padding: const EdgeInsets.only(right: 50,left: 50),
-          child: Column(
+// //         child: Padding(
+// //           padding: const EdgeInsets.only(right: 50,left: 50),
+// //           child: Column(
             
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: DefaultTabController(
-                  length: 2,
-                  child: Container(
-                   // color: Colors.blueAccent,
+// //             mainAxisAlignment: MainAxisAlignment.center,
+// //             children: <Widget>[
+// //               Center(
+// //                 child: DefaultTabController(
+// //                   length: 2,
+// //                   child: Container(
+// //                    // color: Colors.blueAccent,
                     
-                    child: TabBar(
+// //                     child: TabBar(
                       
-                      // isScrollable: true,
-                      indicatorPadding: EdgeInsets.only(),
-                      unselectedLabelColor: Colors.black,
-                      indicatorColor: Colors.amber,
-                      labelColor: Colors.blue,
-                      tabs: <Widget>[
-                      Tab(icon: Icon(Icons.home),),
-                      Tab(icon: Icon(Icons.accessible_forward),),
-                    ],),
-                  ),
+// //                       // isScrollable: true,
+// //                       indicatorPadding: EdgeInsets.only(),
+// //                       unselectedLabelColor: Colors.black,
+// //                       indicatorColor: Colors.amber,
+// //                       labelColor: Colors.blue,
+// //                       tabs: <Widget>[
+// //                       Tab(icon: Icon(Icons.home),),
+// //                       Tab(icon: Icon(Icons.accessible_forward),),
+// //                     ],),
+// //                   ),
                  
-                 ),
+// //                  ),
     
-              ),
-              Container(
-                color: Colors.blue,
+// //               ),
+// //               Container(
+// //                 color: Colors.blue,
                 
-              ),
+// //               ),
 
-              TabBarView(
-                children: <Widget>[
-                Icon(Icons.home,color: Colors.black,),
-                Icon(Icons.accessible_forward,color: Colors.black,)
+// //               TabBarView(
+// //                 children: <Widget>[
+// //                 Icon(Icons.home,color: Colors.black,),
+// //                 Icon(Icons.accessible_forward,color: Colors.black,)
 
-              ],)
-            ],
-          ),
-        ),
-      ),
+// //               ],)
+// //             ],
+// //           ),
+// //         ),
+// //       ),
       
-    );
-  }
-}
+// //     );
+// //   }
+// // }
