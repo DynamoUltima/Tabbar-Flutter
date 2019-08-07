@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,29 +33,38 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return ListView(children: [
       Container(
-        
-          height: 150.0,
+        height: 150.0,
       ),
       DefaultTabController(
           length: 2,
           initialIndex: 0,
           child: Padding(
-          
             padding: const EdgeInsets.all(58.0),
             child: Column(
-            
               children: [
-                TabBar(
-                  isScrollable: true,
-                  labelColor: Colors.black,
-                  tabs: [
-                  Tab(
-                    text: 'Home',
-                  ),
-                  Tab(text: 'News')
-                ]),
                 Container(
-                  color: Colors.blue,
+                  color: Colors.pink,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TabBar(
+                    //  indicatorSize: TabBarIndicatorSize.label,
+                        indicator: BubbleTabIndicator(
+                           indicatorHeight: 30,
+                          indicatorColor: Colors.blueAccent
+                        ),
+                        // isScrollable: true,
+                        labelColor: Colors.black,
+                        tabs: [
+                          Tab(
+                            text: 'Home',
+                          ),
+                          Tab(text: 'News')
+                        ]),
+                  ),
+                ),
+                SizedBox(height: 5,),
+                Container(
+                    color: Colors.blue,
                     height: 300.0,
                     child: TabBarView(
                       children: [
