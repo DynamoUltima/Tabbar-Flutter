@@ -31,56 +31,76 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
-      Container(
-        height: 150.0,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[ Colors.purple[700],Colors.pink[300]],
+          begin: Alignment.centerLeft,
+          end: Alignment(2.0, 4.0)
+          )
       ),
-      DefaultTabController(
-          length: 2,
-          initialIndex: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(58.0),
-            child: Column(
-              children: [
-                Container(
-                  height: 50,
-                  decoration:BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(55)),
-                    color: Colors.pinkAccent
-                  ),
-                 // color: Colors.pink,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TabBar(
-                    //  indicatorSize: TabBarIndicatorSize.label,
-                        indicator: BubbleTabIndicator(
-                          padding: EdgeInsets.all(-0.5),
-                           indicatorHeight: 40,
-                          indicatorColor: Colors.blueAccent
-                        ),
-                        // isScrollable: true,
-                        labelColor: Colors.black,
-                        tabs: [
-                          Tab(
-                            text: 'Home',
+      //color: Colors.purple[600],
+      child: ListView(children: [
+        Container(
+          // color: Colors.indigoAccent,
+          height: 150.0,
+        ),
+        DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(58.0),
+              child: Column(
+                children: [
+                  Container(
+                    height: 50,
+                    decoration:BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(55)),
+                      color: Colors.black.withOpacity(0.5)
+                    ),
+                   // color: Colors.pink,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TabBar(
+                      //  indicatorSize: TabBarIndicatorSize.label,
+                          indicator: BubbleTabIndicator(
+                            padding: EdgeInsets.all(-0.5),
+                             indicatorHeight: 40,
+                            indicatorColor: Colors.white
+                            
                           ),
-                          Tab(text: 'News')
-                        ]),
+                          unselectedLabelColor: Colors.white,
+                          // isScrollable: true,
+                          labelColor: Colors.black,
+                        
+                          tabs: [
+                            Tab(
+                              text: 'Home',
+                            ),
+                            Tab(text: 'News')
+                          ]),
+                    ),
                   ),
-                ),
-                SizedBox(height: 15,),
-                Container(
-                    color: Colors.blue,
-                    height: 300.0,
-                    child: TabBarView(
-                      children: [
-                        Center(child: Text('Home here')),
-                        Center(child: Text('News here')),
-                      ],
-                    ))
-              ],
-            ),
-          ))
-    ]);
+                  SizedBox(height: 15,),
+                  Container(
+                     // color: Colors.blue,
+                      height: 300.0,
+                      child: TabBarView(
+                        children: [
+                          Center(child: Card(
+                            shape:RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                            elevation: 15,
+                            child: Container(),
+                            
+
+                          )),
+                          Center(child: Text('News here')),
+                        ],
+                      ))
+                ],
+              ),
+            ))
+      ]),
+    );
   }
 }
