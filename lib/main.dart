@@ -9,10 +9,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        body: MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -27,62 +28,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
-
- 
-
   @override
   Widget build(BuildContext context) {
-    
-    return Scaffold(
-      
-    
-      body: Container(
+    return ListView(children: [
+      Container(
         
-        child: Padding(
-          padding: const EdgeInsets.only(right: 50,left: 50),
-          child: Column(
-            
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: DefaultTabController(
-                  length: 2,
-                  child: Container(
-                   // color: Colors.blueAccent,
-                    
-                    child: TabBar(
-                      
-                      // isScrollable: true,
-                      indicatorPadding: EdgeInsets.only(),
-                      unselectedLabelColor: Colors.black,
-                      indicatorColor: Colors.amber,
-                      labelColor: Colors.blue,
-                      tabs: <Widget>[
-                      Tab(icon: Icon(Icons.home),),
-                      Tab(icon: Icon(Icons.accessible_forward),),
-                    ],),
-                  ),
-                 
-                 ),
-    
-              ),
-              Container(
-                color: Colors.blue,
-                
-              ),
-
-              TabBarView(
-                children: <Widget>[
-                Icon(Icons.home,color: Colors.black,),
-                Icon(Icons.accessible_forward,color: Colors.black,)
-
-              ],)
-            ],
-          ),
-        ),
+          height: 150.0,
       ),
-      
-    );
+      DefaultTabController(
+          length: 2,
+          initialIndex: 0,
+          child: Padding(
+          
+            padding: const EdgeInsets.all(58.0),
+            child: Column(
+            
+              children: [
+                TabBar(
+                  isScrollable: true,
+                  labelColor: Colors.black,
+                  tabs: [
+                  Tab(
+                    text: 'Home',
+                  ),
+                  Tab(text: 'News')
+                ]),
+                Container(
+                  color: Colors.blue,
+                    height: 300.0,
+                    child: TabBarView(
+                      children: [
+                        Center(child: Text('Home here')),
+                        Center(child: Text('News here')),
+                      ],
+                    ))
+              ],
+            ),
+          ))
+    ]);
   }
 }
