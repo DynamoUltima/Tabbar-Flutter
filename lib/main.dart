@@ -43,13 +43,19 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: [
                 Container(
-                  color: Colors.pink,
+                  height: 50,
+                  decoration:BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(55)),
+                    color: Colors.pinkAccent
+                  ),
+                 // color: Colors.pink,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TabBar(
                     //  indicatorSize: TabBarIndicatorSize.label,
                         indicator: BubbleTabIndicator(
-                           indicatorHeight: 30,
+                          padding: EdgeInsets.all(-0.5),
+                           indicatorHeight: 40,
                           indicatorColor: Colors.blueAccent
                         ),
                         // isScrollable: true,
@@ -62,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ]),
                   ),
                 ),
-                SizedBox(height: 5,),
+                SizedBox(height: 15,),
                 Container(
                     color: Colors.blue,
                     height: 300.0,
