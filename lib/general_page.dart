@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 //import 'package:cupertino_icons/placeholder.txt';
 import 'package:tabbar/adaptive_widgets.dart';
 import 'package:tabbar/chipper.dart';
+import 'package:tabbar/views/order_page.dart';
+//import 'package:percent_indicator_example/sample_circular_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
     List<Widget> pages = [
       giveCenter('Price', context),
       giveCenter('Estimate', context),
-     // giveCenter('Logo 3', context)
+      // giveCenter('Logo 3', context)
     ];
 
     return CupertinoPageScaffold(
@@ -132,12 +134,68 @@ class _HomePageState extends State<HomePage> {
             case 1:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                      middle: (index == 1) ? Text('Activities') : null),
-                  child: Text('data')
+                    navigationBar: CupertinoNavigationBar(
+                        middle: (index == 1) ? Text('Activities') : null),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          // SizedBox(
+                          //   height: 150,
+                          // ),
 
-                  // child: Text('data'),
-                ),
+                          Center(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 200,
+                                  width: 200,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 9,
+                                    value: 0.5,
+                                    semanticsValue: 'Text',
+                                    semanticsLabel: '7',
+                                  ),
+                                ),
+                                ConstrainedBox(
+                                  child: Text(
+                                    'Your Articles are being processed',
+                                    textAlign: TextAlign.center,
+                                    style: _myCuperStyle(context),
+                                  ),
+                                  constraints: BoxConstraints(maxWidth: 150),
+                                )
+                              ],
+                            ),
+                          ),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+
+                          CupertinoButton(
+                            child: Text('Place Order'),
+                            onPressed: () {
+                              Navigator.of(context).push(CupertinoPageRoute(
+                                  builder: (BuildContext context) =>
+                                      OrderPage()));
+                            },
+                            color: CupertinoColors.activeBlue,
+                          )
+
+                          // CircularPercentIndicator(
+                          //   radius: 60.0,
+                          //   lineWidth: 5.0,
+                          //   percent: 1.0,
+                          //   center: new Text("100%"),
+                          //   progressColor: Colors.green,
+                          // ),
+                        ],
+                      ),
+                    )
+
+                    // child: Text('data'),
+                    ),
               );
               break;
             case 2:
@@ -145,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
                       middle: (index == 2) ? Text('Pricing') : null),
-                  child:Column(
+                  child: Column(
                     children: <Widget>[
                       SizedBox(
                         height: 100,
@@ -351,6 +409,7 @@ class VeggieCard extends StatelessWidget {
       ),
     );
   }
+  //TODO :MAKE FLAT CARD COLOR TRANSPARENT
 
   @override
   Widget build(BuildContext context) {
@@ -363,7 +422,7 @@ class VeggieCard extends StatelessWidget {
       onPressed: null,
       pressedOpacity: 0.7,
       child: FlatCard(
-        height: 240,
+        height: 340,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -396,7 +455,7 @@ class FlatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         border: Border.all(
             width: 1 / MediaQuery.of(context).devicePixelRatio,
             color: CupertinoColors.lightBackgroundGray),
@@ -405,7 +464,7 @@ class FlatCard extends StatelessWidget {
       height: height,
       width: width,
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: child,
       ),
     );
