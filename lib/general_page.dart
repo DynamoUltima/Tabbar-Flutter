@@ -5,11 +5,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 //import 'adaptive_widgets.dart';
 //import 'package:cupertino_icons/placeholder.txt';
 import 'package:tabbar/adaptive_widgets.dart';
-import 'package:tabbar/chipper.dart';
-import 'package:tabbar/customWidgets/cirlcle_animated_progress_bar.dart';
-import 'package:tabbar/views/order_page.dart';
-import 'package:tabbar/views/pricing_pageview.dart';
+
+import 'package:tabbar/pages/cupertino_home_page.dart';
+import 'package:tabbar/pages/cupertino_pricing.dart';
+import 'package:tabbar/pages/cupertino_profile.dart';
+
 import 'package:tabbar/views/settings.dart';
+
+import 'pages/cupertino_activities.dart';
 //import 'package:percent_indicator_example/sample_circular_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,16 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static Widget giveCenter(String myText, BuildContext context) {
-    return Text(
-      'This is: $myText',
-      style: CupertinoTheme.of(context)
-          .textTheme
-          .navLargeTitleTextStyle
-          .apply(color: CupertinoColors.activeBlue),
-    );
-  }
-
   _myCuperStyle(BuildContext context) {
     var cuperStyle = CupertinoTheme.of(context)
         .textTheme
@@ -42,67 +35,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Color foreground = Colors.red;
-
-    if (progressPercent >= 0.8) {
-      foreground = Colors.green;
-    } else if (progressPercent >= 0.4) {
-      foreground = Colors.orange;
-    }
-    Color background = foreground.withOpacity(0.2);
-
     // CupertinoTheme cupertinoTheme;
-    final Map<int, Widget> logoWidgets = <int, Widget>{
-      0: Text(
-        'Price',
-        style: CupertinoTheme.of(context)
-            .textTheme
-            .navTitleTextStyle
-            .apply(color: CupertinoColors.activeBlue),
-      ),
-      1: Text(
-        "Estimate",
-        style: CupertinoTheme.of(context)
-            .textTheme
-            .textStyle
-            .apply(color: CupertinoColors.activeBlue),
-      ),
-      // 2: Text("Logo 3",
-      //     style: CupertinoTheme.of(context)
-      //         .textTheme
-      //         .navActionTextStyle
-      //         .apply(color: CupertinoColors.activeBlue))
-    };
-
-    List<Widget> pages = [
-      // giveCenter('Price', context),
-      Container(child: PricingPager()),
-      // SingleChildScrollView(
-      //   scrollDirection: Axis.vertical,
-      //         child: Container(child: StaggeredGridView.count(
-      //           crossAxisCount: 4,
-      //           staggeredTiles: _staggeredTiles,
-      //           children: _tiles,
-      //           mainAxisSpacing: 4.0,
-      //           crossAxisSpacing: 4.0,
-      //           padding: const EdgeInsets.all(4.0),
-      //         ),),
-      // ),
-      giveCenter('Logo 3', context)
-    ];
 
     return CupertinoPageScaffold(
-      // navigationBar: CupertinoNavigationBar(
-      //   previousPageTitle: 'Login',
-      //   transitionBetweenRoutes: true,
-      //   trailing: Text(
-      //     'Home Page',
-      //     style: CupertinoTheme.of(context)
-      //         .textTheme
-      //         .navTitleTextStyle
-      //         .apply(color: CupertinoColors.activeBlue),
-      //   ),
-      // ),
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
           items: [
@@ -126,124 +61,21 @@ class _HomePageState extends State<HomePage> {
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
-                      // previousPageTitle: (index == 0) ? 'Login': null,
-                      middle: (index == 0) ? Text('Home') : Text('School')),
-                  child: ListView(
-                    padding: EdgeInsets.all(16.0),
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      VeggieCard(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      VeggieCard(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      VeggieCard(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      VeggieCard(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                    middle: (index == 0) ? Text('Home') : Text('School'),
                   ),
-                  // child: Text('data'),
+                  child: CupertinoHome(),
                 ),
               );
               break;
             case 1:
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
-                    navigationBar: CupertinoNavigationBar(
-                        middle: (index == 1) ? Text('Activities') : null),
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          // SizedBox(
-                          //   height: 150,
-                          // ),
-
-                          // Center(
-                          //   child: Stack(
-                          //     alignment: Alignment.center,
-                          //     children: <Widget>[
-                          //       SizedBox(
-                          //         height: 200,
-                          //         width: 200,
-                          //         child: CircularProgressIndicator(
-                          //           strokeWidth: 9,
-                          //           value: 0.5,
-                          //           semanticsValue: 'Text',
-                          //           semanticsLabel: '7',
-                          //         ),
-                          //       ),
-                          //       ConstrainedBox(
-                          //         child: Text(
-                          //           'Your Articles are being processed',
-                          //           textAlign: TextAlign.center,
-                          //           style: _myCuperStyle(context),
-                          //         ),
-                          //         constraints: BoxConstraints(maxWidth: 150),
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
-                          Center(
-                            child: SizedBox(
-                              height: 200,
-                              width: 200,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: <Widget>[
-                                  CircleProgressBar(
-                                    backgroundColor: background,
-                                    foregroundColor: foreground,
-                                    value: 0.4,
-                                  ),
-                                  ConstrainedBox(
-                                    child: Text(
-                                      'Your Articles are being processed',
-                                      textAlign: TextAlign.center,
-                                      style: _myCuperStyle(context),
-                                    ),
-                                    constraints: BoxConstraints(maxWidth: 100),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          CupertinoButton(
-                            child: Text('Place Order'),
-                            onPressed: () {
-                              Navigator.of(context).push(CupertinoPageRoute(
-                                  builder: (BuildContext context) =>
-                                      OrderPage()));
-                            },
-                            color: CupertinoColors.activeBlue,
-                          )
-
-                          // CircularPercentIndicator(
-                          //   radius: 60.0,
-                          //   lineWidth: 5.0,
-                          //   percent: 1.0,
-                          //   center: new Text("100%"),
-                          //   progressColor: Colors.green,
-                          // ),
-                        ],
-                      ),
-                    )
-
-                    // child: Text('data'),
-                    ),
+                  navigationBar: CupertinoNavigationBar(
+                      middle: (index == 1) ? Text('Activities') : null,
+                      trailing:Text('Order History',style:TextStyle(color: CupertinoColors.activeBlue) ,) ,),
+                    
+                  child: CupertinoActivities(),
+                ),
               );
               break;
             case 2:
@@ -251,36 +83,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
                       middle: (index == 2) ? Text('Pricing') : null),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 100,
-                      ),
-                      SizedBox(
-                        width: 500,
-                        child: CupertinoSegmentedControl(
-                          selectedColor: Colors.white,
-                          pressedColor: Colors.blueAccent,
-                          children: logoWidgets,
-                          onValueChanged: (value) {
-                            setState(() {
-                              sharedValue = value;
-                            });
-                          },
-                        ),
-                      ),
-                      // SizedBox(
-                      //   height: 50,
-                      // ),
-                      Column(
-                        children: <Widget>[
-                          Center(
-                            child: pages[sharedValue],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                  child: CupertinoPricing(),
                   // child: Text('data'),
                 ),
               );
@@ -299,117 +102,7 @@ class _HomePageState extends State<HomePage> {
                         child: Icon(CupertinoIcons.settings,
                             color: CupertinoColors.activeBlue)),
                   ),
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 100,
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            radius: 70,
-                            backgroundImage: NetworkImage(
-                                'https://blogs.psychcentral.com/life-goals/files/2018/09/mens-dress-guide-768x513.jpg'),
-                          ),
-                        ),
-                        Text(
-                          'Johnson James',
-                          style: CupertinoTheme.of(context)
-                              .textTheme
-                              .navActionTextStyle
-                              .apply(
-                                  color: CupertinoColors.activeBlue,
-                                  fontSizeDelta: 22),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        CupertinoButton(
-                          child: Text('Home'),
-                          onPressed: () {},
-                          color: CupertinoColors.activeBlue,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(CupertinoIcons.location,
-                                color: CupertinoColors.activeBlue),
-                            Text(
-                              'Accra,Haatso',
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .navActionTextStyle
-                                  .apply(
-                                    color: CupertinoColors.activeBlue,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(CupertinoIcons.mail,
-                                color: CupertinoColors.activeBlue),
-                            Text(
-                              'dynamo.joey@gmailgmail.com',
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .navActionTextStyle
-                                  .apply(
-                                    color: CupertinoColors.activeBlue,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(CupertinoIcons.phone,
-                                color: CupertinoColors.activeBlue),
-                            Text(
-                              '+23326274457',
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .navActionTextStyle
-                                  .apply(
-                                    color: CupertinoColors.activeBlue,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(CupertinoIcons.flag,
-                                color: CupertinoColors.activeBlue),
-                            Text(
-                              'near Mabey',
-                              style: CupertinoTheme.of(context)
-                                  .textTheme
-                                  .navActionTextStyle
-                                  .apply(
-                                    color: CupertinoColors.activeBlue,
-                                  ),
-                            ),
-                          ],
-                        ),
-
-                        //Chip(label: Text('Home'),)
-                      ],
-                    ),
-                  ),
+                  child: CupertinoProfile(),
                 ),
               );
               break;
@@ -422,12 +115,6 @@ class _HomePageState extends State<HomePage> {
 }
 
 class VeggieCard extends StatelessWidget {
-  // const VeggieCard(this.veggie, this.onPressed);
-
-  //final VoidCallback onPressed;
-
-  //final Veggie veggie;
-
   Widget _buildDetails(AdaptiveTextThemeData textTheme, BuildContext context) {
     return AdaptiveBackground(
       color: Color.lerp(CupertinoColors.white, CupertinoColors.white, 0.15)
@@ -527,39 +214,3 @@ class FlatCard extends StatelessWidget {
     );
   }
 }
-
-//  appBar: CupertinoNavigationBar(
-//        previousPageTitle: 'Login',
-//        transitionBetweenRoutes: true,
-//        trailing: Text('Home Page',style: CupertinoTheme.of(context).textTheme.navTitleTextStyle.apply(color: CupertinoColors.activeBlue),),
-//      ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(10.0),
-//         child: Column(
-//           children: <Widget>[
-//             SizedBox(height: 30,),
-//             Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: SizedBox(
-//                 width: 500,
-//                 child: Container(
-
-//                   child: CupertinoSegmentedControl(
-//                     selectedColor: Colors.blue,
-//                     pressedColor: Colors.blueAccent,
-//                     children: logoWidgets,
-//                     onValueChanged: (value) {
-//                       setState(() {
-//                         sharedValue = value;
-//                       });
-//                     },
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 50,),
-//             Column(children: <Widget>[Center(child: pages[sharedValue])])
-//           ],
-//         ),
-//       ),
-//     );

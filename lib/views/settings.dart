@@ -51,7 +51,17 @@ class _AllSettingsState extends State<AllSettings> {
         Icon(CupertinoIcons.right_chevron)
       ],
     );
-    _lights(){}
+
+    bool _value = false;
+
+    //  onChangeSwitch(bool value){
+    //    setState(() {
+    //      _value= value;
+
+    //    });
+
+    //  }
+
     var notification = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,10 +88,10 @@ class _AllSettingsState extends State<AllSettings> {
         CupertinoSwitch(
           onChanged: (bool value) {
             setState(() {
-             // _lights = value;
+              _value = value;
             });
           },
-          value: true,
+          value: _value,
         )
       ],
     );
@@ -130,6 +140,55 @@ class _AllSettingsState extends State<AllSettings> {
       return settingTile;
     }
 
+    NotificationListTiles(
+      Color circleBackgroundColor,
+      String tileText,
+      IconData tileIcon,
+    ) {
+      var notificationTile = GestureDetector(
+        onTap: () {
+          print('Tapped Notification');
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                CircleAvatar(
+                  child: Icon(
+                    tileIcon,
+                    color: CupertinoColors.white,
+                  ),
+                  backgroundColor: circleBackgroundColor,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  tileText,
+                  style: myTextType.myDefaultCuperStyle(
+                      context, 20, CupertinoColors.activeBlue),
+                ),
+              ],
+            ),
+            CupertinoSwitch(
+              onChanged: (bool value) {
+                setState(
+                  () {
+                    _value = value;
+                  },
+                );
+              },
+              value: _value,
+            )
+          ],
+        ),
+      );
+
+      return notificationTile;
+    }
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text('Settings'),
@@ -174,7 +233,10 @@ class _AllSettingsState extends State<AllSettings> {
                 style: myTextType.myActionCuperStyle(context),
               )
             ]),
- 
+            SizedBox(
+              height: 20,
+            ),
+            NotificationListTiles(CupertinoColors.activeGreen, 'Notification', CupertinoIcons.bell)
           ],
         ),
       ),
