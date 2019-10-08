@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 //import 'adaptive_widgets.dart';
 //import 'package:cupertino_icons/placeholder.txt';
 import 'package:tabbar/adaptive_widgets.dart';
 import 'package:tabbar/chipper.dart';
+import 'package:tabbar/customWidgets/cirlcle_animated_progress_bar.dart';
 import 'package:tabbar/views/order_page.dart';
+import 'package:tabbar/views/pricing_pageview.dart';
+import 'package:tabbar/views/settings.dart';
 //import 'package:percent_indicator_example/sample_circular_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,9 +38,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   int sharedValue = 0;
+  double progressPercent = 0;
 
   @override
   Widget build(BuildContext context) {
+    Color foreground = Colors.red;
+
+    if (progressPercent >= 0.8) {
+      foreground = Colors.green;
+    } else if (progressPercent >= 0.4) {
+      foreground = Colors.orange;
+    }
+    Color background = foreground.withOpacity(0.2);
+
     // CupertinoTheme cupertinoTheme;
     final Map<int, Widget> logoWidgets = <int, Widget>{
       0: Text(
@@ -61,9 +75,20 @@ class _HomePageState extends State<HomePage> {
     };
 
     List<Widget> pages = [
-      giveCenter('Price', context),
-      giveCenter('Estimate', context),
-      // giveCenter('Logo 3', context)
+      // giveCenter('Price', context),
+      Container(child: PricingPager()),
+      // SingleChildScrollView(
+      //   scrollDirection: Axis.vertical,
+      //         child: Container(child: StaggeredGridView.count(
+      //           crossAxisCount: 4,
+      //           staggeredTiles: _staggeredTiles,
+      //           children: _tiles,
+      //           mainAxisSpacing: 4.0,
+      //           crossAxisSpacing: 4.0,
+      //           padding: const EdgeInsets.all(4.0),
+      //         ),),
+      // ),
+      giveCenter('Logo 3', context)
     ];
 
     return CupertinoPageScaffold(
@@ -84,7 +109,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
                 icon: Icon(CupertinoIcons.home), title: Text('Home')),
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.bell_solid),
+                icon: Icon(CupertinoIcons.folder_open),
                 title: Text('Activities')),
             BottomNavigationBarItem(
                 icon: Icon(CupertinoIcons.shopping_cart),
@@ -138,41 +163,64 @@ class _HomePageState extends State<HomePage> {
                         middle: (index == 1) ? Text('Activities') : null),
                     child: Container(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           // SizedBox(
                           //   height: 150,
                           // ),
 
+                          // Center(
+                          //   child: Stack(
+                          //     alignment: Alignment.center,
+                          //     children: <Widget>[
+                          //       SizedBox(
+                          //         height: 200,
+                          //         width: 200,
+                          //         child: CircularProgressIndicator(
+                          //           strokeWidth: 9,
+                          //           value: 0.5,
+                          //           semanticsValue: 'Text',
+                          //           semanticsLabel: '7',
+                          //         ),
+                          //       ),
+                          //       ConstrainedBox(
+                          //         child: Text(
+                          //           'Your Articles are being processed',
+                          //           textAlign: TextAlign.center,
+                          //           style: _myCuperStyle(context),
+                          //         ),
+                          //         constraints: BoxConstraints(maxWidth: 150),
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
                           Center(
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 200,
-                                  width: 200,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 9,
-                                    value: 0.5,
-                                    semanticsValue: 'Text',
-                                    semanticsLabel: '7',
+                            child: SizedBox(
+                              height: 200,
+                              width: 200,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  CircleProgressBar(
+                                    backgroundColor: background,
+                                    foregroundColor: foreground,
+                                    value: 0.4,
                                   ),
-                                ),
-                                ConstrainedBox(
-                                  child: Text(
-                                    'Your Articles are being processed',
-                                    textAlign: TextAlign.center,
-                                    style: _myCuperStyle(context),
-                                  ),
-                                  constraints: BoxConstraints(maxWidth: 150),
-                                )
-                              ],
+                                  ConstrainedBox(
+                                    child: Text(
+                                      'Your Articles are being processed',
+                                      textAlign: TextAlign.center,
+                                      style: _myCuperStyle(context),
+                                    ),
+                                    constraints: BoxConstraints(maxWidth: 100),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 20,
-                          // ),
-
+                          SizedBox(
+                            height: 20,
+                          ),
                           CupertinoButton(
                             child: Text('Place Order'),
                             onPressed: () {
@@ -221,9 +269,9 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 50,
-                      ),
+                      // SizedBox(
+                      //   height: 50,
+                      // ),
                       Column(
                         children: <Widget>[
                           Center(
@@ -241,7 +289,16 @@ class _HomePageState extends State<HomePage> {
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
-                      middle: (index == 3) ? Text('Profile') : null),
+                    middle: (index == 3) ? Text('Profile') : null,
+                    trailing: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (BuildContext context) =>
+                                  AllSettings()));
+                        },
+                        child: Icon(CupertinoIcons.settings,
+                            color: CupertinoColors.activeBlue)),
+                  ),
                   child: Container(
                     child: Column(
                       children: <Widget>[
@@ -373,7 +430,7 @@ class VeggieCard extends StatelessWidget {
 
   Widget _buildDetails(AdaptiveTextThemeData textTheme, BuildContext context) {
     return AdaptiveBackground(
-      color: Color.lerp(CupertinoColors.white, Color(0x40de8c66), 0.15)
+      color: Color.lerp(CupertinoColors.white, CupertinoColors.white, 0.15)
           .withAlpha(140),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -428,7 +485,7 @@ class VeggieCard extends StatelessWidget {
           children: [
             Image.network(
               url,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
               semanticLabel: 'A card background featuring Forhey',
             ),
             Positioned(
