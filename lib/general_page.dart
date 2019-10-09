@@ -9,6 +9,7 @@ import 'package:tabbar/adaptive_widgets.dart';
 import 'package:tabbar/pages/cupertino_home_page.dart';
 import 'package:tabbar/pages/cupertino_pricing.dart';
 import 'package:tabbar/pages/cupertino_profile.dart';
+import 'package:tabbar/views/history_page.dart';
 
 import 'package:tabbar/views/settings.dart';
 
@@ -71,9 +72,22 @@ class _HomePageState extends State<HomePage> {
               return CupertinoTabView(
                 builder: (context) => CupertinoPageScaffold(
                   navigationBar: CupertinoNavigationBar(
-                      middle: (index == 1) ? Text('Activities') : null,
-                      trailing:Text('Order History',style:TextStyle(color: CupertinoColors.activeBlue) ,) ,),
-                    
+                    middle: (index == 1) ? Text('Activities') : null,
+                    trailing: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) => OrderHistory(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Order History',
+                        style: TextStyle(color: CupertinoColors.activeBlue),
+                      ),
+                    ),
+                  ),
                   child: CupertinoActivities(),
                 ),
               );
