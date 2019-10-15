@@ -136,6 +136,7 @@ class _OrderHistoryState extends State<OrderHistory> {
       child: Container(
         padding: EdgeInsets.all(8),
         child: ListView(
+          physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           children: <Widget>[
             SizedBox(

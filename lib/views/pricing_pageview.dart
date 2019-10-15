@@ -39,26 +39,31 @@ class _PricingPagerState extends State<PricingPager> {
     String imageUrl =
         'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
 
-    return AnimatedContainer(
-        duration: Duration(milliseconds: 500),
-        curve: Curves.bounceOut,
-        margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
-                image: NetworkImage(imageUrl), fit: BoxFit.cover),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black87,
-                  blurRadius: blur,
-                  offset: Offset(offset, offset))
-            ]),
-        child: Center(
-          child: Text(
-            'Pricers',
-            style: _myCuperStyle(context),
-          ),
-        )); //easoutquit
+    return GestureDetector(
+      onTap: (){
+        
+      },
+          child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.bounceOut,
+          margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                  image: NetworkImage(imageUrl), fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black87,
+                    blurRadius: blur,
+                    offset: Offset(offset, offset))
+              ]),
+          child: Center(
+            child: Text(
+              'Pricers',
+              style: _myCuperStyle(context),
+            ),
+          )),
+    ); //easoutquit
   }
 
   _buildPricingPage0() {

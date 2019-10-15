@@ -8,11 +8,13 @@ class CupertinoHome extends StatefulWidget {
 }
 
 class _CupertinoHomeState extends State<CupertinoHome> {
-  List myfirstList = [
+   static String cardMessage= "Forhey is the solution you have been waiting for";
+  List<String> myfirstList = [
     'Forhey is the solution you have been waiting for',
     'Forhey is the solution you have been waiting for',
-    0,
-    0
+    '${cardMessage}',
+    cardMessage,
+    
   ];
   List<Widget> myIntList = [
     VeggieCard(),
@@ -90,27 +92,3 @@ class _CupertinoHomeState extends State<CupertinoHome> {
   }
 }
 
-// ListView(
-//   padding: EdgeInsets.all(16.0),
-//   children: <Widget>[
-//     SizedBox(
-//       height: 20,
-//     ),
-//     VeggieCard(),
-//     SizedBox(
-//       height: 10,
-//     ),
-//     VeggieCard(),
-//     SizedBox(
-//       height: 10,
-//     ),
-//     VeggieCard(),
-//     SizedBox(
-//       height: 10,
-//     ),
-//     VeggieCard(),
-//     SizedBox(
-//       height: 10,
-//     ),
-//   ],
-// ),
