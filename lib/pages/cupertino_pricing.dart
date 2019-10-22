@@ -22,8 +22,7 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
 
   @override
   Widget build(BuildContext context) {
-
-     final Map<int, Widget> logoWidgets = <int, Widget>{
+    final Map<int, Widget> logoWidgets = <int, Widget>{
       0: Text(
         'Price',
         style: CupertinoTheme.of(context)
@@ -38,47 +37,43 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
             .textStyle
             .apply(color: CupertinoColors.activeBlue),
       ),
-
-    
     };
 
     List<Widget> pages = [
       // giveCenter('Price', context),
       Container(child: PricingPager()),
-      
+
       giveCenter('Logo 3', context)
     ];
 
     return Container(
       child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 100,
-                      ),
-                      SizedBox(
-                        width: 500,
-                        child: CupertinoSegmentedControl(
-                          selectedColor: Colors.white,
-                          pressedColor: Colors.blueAccent,
-                          children: logoWidgets,
-                          onValueChanged: (value) {
-                            setState(() {
-                              sharedValue = value;
-                            });
-                          },
-                        ),
-                      ),
-                    
-                      Column(
-                        children: <Widget>[
-                          Center(
-                            child: pages[sharedValue],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-      
+        children: <Widget>[
+          SizedBox(
+            height: 100,
+          ),
+          SizedBox(
+            width: 500,
+            child: CupertinoSegmentedControl(
+              selectedColor: Colors.white,
+              pressedColor: Colors.blueAccent,
+              children: logoWidgets,
+              onValueChanged: (value) {
+                setState(() {
+                  sharedValue = value;
+                });
+              },
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Center(
+                child: pages[sharedValue],
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -29,14 +29,7 @@ class _CupertinoHomeState extends State<CupertinoHome> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     firstRow(int position) {
-      // var firstRower = Row(
-      //   children: <Widget>[
-      //     Text(
-      //       '${myfirstList[position]}',
-      //       style: myTextType.myCuperStyle(context),
-      //     ),
-      //   ],
-      // );
+     
 
       return myIntList[position];
     }

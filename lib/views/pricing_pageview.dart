@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:tabbar/adaptive_widgets.dart';
+import 'package:tabbar/views/pricing_page_details.dart';
 
 class PricingPager extends StatefulWidget {
   @override
@@ -9,11 +10,10 @@ class PricingPager extends StatefulWidget {
 }
 
 class _PricingPagerState extends State<PricingPager> {
-  PageController pagePriceController = PageController(viewportFraction: 1.0);
+  PageController pagePriceController = PageController(viewportFraction: 0.8);
   int currentPage;
   bool activer = false;
 
-  
   _myCuperStyle(BuildContext context) {
     var cuperStyle = CupertinoTheme.of(context)
         .textTheme
@@ -40,10 +40,14 @@ class _PricingPagerState extends State<PricingPager> {
         'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
 
     return GestureDetector(
-      onTap: (){
-        
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (BuildContext context) => PricingPageDetails()));
       },
-          child: AnimatedContainer(
+      child: AnimatedContainer(
+          padding: EdgeInsets.all(16),
           duration: Duration(milliseconds: 500),
           curve: Curves.bounceOut,
           margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
@@ -59,7 +63,7 @@ class _PricingPagerState extends State<PricingPager> {
               ]),
           child: Center(
             child: Text(
-              'Pricers',
+              'Ladies',
               style: _myCuperStyle(context),
             ),
           )),
@@ -71,20 +75,18 @@ class _PricingPagerState extends State<PricingPager> {
     // bool active=false;
     final double blur = activer ? 30 : 0;
     final double offset = activer ? 20 : 0;
-    final double top = activer ? 2.5 : 5;
+    final double top = activer ? 50 : 100;
     String imageUrl =
         'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.bounceOut,
-      margin: EdgeInsets.only(top: top, bottom: 50, right: 0),
+      margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
       decoration: BoxDecoration(
-        color: Colors.blue,
-
         borderRadius: BorderRadius.circular(20),
-        // image: DecorationImage(
-        //     image: NetworkImage(imageUrl), fit: BoxFit.cover),
+        image:
+            DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
         boxShadow: [
           BoxShadow(
               color: Colors.black87,
@@ -92,34 +94,12 @@ class _PricingPagerState extends State<PricingPager> {
               offset: Offset(offset, offset))
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          height: 100,
-          child: GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(
-              100,
-              (index) {
-                return Center(
-                  child: Card(
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: <Widget>[
-                        Image.network(imageUrl),
-                        Text(
-                          'Item $index',
-                          style: Theme.of(context).textTheme.headline,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+      child: Center(
+          child: Text(
+            'Gents',
+            style: _myCuperStyle(context),
           ),
         ),
-      ),
     ); //easoutquit
   }
 
@@ -133,31 +113,33 @@ class _PricingPagerState extends State<PricingPager> {
         'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
 
     return GestureDetector(
-      // onTap: (){
-      //   setState(() {
-      //     active=true;
-      //   });
-      // },
+      onTap: (){
+       Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (BuildContext context) => PricingPageDetails()));
+      },
       child: AnimatedContainer(
-          duration: Duration(milliseconds: 500),
-          curve: Curves.bounceOut,
-          margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                  image: NetworkImage(imageUrl), fit: BoxFit.cover),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black87,
-                    blurRadius: blur,
-                    offset: Offset(offset, offset))
-              ]),
-          child: Center(
-            child: Text(
-              'Pricers',
-              style: _myCuperStyle(context),
-            ),
-          )),
+        duration: Duration(milliseconds: 500),
+        curve: Curves.bounceOut,
+        margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: DecorationImage(
+                image: NetworkImage(imageUrl), fit: BoxFit.cover),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black87,
+                  blurRadius: blur,
+                  offset: Offset(offset, offset))
+            ]),
+        child: Center(
+          child: Text(
+            'Beddings',
+            style: _myCuperStyle(context),
+          ),
+        ),
+      ),
     ); //easoutquit
   }
 
@@ -183,12 +165,11 @@ class _PricingPagerState extends State<PricingPager> {
       _buildPricingPage2()
     ];
     double screenHeight = MediaQuery.of(context).size.height;
-    
 
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
-        height: screenHeight*0.7,
+        height: screenHeight * 0.7,
         // width: 250,
         child: PageView.builder(
           pageSnapping: true,
