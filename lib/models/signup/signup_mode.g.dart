@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_mode.dart';
+part of 'signup_mode.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginModel _$LoginModelFromJson(Map<String, dynamic> json) {
-  return LoginModel(
+SignUpModel _$SignUpModelFromJson(Map<String, dynamic> json) {
+  return SignUpModel(
       tag: json['tag'] as String,
       name: json['name'] as String,
       location: json['location'] as String,
@@ -20,7 +20,7 @@ LoginModel _$LoginModelFromJson(Map<String, dynamic> json) {
       gcm_regid: json['gcm_regid'] as bool);
 }
 
-Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
+Map<String, dynamic> _$SignUpModelToJson(SignUpModel instance) =>
     <String, dynamic>{
       'tag': instance.tag,
       'name': instance.name,

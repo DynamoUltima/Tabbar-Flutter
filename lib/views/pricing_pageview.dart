@@ -172,7 +172,7 @@ class _PricingPagerState extends State<PricingPager> {
         height: screenHeight * 0.7,
         // width: 250,
         child: PageView.builder(
-          pageSnapping: true,
+          // pageSnapping: true,
           controller: pagePriceController,
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),

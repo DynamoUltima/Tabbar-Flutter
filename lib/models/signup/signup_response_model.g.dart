@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_response_model.dart';
+part of 'signup_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
-  return LoginResponse(
+SignUpResponse _$SignUpResponseFromJson(Map<String, dynamic> json) {
+  return SignUpResponse(
       tag: json['tag'] as String,
       error: json['error'] as String,
       success: json['success'] as String,
@@ -17,7 +17,7 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
           : User.fromJson(json['user'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
+Map<String, dynamic> _$SignUpResponseToJson(SignUpResponse instance) =>
     <String, dynamic>{
       'tag': instance.tag,
       'success': instance.success,

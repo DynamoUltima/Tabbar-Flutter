@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tabbar/views/estimate_page.dart';
 import 'package:tabbar/views/pricing_pageview.dart';
 
 class CupertinoPricing extends StatefulWidget {
@@ -40,10 +41,10 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
     };
 
     List<Widget> pages = [
-      // giveCenter('Price', context),
+      
       Container(child: PricingPager()),
 
-      giveCenter('Logo 3', context)
+     Container(child: Estimator(),)
     ];
 
     return Container(
