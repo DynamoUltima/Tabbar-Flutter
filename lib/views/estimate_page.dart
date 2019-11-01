@@ -33,24 +33,65 @@ class _EstimatorTileState extends State<EstimatorTile> {
   Widget build(BuildContext context) {
     items = List<String>.generate(10000, (i) => "Item $i");
 
+    var estimatorPicker = CupertinoPicker(
+      itemExtent: 100,
+      onSelectedItemChanged: (int value) {
+        print(value);
+      },
+      children: <Widget>[
+        Text(
+          '1',
+          style: myTextType.myActionCuperStyle(context),
+        ),
+        Text(
+          '2',
+          style: myTextType.myActionCuperStyle(context),
+        ),
+      ],
+      // itemBuilder: (BuildContext context, int index) {
+      //   return Text("$items");
+      // },
+    );
+
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: <Widget>[
-          Text(
-            'Douvet',
-            style: myTextType.myActionCuperStyle(context),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Douvet',
+                  style: myTextType.myActionCuperStyle(context),
+                ),
+                Text(
+                  '5.00',
+                  style: myTextType.myActionCuperStyle(context),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(
+                      () {
+                        SizedBox(height: 160, child: estimatorPicker);
+                      },
+                    );
+
+                    print('tapped');
+                  },
+                  child: Text(
+                    '2',
+                    style: myTextType.myActionCuperStyle(context),
+                  ),
+                ),
+              ],
+            ),
           ),
-          Text('5.00'),
-          CupertinoPicker.builder(
-            itemExtent: 100,
-            onSelectedItemChanged: (int value) {
-              print(value);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return Text("$items");
-            },
-          )
+          //Text('data')
+          SizedBox(
+            height: 100,
+            width: 250,
+            child: estimatorPicker)
         ],
       ),
     );
