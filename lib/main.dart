@@ -48,8 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-
-   @override
+  @override
   void initState() {
     super.initState();
     const MethodChannel('plugins.flutter.io/shared_preferences')
@@ -143,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     left: 20,
                                                     right: 20),
                                                 child: TextFormField(
+                                                  controller: _emailController,
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: 'Email Address',
@@ -195,22 +195,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     onPressed: () {
-                                       Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        HomePage(),
-                                              ),);
                                       postLogin(_emailController.text,
                                               _passwordController.text)
                                           .then(
                                         (response) {
                                           //Print response
+                                          print(response.statusCode);
 
-                                          print(json.decode(response.body));
-                                          LoginResponse loginResponse =
-                                              new LoginResponse();
+                                          var loginMap =json.decode(response.body);
+
+                                         
+                                          LoginResponse loginResponse =new LoginResponse();
+                                          setState(() {
+                                           loginResponse =LoginResponse.fromJson(loginMap); 
+                                          });
+                                              
                                           print(loginResponse.toJson());
 
                                           List<String> myStrings = [
@@ -223,12 +222,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                           saveListName(myStrings);
 
-                                          // if (response.statusCode == 200) {
-                                           
-                                          //   );
-                                         // }
+                                          if (response.statusCode == 200) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        HomePage(),
+                                              ),
+                                            );
+                                          }
                                         },
-                                      );
+                                      ).catchError((onError){
+                                        print(onError);
+                                      });
                                     },
                                     textColor: Colors.white,
                                     padding: const EdgeInsets.all(0.0),

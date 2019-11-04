@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
+
 
 import 'package:http/http.dart' as http;
 import 'package:tabbar/models/login/login_mode.dart';
@@ -9,25 +9,28 @@ import 'package:tabbar/models/place_order/place_order.dart';
 
 
 
-String baseUrl = 'http://www.forhey.com/forhey_mobile_scripts/';
+String baseUrl = "http://www.forhey.com/forhey_mobile_scripts/";
 
 
 Future<http.Response> postLogin(String email, String password) async {
-  var loginBody = LoginModel(email: email, password: password,tag: 'login');
+  //var loginBody = LoginModel(email: email, password: password,tag: "login");
  // print(loginBody);
-  print(json.encode(loginBody));
+  //print(json.encode(loginBody));
+
+  Map<String, String> body = {"email":email,"password":password,"tag":"login"};
 
   final response = await http.post(
-    baseUrl + 'access_credentials.php', 
+    baseUrl + "access_credentials.php", 
     headers: {
-    HttpHeaders.contentTypeHeader: 'application/json',
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+   // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
   },
-  body: json.encode(loginBody)
+  body: body,
+  
 
   );
-  // var catMap = json.decode(response.body);
-
-  // print(catMap);
+ 
   return response;
 
 }
