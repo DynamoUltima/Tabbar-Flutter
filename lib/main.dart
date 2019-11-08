@@ -221,8 +221,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ];
 
                                           saveListName(myStrings);
+                                          CircularProgressIndicator();
 
                                           if (response.statusCode == 200) {
+                                            
+                                            
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -231,11 +234,44 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         HomePage(),
                                               ),
                                             );
+                                          } else{
+                                            return CircularProgressIndicator();
                                           }
                                         },
                                       ).catchError((onError){
                                         print(onError);
                                       });
+
+
+                                    //  return FutureBuilder(
+                                    //     future: postLogin(_emailController.text, _passwordController.text),
+                                    //     builder: (BuildContext context,AsyncSnapshot snapshot){
+                                          
+
+
+
+                                    //       print(snapshot.data.toString());
+                                    //       print('tapped');
+
+
+                                    //       if(snapshot.connectionState ==ConnectionState.done){
+
+                                    //           Navigator.push(
+                                    //           context,
+                                    //           MaterialPageRoute(
+                                    //             builder:
+                                    //                 (BuildContext context) =>
+                                    //                     HomePage(),
+                                    //           ),
+                                    //         );
+
+
+                                    //       } else{
+                                    //         return CircularProgressIndicator()
+                                    //       }
+                                    //     },
+
+                                    //   );
                                     },
                                     textColor: Colors.white,
                                     padding: const EdgeInsets.all(0.0),
