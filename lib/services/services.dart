@@ -1,41 +1,38 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 import 'package:http/http.dart' as http;
 import 'package:tabbar/models/login/login_mode.dart';
 import 'package:tabbar/models/place_order/place_order.dart';
 
-
-
-
 String baseUrl = "http://www.forhey.com/forhey_mobile_scripts/";
-
 
 Future<http.Response> postLogin(String email, String password) async {
   //var loginBody = LoginModel(email: email, password: password,tag: "login");
- // print(loginBody);
+  // print(loginBody);
   //print(json.encode(loginBody));
 
-  Map<String, String> body = {"email":email,"password":password,"tag":"login"};
+  Map<String, String> body = {
+    "email": email,
+    "password": password,
+    "tag": "login"
+  };
 
   final response = await http.post(
-    baseUrl + "access_credentials.php", 
+    baseUrl + "access_credentials.php",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
-   // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
-  },
-  body: body,
-  
-
+      // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+    },
+    body: body,
   );
- 
-  return response;
 
+  return response;
 }
 
-Future<http.Response> orderPlaced( String tag,
+Future<http.Response> orderPlaced(
+  String tag,
   String pick_up_point,
   String pickup_date,
   String pick_from_time,
@@ -64,118 +61,192 @@ Future<http.Response> orderPlaced( String tag,
   String nameOfUser,
   String location,
   String other_location,
-  String server_code,) async {
+  String server_code,
+) async {
+  Map<String, String> body = {
+    'tag': tag,
+    'pickup_point': pick_up_point,
+    'pickup_date': pickup_date,
+    'pick_from_time': pick_from_time,
+    'pick_to_time': pick_to_time,
+    'note': note,
+    'delivery_date': delivery_date,
+    'delivery_from_time': delivery_from_time,
+    'delivery_to_time': delivery_to_time,
+    'status': status,
+    'user_id': user_id,
+    'pickup_to_hour': pickup_to_hour,
+    'pickup_to_minute': pickup_to_minute,
+    'pickup_from_hour': pickup_from_hour,
+    'pickup_from_minute': pickup_from_minute,
+    'delivery_from_hour': delivery_from_hour,
+    'delivery_from_min': delivery_from_min,
+    'delivery_to_hour': delivery_to_hour,
+    'delivery_to_min': delivery_to_min,
+    'promotion': promotion,
+    'promo_code': promo_code,
+    'fold': fold,
+    'press': press,
+    'dry_clean': dry_clean,
+    'p_only': p_only,
+    'home_service': home_service,
+    'nameOfUser': nameOfUser,
+    'location': location,
+    'other_location': other_location,
+    'server_code': server_code
+  };
 
-  Map<String,String> body={
-      'tag': tag,
-      'pick_up_point': pick_up_point,
-      'pickup_date': pickup_date,
-      'pick_from_time': pick_from_time,
-      'pick_to_time': pick_to_time,
-      'note': note,
-      'delivery_date': delivery_date,
-      'delivery_from_time': delivery_from_time,
-      'delivery_to_time': delivery_to_time,
-      'status': status,
-      'user_id': user_id,
-      'pickup_to_hour': pickup_to_hour,
-      'pickup_to_minute': pickup_to_minute,
-      'pickup_from_hour': pickup_from_hour,
-      'pickup_from_minute': pickup_from_minute,
-      'delivery_from_hour': delivery_from_hour,
-      'delivery_from_min': delivery_from_min,
-      'delivery_to_hour': delivery_to_hour,
-      'delivery_to_min': delivery_to_min,
-      'promotion': promotion,
-      'promo_code':promo_code,
-      'fold': fold,
-      'press': press,
-      'dry_clean': dry_clean,
-      'p_only': p_only,
-      'home_service': home_service,
-      'nameOfUser': nameOfUser,
-      'location': location,
-      'other_location': other_location,
-      'server_code': server_code
-    };
-  
- // print(json.encode(placeOrder));
+  // print(json.encode(placeOrder));
 
-  final response = await http.post(
-    baseUrl + 'updated_order_process.php', 
-    headers: {
-    HttpHeaders.contentTypeHeader: 'application/json',
-  },
-  body: json.encode(body)
+  final response = await http.post(baseUrl + 'updated_order_process.php',
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: body);
 
-  );
+  print(body);
 
   return response;
-
 }
 
-Future<http.Response> refferalCode(String tag, String code,String number) async {
-  
-  Map<String, String> body = {"tag":tag,"code":code,"number":number};
+Future<http.Response> refferalCode(
+    String tag, String code, String number) async {
+  Map<String, String> body = {"tag": tag, "code": code, "number": number};
 
   final response = await http.post(
-    baseUrl + "access_credentials.php", 
+    baseUrl + "access_credentials.php",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
-   // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
-  },
-  body: body,
-  
+      // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+    },
+    body: body,
   );
   return response;
-
 }
 
-
-Future<http.Response> addUserPromoCode(String tag, String code,String user) async {
-  
-  Map<String, String> body = {"tag":tag,"code":code,"user":user};
+Future<http.Response> addUserPromoCode(
+    //add_user_promo_code -tag
+    String tag,
+    String code,
+    String userId) async {
+  Map<String, String> body = {"tag": tag, "code": code, "user_id": userId};
 
   final response = await http.post(
-    baseUrl + "access_credentials.php", 
+    baseUrl + "new_forhey_scripts.php",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
-   
-  },
-  body: body,
-  
+    },
+    body: body,
   );
   return response;
-
 }
 
-
-Future<http.Response> notifySupport(String tag, String status,String serverCode,String name, String receipt) async {
-  
-  Map<String, String> body = {"tag":tag,"status":status,"server_code":serverCode, "name":name,"receipt":receipt};
- //"complete_payment" tag
- //1 status
- //receipt ""
+Future<http.Response> notifySupport(
+    String tag,
+    int status,
+//AppController.forheyService.notifySupport("complete_payment", 1, server_code, name, "")
+    String serverCode,
+    String name,
+    String receipt) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+    "status": status,
+    "server_code": serverCode,
+    "name": name,
+    "receipt": receipt
+  };
+  //"complete_payment" tag
+  //1 status
+  //receipt ""
 
   final response = await http.post(
-    baseUrl + "Order_Post.php", 
+    baseUrl + "Order_Post.php",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
-   // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
-  },
-  body: body,
-  
+      // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+    },
+    body: body,
   );
   return response;
+}
 
+Future<http.Response> sendSmsMessage(
+  String message,
+  String phoneNumber,
+) async {
+  Map<String, String> body = {
+    "sms_message": message,
+    "phonenumber": phoneNumber,
+  };
+
+  final response = await http.post(
+    baseUrl + "txt_message_terminal.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body,
+  );
+  return response;
+}
+
+Future<http.Response> updateAccount(
+  String tag,
+  String email,
+  String name,
+  String location,
+  String phone,
+  String other_location,
+  String street_name,
+  String house_number,
+  String reference,
+  String company_name,
+  String pickupPoint,
+  String lat,
+  String lng,
+) async {
+  Map<String, String> body = {
+    "tag": tag,
+    "email": email,
+    "name": name,
+    "phone": phone,
+    "other_location": other_location,
+    "street_name": street_name,
+    "house_number": house_number,
+    "reference": reference,
+    "company_name": company_name,
+    "pickupPoint": pickupPoint,
+    "lat": lat,
+    "lng":lng,
+  };
+
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body,
+  );
+  return response;
 }
 
 /*
 Place Order
 ForheyService.domain+"updated_order_process.php
+
+@FormUrlEncoded
+    @POST("access_credentials.php")
+    Call<SuccessClass>  updateAccount(@Field("tag") String tag, @Field("email") String email, @Field("name") String name, @Field("location") String location,
+                       @Field("phone") String phone,  @Field("other_location") String other_location,
+                       @Field("cc") String street_name, @Field("house_number") String house_number, @Field("reference") String ref,
+                       @Field("company_name") String company_name, @Field("pickupPoint") String pickupPoint, @Field("lat") String lat,
+                       @Field("lng") String lng);
+
 
 
 
@@ -204,18 +275,6 @@ promo_message":"no promo",
 
 
 
-@FormUrlEncoded
-    @POST("access_credentials.php")
-    Call<SuccessClass>  updateAccount(@Field("tag") String tag, @Field("email") String email, @Field("name") String name, @Field("location") String location,
-                       @Field("phone") String phone,  @Field("other_location") String other_location,
-                       @Field("street_name") String street_name, @Field("house_number") String house_number, @Field("reference") String ref,
-                       @Field("company_name") String company_name, @Field("pickupPoint") String pickupPoint, @Field("lat") String lat,
-                       @Field("lng") String lng);
 
 
 */
-
-
-
-
-

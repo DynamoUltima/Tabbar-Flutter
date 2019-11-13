@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
 import 'package:tabbar/views/order_page.dart';
+import 'package:tabbar/views/update_accounts_page.dart';
 
 class AllSettings extends StatefulWidget {
   @override
@@ -217,7 +218,7 @@ class _AllSettingsState extends State<AllSettings> {
             SizedBox(
               height: 20,
             ),
-            settingListTiles(OrderPage(), CupertinoColors.activeOrange,
+            settingListTiles(UpdateAccountPage(), CupertinoColors.activeOrange,
                 'Edit profile', CupertinoIcons.person),
             SizedBox(
               height: 10,
