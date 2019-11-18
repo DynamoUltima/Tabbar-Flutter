@@ -31,6 +31,7 @@ class _OrderPageState extends State<OrderPage> {
   String smsPhoneNumber = "0502911370,0277073834";
   String smsMessage = "this is a test";
   String serverCode = "";
+  String refferalCode="";
 
   //TODO:serverCode is not upposed to be empty
 
@@ -353,7 +354,7 @@ class _OrderPageState extends State<OrderPage> {
                   /* delivery_to_hour*/ "4",
                   /* delivery_to_min*/ "00",
                   /*promotion*/ "promotion",
-                  /*promo_code*/ _promoCodeController.text??"no promo",
+                  /*promo_code*/ refferalCode??"no promo",
                   "${washAndFold}",
                   "${press}",
                   "${dryCleaning}",
@@ -404,6 +405,8 @@ class _OrderPageState extends State<OrderPage> {
           }).catchError((onError) {
             print("notify support :" + onError);
           });
+
+          Navigator.pop(context);
         },
         child: Text('Place Order'),
         color: CupertinoColors.activeBlue,
@@ -425,7 +428,20 @@ class _OrderPageState extends State<OrderPage> {
             title: Text('Enter Promo Code'),
             content: CupertinoTextField(
               controller: _promoCodeController,
+              maxLength: 5,
+              maxLengthEnforced: true,
+              decoration: BoxDecoration(color: CupertinoColors.lightBackgroundGray),
             ),
+            actions: <Widget>[
+              CupertinoButton(child: Text('Yes'), onPressed: () {
+                setState(() {
+                  refferalCode =_promoCodeController.text;
+                });
+
+                Navigator.of(context, rootNavigator: true).pop("Discard");
+
+              },)
+            ],
           ),
         );
         },

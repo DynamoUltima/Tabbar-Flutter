@@ -1,0 +1,90 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'order_list.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+OrderList _$OrderListFromJson(Map<String, dynamic> json) {
+  return OrderList(
+      amount: json['amount'] as String,
+      assigned_to: json['assigned_to'] as String,
+      cancel_message: json['cancel_message'] as String,
+      client_gcm: json['client_gcm'] as String,
+      client_name: json['client_name'] as String,
+      client_phone: json['client_phone'] as String,
+      comment: json['comment'] as String,
+      created_at: json['created_at'] as String,
+      delivery_date: json['delivery_date'] as String,
+      delivery_from_time: json['delivery_from_time'] as String,
+      delivery_to_time: json['delivery_to_time'] as String,
+      dry_clean: json['dry_clean'] as String,
+      fold: json['fold'] as String,
+      home_housenumber: json['home_housenumber'] as String,
+      home_latitude: json['home_latitude'] as String,
+      home_location: json['home_location'] as String,
+      home_otherlocation: json['home_otherlocation'] as String,
+      home_reference: json['home_reference'] as String,
+      home_service: json['home_service'] as String,
+      home_street_name: json['home_street_name'] as String,
+      homeLatitude: json['homeLatitude'] as String,
+      medium: json['medium'] as String,
+      note: json['note'] as String,
+      order_rating: json['order_rating'] as String,
+      payment: json['payment'] as String,
+      payment_mode: json['payment_mode'] as String,
+      payment_status: json['payment_status'] as String,
+      pick_from_time: json['pick_from_time'] as String,
+      pick_to_time: json['pick_to_time'] as String,
+      pickup_date: json['pickup_date'] as String,
+      pickup_point: json['pickup_point'] as String,
+      press: json['press'] as String,
+      press_only: json['press_only'] as String,
+      promotion: json['promotion'] as String,
+      receipt_url: json['receipt_url'] as String,
+      server_code: json['server_code'] as String,
+      service_cost: json['service_cost'] as String)
+    ..status = json['status'] as String;
+}
+
+Map<String, dynamic> _$OrderListToJson(OrderList instance) => <String, dynamic>{
+      'server_code': instance.server_code,
+      'pickup_point': instance.pickup_point,
+      'pickup_date': instance.pickup_date,
+      'pick_from_time': instance.pick_from_time,
+      'pick_to_time': instance.pick_to_time,
+      'note': instance.note,
+      'delivery_date': instance.delivery_date,
+      'delivery_from_time': instance.delivery_from_time,
+      'delivery_to_time': instance.delivery_to_time,
+      'status': instance.status,
+      'assigned_to': instance.assigned_to,
+      'promotion': instance.promotion,
+      'comment': instance.comment,
+      'order_rating': instance.order_rating,
+      'payment': instance.payment,
+      'amount': instance.amount,
+      'payment_mode': instance.payment_mode,
+      'fold': instance.fold,
+      'press': instance.press,
+      'dry_clean': instance.dry_clean,
+      'press_only': instance.press_only,
+      'home_service': instance.home_service,
+      'cancel_message': instance.cancel_message,
+      'payment_status': instance.payment_status,
+      'receipt_url': instance.receipt_url,
+      'created_at': instance.created_at,
+      'medium': instance.medium,
+      'service_cost': instance.service_cost,
+      'client_name': instance.client_name,
+      'client_phone': instance.client_phone,
+      'client_gcm': instance.client_gcm,
+      'home_location': instance.home_location,
+      'home_otherlocation': instance.home_otherlocation,
+      'home_street_name': instance.home_street_name,
+      'homeLatitude': instance.homeLatitude,
+      'home_latitude': instance.home_latitude,
+      'home_reference': instance.home_reference,
+      'home_housenumber': instance.home_housenumber
+    };
