@@ -1,9 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
+
 
 import 'package:http/http.dart' as http;
-import 'package:tabbar/models/login/login_mode.dart';
-import 'package:tabbar/models/place_order/place_order.dart';
+
 
 String baseUrl = "http://www.forhey.com/forhey_mobile_scripts/";
 
@@ -229,6 +227,53 @@ Future<http.Response> updateAccount(
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body,
+  );
+  return response;
+}
+
+
+Future<http.Response> getOrderState(
+    String tag, 
+    String serverCode,
+    
+    ) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+    "server_code": serverCode,
+    
+  };
+ 
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+     
+    },
+    body: body,
+  );
+  return response;
+}
+
+Future<http.Response> getOrderHistory(
+    String tag, 
+    String email,
+    
+    ) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+    "email": email,
+    
+  };
+ 
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+     
     },
     body: body,
   );

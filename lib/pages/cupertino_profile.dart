@@ -12,6 +12,8 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
   String user_list_key = "list_key";
   List<String> mydetailList = [];
 
+  String homeRef="";
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +26,8 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
         return null;
       },
     );
+    
+    
     
     loadList();
   }
@@ -43,6 +47,14 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
 
   @override
   Widget build(BuildContext context) {
+    if(mydetailList[4]==null){
+      setState(() {
+        this.homeRef="";
+      });
+    }
+    
+      
+    
     return Container(
       child: Container(
         child: Column(
@@ -135,7 +147,7 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
               children: <Widget>[
                 Icon(CupertinoIcons.flag, color: CupertinoColors.activeBlue),
                 Text(
-                  mydetailList[4]??'',
+                  homeRef,
                   style: CupertinoTheme.of(context)
                       .textTheme
                       .navActionTextStyle

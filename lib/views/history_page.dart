@@ -1,21 +1,88 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tabbar/customWidgets/myTextStyle.dart';
+import 'package:tabbar/models/orderHistory/order_history_list.dart';
+import 'package:tabbar/models/orderHistory/order_history_response.dart';
 
-class OrderHistory extends StatefulWidget {
+import 'package:tabbar/services/services.dart';
+
+class OrderHistoryPage extends StatefulWidget {
   @override
-  _OrderHistoryState createState() => _OrderHistoryState();
+  _OrderHistoryPageState createState() => _OrderHistoryPageState();
 }
 
-class _OrderHistoryState extends State<OrderHistory> {
+class _OrderHistoryPageState extends State<OrderHistoryPage> {
   myTextStyle myTextType = new myTextStyle();
-  var date = new DateTime.now();
+  //var date = new DateTime.now();
+  String tag = "orderDetails";
+  String user_list_key = "list_key";
+  List<String> mydetailList = [];
+  String email;
 
- 
+   List<OrderHistoryList> orderDetailList = List<OrderHistoryList>();
+
+  _getUserOrderHistory() {
+    
+    getOrderHistory(tag, "dynamo@gmail.com").then((response) {
+      print(response.statusCode);
+      print(mydetailList[0]);
+      var historyMap = json.decode(response.body);
+
+      OrderHistory orderHistory = OrderHistory();
+
+      setState(() {
+        orderHistory = OrderHistory.fromJson(historyMap);
+      });
+      //print(orderHistory.toJson());
+      
+        orderDetailList = orderHistory.order_list;
+    
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    const MethodChannel('plugins.flutter.io/shared_preferences')
+        .setMockMethodCallHandler(
+      (MethodCall methodCall) async {
+        if (methodCall.method == 'getAll') {
+          return {"flutter." + user_list_key: "No Name saved"};
+        }
+        return null;
+      },
+    );
+
+    loadList();
+    _getUserOrderHistory();
+  }
+
+  // dispose() {
+  //   super.dispose();
+  // }
+
+  Future<List<String>> getUserList() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getStringList(user_list_key);
+  }
+
+  loadList() {
+    getUserList().then((onValue) {
+      setState(() {
+        mydetailList = onValue;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight =MediaQuery.of(context).size.height;
+    double screenWidth =MediaQuery.of(context).size.width;
     var pageTtitleText = Row(
       children: <Widget>[
         Text(
@@ -25,136 +92,150 @@ class _OrderHistoryState extends State<OrderHistory> {
       ],
     );
 
+    HistoryCardMethod(String date, String address, String orderId,
+        String paymentStatus, String orderStatus, String orderType) {
+      var historyCard = Container(
+        color: CupertinoColors.lightBackgroundGray,
+        padding: EdgeInsets.all(8),
+        child: Column(
+          
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(CupertinoIcons.news),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      '${date}',
+                      style: myTextType.myActionCuperStyle(context),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(CupertinoIcons.time),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      orderStatus,
+                      style: myTextType.myActionCuperStyle(context),
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(CupertinoIcons.tag),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      orderType,
+                      style: myTextType.myActionCuperStyle(context),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(CupertinoIcons.bookmark),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      paymentStatus,
+                      style: myTextType.myActionCuperStyle(context),
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(CupertinoIcons.location),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Address: ${address}',
+                      style: myTextType.myActionCuperStyle(context),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(CupertinoIcons.eye),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Order # ${orderId}',
+                      style: myTextType.myActionCuperStyle(context),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      );
 
-    var historyCard=Container(
-              color: CupertinoColors.lightBackgroundGray,
-              padding: EdgeInsets.all(8),
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(CupertinoIcons.news),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            '${date}',
-                            style: myTextType.myActionCuperStyle(context),
-                          )
-                        ],
-                      ),
-                     
-                       Row(
-                        children: <Widget>[
-                          Icon(CupertinoIcons.time),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Order Placed',
-                            style: myTextType.myActionCuperStyle(context),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                   SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(CupertinoIcons.tag),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Type:Wash & Fold',
-                            style: myTextType.myActionCuperStyle(context),
-                          )
-                        ],
-                      ),
-                       Row(
-                        children: <Widget>[
-                          Icon(CupertinoIcons.bookmark),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Payment Placed',
-                            style: myTextType.myActionCuperStyle(context),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(CupertinoIcons.location),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Address: Office',
-                            style: myTextType.myActionCuperStyle(context),
-                          )
-                        ],
-                      ),
-                       Row(
-                        children: <Widget>[
-                          Icon(CupertinoIcons.eye),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Order # M0429475',
-                            style: myTextType.myActionCuperStyle(context),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            );
-
+      return historyCard;
+    }
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Activities',
         middle: Text('Order History'),
       ),
-      child: Container(
-        padding: EdgeInsets.all(8),
-        child: ListView(
+       
+      
+      child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          shrinkWrap: true,
-          children: <Widget>[
-            SizedBox(
-              height: 40,
-            ),
-            pageTtitleText,
-            SizedBox(height: 20),
-            historyCard,
-            SizedBox(height: 10,),
-            historyCard,
-            SizedBox(height: 10,),
-            historyCard,
-            SizedBox(height: 10,),
-            historyCard,
-            SizedBox(height: 10,),
-            historyCard,
-            
-          ],
+              child: Container(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 70,
+              ),
+              pageTtitleText,
+              ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount:orderDetailList.length ,
+                shrinkWrap: true,
+                
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: HistoryCardMethod(
+                     orderDetailList[index].pick_up_date,
+                     orderDetailList[index].pick_up_point,
+                     orderDetailList[index].server_code,
+                      "paymentStatus", "orderStatus", "orderType"),
+                  );
+                },
+                
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -196,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     onPressed: () {
                                       postLogin(_emailController.text,
-                                              _passwordController.text)
+                                              _passwordController.text.trim())
                                           .then(
                                         (response) {
                                           //Print response
