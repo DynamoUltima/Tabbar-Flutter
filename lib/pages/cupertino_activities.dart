@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbar/customWidgets/cirlcle_animated_progress_bar.dart';
+import 'package:tabbar/models/orderStatus/assignees.dart';
 import 'package:tabbar/models/orderStatus/order_list.dart';
 import 'package:tabbar/models/orderStatus/order_status.dart';
 import 'package:tabbar/services/services.dart';
@@ -23,8 +24,21 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   }
 
   String tag = "getOrderbyServerCode";
+  String orderStatusText;
+  String heyGender;
+  String assigneeName;
+  String assigneeUrl;
+  double circleProgress;
+
+  Color foreground = Colors.red;
+  Color liveButtonColor = CupertinoColors.activeBlue;
+  Color disabledButtonColor = CupertinoColors.lightBackgroundGray;
+  Color currentOrderButtonColor;
+  Color currentDetailButtonColor;
 
   List<OrderList> orderDetailList = List<OrderList>();
+  List<Assignees> assigneeDetailList = List<Assignees>();
+
   _getUserOrderStaus() {
     getOrderState(tag, "TU11122664").then((response) {
       print(response.statusCode);
@@ -36,26 +50,113 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
       setState(() {
         orderStatus = OrderStatus.fromJson(detailMap);
       });
+
       print(orderStatus.toJson());
 
       orderDetailList = orderStatus.order_list;
+
+      assigneeDetailList = orderStatus.assignees;
+
+      print(orderDetailList.length);
+      //print(orderDetailList[0].status);
+    }).catchError((onError) {
+      print(onError);
     });
+  }
+
+  void generateAssigneeDetails() {
+    if (assigneeDetailList[1].gender == "m") {
+      setState(() {
+        heyGender = "Heyguy :";
+      });
+    } else {
+      setState(() {
+        heyGender = "Heygirl :";
+      });
+    }
+
+    //String assigneeEmail=orderDetailList[0].assigned_to;
+    //int gridIndex = privilegeItems.indexWhere((p) => p.code == code);
+    setState(() {
+      assigneeName = assigneeDetailList[1].name;
+    });
+  }
+
+  void generateOrderStatusMethod() {
+    String orderProcessStatus = orderDetailList[0].status;
+
+    //print(orderProcessStatus);
+    print('tapped');
+
+    switch (orderProcessStatus) {
+      case "1":
+        setState(() {
+          orderStatusText = "On route to pick up";
+          circleProgress = 0.25;
+          foreground = Colors.red;
+          currentDetailButtonColor = liveButtonColor;
+        });
+        break;
+      case "2":
+        setState(() {
+          orderStatusText = "Your Articles are being processed";
+          circleProgress = 0.5;
+          foreground = Colors.orange;
+          currentDetailButtonColor = liveButtonColor;
+          currentOrderButtonColor = disabledButtonColor;
+        });
+        break;
+      case "3":
+        setState(() {
+          orderStatusText = "On route to delivery";
+          currentDetailButtonColor = liveButtonColor;
+          currentOrderButtonColor = disabledButtonColor;
+        });
+        setState(() {
+          circleProgress = 0.75;
+          foreground = Colors.yellow;
+        });
+
+        break;
+      case "4":
+        setState(() {
+          orderStatusText = "Your Articles have been delivered";
+          circleProgress = 1.0;
+          foreground = Colors.green;
+          currentDetailButtonColor = liveButtonColor;
+          currentOrderButtonColor = disabledButtonColor;
+        });
+        break;
+      default:
+        setState(() {
+          orderStatusText = "Place An Order";
+          circleProgress = 0.0;
+          currentDetailButtonColor = disabledButtonColor;
+          currentOrderButtonColor = liveButtonColor;
+          foreground = Colors.purple;
+        });
+    }
+
+    //print(orderStatusText);
+
+    //return orderStatustText;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserOrderStaus();
+    //generateOrderStatusMethod();
   }
 
   double progressPercent = 0;
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    String tag = "getOrderbyServerCode";
+    // double screenWidth = MediaQuery.of(context).size.width;
 
-    Color foreground = Colors.red;
+    generateOrderStatusMethod();
 
-    if (progressPercent >= 0.8) {
-      foreground = Colors.green;
-    } else if (progressPercent >= 0.4) {
-      foreground = Colors.orange;
-    }
     Color background = foreground.withOpacity(0.2);
 
     return Container(
@@ -71,23 +172,17 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
             SizedBox(
               height: screenHeight * 0.1,
             ),
-            SizedBox(
-              width: screenWidth * 0.67,
-              child: CupertinoButton(
-                pressedOpacity: 0.5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Icon(CupertinoIcons.pencil),
-                    Text("Tap for Order Details"),
-                  ],
-                ),
-                onPressed: () {
-                  buildShowCupertinoModalPopup(context);
-                },
-                color: CupertinoColors.lightBackgroundGray,
-                borderRadius: BorderRadius.all(Radius.circular(18)),
-              ),
+            CupertinoButton(
+              pressedOpacity: 0.5,
+              child: Text("Tap for Order Details"),
+              onPressed: () {
+                _getUserOrderStaus();
+                generateAssigneeDetails();
+                generateOrderStatusMethod();
+                buildShowCupertinoModalPopup(context);
+              },
+              color: currentDetailButtonColor,
+              borderRadius: BorderRadius.all(Radius.circular(18)),
             )
           ],
         ),
@@ -108,12 +203,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  CircleAvatar(
-                    radius: 25,
-                    child: Icon(CupertinoIcons.person_solid),
-                    backgroundColor: CupertinoColors.activeBlue,
-                  ),
-                  Center(child: Text("Hey girl/guy : Frank Baidoo"))
+                  AssigneeAvatar(),
+                  Center(child: Text("${heyGender}" + " ${assigneeName}"))
                 ],
               ),
               onPressed: () {
@@ -122,48 +213,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
             ),
             CupertinoActionSheetAction(
               child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    // child: ListView.builder(
-                    //   itemCount: orderDetailList.length,
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     String orderStatustText;
-                    //     int orderProcessStatus =
-                    //         int.parse(orderDetailList[index].status);
-                    //     switch (orderProcessStatus) {
-                    //       case 1:
-                    //         setState(() {
-                    //           orderStatustText = "On route to pick up";
-                    //         });
-                    //         break;
-                    //       case 2:
-                    //         setState(() {
-                    //           orderStatustText =
-                    //               "Your Articles are being processed";
-                    //         });
-                    //         break;
-                    //       case 3:
-                    //         setState(() {
-                    //           orderStatustText = "On route to delivery";
-                    //         });
-                    //         break;
-                    //       case 4:
-                    //         setState(() {
-                    //           orderStatustText =
-                    //               "Your Articles have been delivered";
-                    //         });
-                    //         break;
-                    //       default:
-                    //     }
-
-                    //     return Text("Order Status : " //+ 
-                    //    // orderStatustText
-                    //     );
-                    //   },
-                    // ),
-                  )
-                ],
+                children: <Widget>[Text(orderStatusText)],
               ),
               onPressed: () {
                 Navigator.pop(context, '🙋 No');
@@ -175,11 +225,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
-                      child:  Text("Delivery Date : " 
-                      //+
-                            //  orderDetailList[0].delivery_date
-                              ),
-                      
+                      child: Text(
+                          "Delivery Date : " + orderDetailList[0].pickup_date),
                     ),
                   )
                 ],
@@ -194,12 +241,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
                   Padding(
                     //cost
                     padding: const EdgeInsets.all(8.0),
-                    child: 
-                         Text(
-                            "cost : " //+ orderDetailList[0].service_cost
-                            ),
-                      
-                    
+                    child: Text("cost : " + orderDetailList[0].service_cost),
                   )
                 ],
               ),
@@ -221,6 +263,29 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     );
   }
 
+  CircleAvatar buildAssigneeCircleAvatarDefault() {
+    return CircleAvatar(
+      radius: 25,
+      child: Icon(CupertinoIcons.person_solid),
+      backgroundColor: CupertinoColors.activeBlue,
+    );
+  }
+
+  CircleAvatar buildAssigneeCircleAvatar() {
+    return CircleAvatar(
+      radius: 25,
+      backgroundImage: NetworkImage(assigneeDetailList[1].image),
+    );
+  }
+
+  CircleAvatar AssigneeAvatar() {
+    if (assigneeDetailList[1].image != null) {
+      return buildAssigneeCircleAvatar();
+    } else {
+      return buildAssigneeCircleAvatarDefault();
+    }
+  }
+
   CupertinoButton buildCupertinoGoToOrderButton(BuildContext context) {
     return CupertinoButton(
       child: Text('Go To Order'),
@@ -228,14 +293,12 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
         Navigator.of(context).push(
             CupertinoPageRoute(builder: (BuildContext context) => OrderPage()));
       },
-      color: CupertinoColors.activeBlue,
+      color: currentOrderButtonColor,
     );
   }
 
   Center buildCircularProgress(
       Color background, Color foreground, BuildContext context) {
-    //int orderProcessStatus =int.parse(orderDetailList[index].status);
-
     return Center(
       child: SizedBox(
         height: 200,
@@ -246,11 +309,11 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
             CircleProgressBar(
               backgroundColor: background,
               foregroundColor: foreground,
-              value: 0.4,
+              value: circleProgress,
             ),
             ConstrainedBox(
               child: Text(
-                'Your Articles are being processed',
+                orderStatusText, //Strting ArticleValue
                 textAlign: TextAlign.center,
                 style: _myCuperStyle(context),
               ),
@@ -263,4 +326,4 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   }
 }
 
-class OrderSatus {}
+// class OrderSatus {}

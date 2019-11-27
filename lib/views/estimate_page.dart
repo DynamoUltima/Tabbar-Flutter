@@ -7,13 +7,29 @@ class Estimator extends StatefulWidget {
 }
 
 class _EstimatorState extends State<Estimator> {
+  PageController estimateController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(8),
-      child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[EstimatorTile()],
+      child: PageView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+              child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[Text("Total Price"),],
+              ),
+              Row(
+                children: <Widget>[
+                  
+                ],
+              )
+            ],
+          ));
+        },
       ),
     );
   }
@@ -88,12 +104,16 @@ class _EstimatorTileState extends State<EstimatorTile> {
             ),
           ),
           //Text('data')
-          SizedBox(
-            height: 100,
-            width: 250,
-            child: estimatorPicker)
+          SizedBox(height: 100, width: 250, child: estimatorPicker)
         ],
       ),
     );
   }
 }
+
+// ListView(
+//             shrinkWrap: true,
+//             children: <Widget>[
+//               EstimatorTile(),
+//             ],
+//           );

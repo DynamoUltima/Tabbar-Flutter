@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 
 //import 'adaptive_widgets.dart';
 //import 'package:cupertino_icons/placeholder.txt';
@@ -10,11 +10,13 @@ import 'package:tabbar/pages/cupertino_home_page.dart';
 import 'package:tabbar/pages/cupertino_pricing.dart';
 import 'package:tabbar/pages/cupertino_profile.dart';
 import 'package:tabbar/views/history_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:tabbar/views/settings.dart';
 
+
 import 'pages/cupertino_activities.dart';
-//import 'package:percent_indicator_example/sample_circular_page.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -45,13 +47,14 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
                 icon: Icon(CupertinoIcons.home), title: Text('Home')),
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.folder_open),
+                icon: Icon(FontAwesomeIcons.briefcase),
                 title: Text('Activities')),
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.shopping_cart),
+                icon: Icon(FontAwesomeIcons.moneyBill),
                 title: Text('Pricing')),
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.person), title: Text('Profile')),
+                icon: Icon(CupertinoIcons.person), 
+                title: Text('Profile')),
           ],
         ),
         tabBuilder: (BuildContext context, int index) {

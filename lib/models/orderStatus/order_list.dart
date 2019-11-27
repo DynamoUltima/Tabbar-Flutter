@@ -16,6 +16,7 @@ part 'order_list.g.dart';
  
   String  note;
   
+  @JsonKey(disallowNullValue: true,name:'empty2')
   String  delivery_date;
   
   String  delivery_from_time;
