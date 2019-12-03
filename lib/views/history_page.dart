@@ -135,30 +135,30 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(CupertinoIcons.tag),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      orderType,
-                      style: myTextType.myActionCuperStyle(context),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(CupertinoIcons.bookmark),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      paymentStatus,
-                      style: myTextType.myActionCuperStyle(context),
-                    )
-                  ],
-                )
+                // Row(
+                //   children: <Widget>[
+                //     Icon(CupertinoIcons.tag),
+                //     SizedBox(
+                //       width: 5,
+                //     ),
+                //     Text(
+                //       orderType,
+                //       style: myTextType.myActionCuperStyle(context),
+                //     )
+                //   ],
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Icon(CupertinoIcons.bookmark),
+                //     SizedBox(
+                //       width: 5,
+                //     ),
+                //     Text(
+                //       paymentStatus,
+                //       style: myTextType.myActionCuperStyle(context),
+                //     )
+                //   ],
+                // )
               ],
             ),
             SizedBox(

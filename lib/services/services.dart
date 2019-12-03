@@ -1,7 +1,4 @@
-
-
 import 'package:http/http.dart' as http;
-
 
 String baseUrl = "http://www.forhey.com/forhey_mobile_scripts/";
 
@@ -219,7 +216,7 @@ Future<http.Response> updateAccount(
     "company_name": company_name,
     "pickupPoint": pickupPoint,
     "lat": lat,
-    "lng":lng,
+    "lng": lng,
   };
 
   final response = await http.post(
@@ -233,24 +230,20 @@ Future<http.Response> updateAccount(
   return response;
 }
 
-
 Future<http.Response> getOrderState(
-    String tag, 
-    String serverCode,
-    
-    ) async {
+  String tag,
+  String serverCode,
+) async {
   Map<String, dynamic> body = {
     "tag": tag,
     "server_code": serverCode,
-    
   };
- 
+
   final response = await http.post(
     baseUrl + "access_credentials.php",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
-     
     },
     body: body,
   );
@@ -258,22 +251,37 @@ Future<http.Response> getOrderState(
 }
 
 Future<http.Response> getOrderHistory(
-    String tag, 
-    String email,
-    
-    ) async {
+  String tag,
+  String email,
+) async {
   Map<String, dynamic> body = {
     "tag": tag,
     "email": email,
-    
   };
- 
+
   final response = await http.post(
     baseUrl + "access_credentials.php",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/x-www-form-urlencoded"
-     
+    },
+    body: body,
+  );
+  return response;
+}
+
+Future<http.Response> getPriceList(
+  String tag,
+) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+  };
+
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
     },
     body: body,
   );

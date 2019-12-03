@@ -68,6 +68,7 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
           ),
           Column(
             children: <Widget>[
+              SizedBox(height: 40,),
               Center(
                 child: pages[sharedValue],
               ),
