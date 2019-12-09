@@ -47,11 +47,11 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
 
   @override
   Widget build(BuildContext context) {
-    if(mydetailList[4]==null){
-      setState(() {
-        this.homeRef="";
-      });
-    }
+    // if(mydetailList[4]==null){
+    //   setState(() {
+    //     this.homeRef="";
+    //   });
+    // }
     
       
     

@@ -1,7 +1,10 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:core' as prefix0;
+import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
 import 'package:tabbar/models/prices/laundry_items.dart';
@@ -18,9 +21,19 @@ class _EstimatorState extends State<Estimator> {
   List<LaundryItems> articlePriceList = List<LaundryItems>();
   String tag = "getPrices";
   List<Object> gentArray = [];
-  List gentsResults = [];
+  List gentsResults = List<LaundryItems>();
+  List LadiesArray = [];
+  List TraditionalArray = [];
+  List ChildWear = [];
+  List BeddingArray = [];
+  List WashAndFoldArray = [];
   double currentPageValue = 0.0;
   String pageTitle;
+  int currentIndex = 0;
+  var finalPrice = 0.0;
+  //this is a map of number of items and articles
+  Map<String, int> numbered = {};
+  Map<String, double> priceMap = {};
 
   _getArticlePriceDetails() {
     getPriceList(tag).then((response) {
@@ -74,22 +87,50 @@ class _EstimatorState extends State<Estimator> {
       //cartegoryArray.add(item.laundryItem);
 
     }
+    _estimatePickerMethod(String priceIndex, double price) {
+      return CupertinoPicker.builder(
+        useMagnifier: true,
+        magnification: 1.2,
+        childCount: 100,
+        itemExtent: 50,
+        onSelectedItemChanged: (int value) {
+          double currentPrice;
+          double noOfitems = value.toDouble();
+          setState(() {
+            currentPrice = noOfitems * price;
+          });
 
-    _getCategoryIndex(int index) {
-      List categoryResults = LinkedHashSet.from(gentArray).toList();
-      print("--categoryindex--");
-      print(index);
-      gentsResults.clear();
-      articlePriceList.forEach((f) {
-        if (f.cartegory == categoryResults[index]) {
-          //gentsResults.clear();
-          gentsResults.add(f.laundryItem);
+          setState(() {
+            numbered.update(priceIndex, (val) => value);
+          });
+          priceMap.putIfAbsent(priceIndex, () => currentPrice);
+          setState(() {
+            priceMap.update(priceIndex, (val) => currentPrice);
+          });
 
-          //f.laundryDetails.
+          setState(() {
+            finalPrice =
+                priceMap.values.reduce((sum, combine) => sum + combine);
+          });
 
-        }
-      });
+          print("--final Price--");
+          print(finalPrice);
+
+          print("--currentPrice--");
+          print(currentPrice);
+
+          print("----Price Map---");
+          print(priceMap);
+
+          print(value);
+        },
+        itemBuilder: (BuildContext context, int index) {
+          return Text("$index");
+        },
+      );
     }
+
+  
 
     List categoryResults = LinkedHashSet.from(gentArray).toList();
     print("Awesome");
@@ -105,88 +146,36 @@ class _EstimatorState extends State<Estimator> {
         height: screenHeight * 0.7,
         child: PageView.builder(
           scrollDirection: Axis.horizontal,
+          dragStartBehavior: DragStartBehavior.down,
           itemCount: categoryResults.length,
           physics: BouncingScrollPhysics(),
-          onPageChanged: (int) {
-            print("--my Page Value------");
-            print(int);
-            print(pageTitle);
+          onPageChanged: (intIndex) {
+            setState(() {
+              currentIndex = intIndex;
+            });
+
+            gentsResults.clear();
           },
           itemBuilder: (BuildContext context, int indexItems) {
             List categoryResults = LinkedHashSet.from(gentArray).toList();
-            String categoryName = articlePriceList[indexItems].cartegory;
-            int categoryIndex =
-                articlePriceList.indexWhere((p) => p.cartegory == categoryName);
-            estimateController.addListener(() {
-              setState(() {
-                currentPageValue = estimateController.page;
-              });
-              print("----My current Page---");
-              print(currentPageValue);
-              print(gentsResults);
-              gentsResults.clear();
-              articlePriceList.forEach((f) {
-                if (f.cartegory == categoryResults[indexItems]) {
-                  //gentsResults.clear();
-                  gentsResults.add(f.laundryItem);
+            // String categoryName = articlePriceList[indexItems].cartegory;
+            // int categoryIndex =
+            //     articlePriceList.indexWhere((p) => p.cartegory == categoryName);
 
-                  //f.laundryDetails.
+            //print("--My Map experiment---");
 
-                }
-              });
-            });
-
-            _getCategoryIndex(indexItems);
-
-            // articlePriceList.every((article){
-            //   var art= article.cartegory="Gents";
-            //  gentArray.add()
-            // });
-
-            //articlePriceList.forEach(var ite){}
-
-            // if (categoryName == "Gents") {
-            //   for (var item in articlePriceList) {
-            //     gentArray.add(item.cartegory);
-            //     //cartegoryArray.add(item.laundryItem);
-
-            //   }
-            // }
-            // print("array");
-            // // print(gentArray);
-
-            // print(categoryResults);
-
-            for (var items in articlePriceList) {
-              if (items.cartegory == "Gents") {
-                /** 
-                 * this forEach loop goes through the whole article and adds all items which have 
-                 the cartegory name ==categoryResults[indexItems] to the gentsResultsArray
-                 */
-                //categoryResults[indexItems]
-
-                articlePriceList.forEach((f) {
-                  if (f.cartegory == categoryResults[indexItems]) {
-                    //gentsResults.clear();
-                    gentsResults.add(f.laundryItem);
-
-                    //f.laundryDetails.
-
-                  }
-                });
+            articlePriceList.forEach((f) {
+              if (f.cartegory == categoryResults[currentIndex]) {
+                gentsResults.add(f);
+                gentsResults = LinkedHashSet.from(gentsResults).toList();
               }
-            }
-            print("---category---");
-            print(categoryResults[indexItems]);
-            pageTitle = categoryResults[indexItems];
-
-            // print(gentsResults);
+            });
 
             return Container(
                 height: screenHeight * 0.65,
                 child: Column(
                   children: <Widget>[
-                    //${articlePriceList[indexItems].cartegory}
+                   
                     Row(
                       children: <Widget>[
                         Text("${categoryResults[indexItems]}",
@@ -195,7 +184,7 @@ class _EstimatorState extends State<Estimator> {
                     ),
                     Row(
                       children: <Widget>[
-                        Text("Total Price",
+                        Text("Total Price " + "GH¢ " + "${finalPrice}",
                             style: myTextType.myActionCuperStyle(context)),
                       ],
                     ),
@@ -207,16 +196,40 @@ class _EstimatorState extends State<Estimator> {
                         shrinkWrap: true,
                         itemCount: gentsResults.length,
                         itemBuilder: (BuildContext context, int indexDetails) {
-                          // have to use the Radio button to differentiate between type of pricessing
-                          // var articleDetails = articlePriceList[categoryIndex]
-                          //     .laundryDetails[indexDetails];
-                          print("---List results---");
-                          print(gentsResults);
-                          print(gentsResults.length);
-                          return EstimatorTile(
-                            laundryItems: gentsResults[indexDetails],
-                            laundryType: "0",
-                            price: "0",
+                          //indexDetails
+                          numbered.putIfAbsent(
+                              gentsResults[indexDetails].laundryItem, () => 0);
+                          // print(numbered);
+
+                          return GestureDetector(
+                            onTap: () {
+                              print(gentsResults[indexDetails].laundryItem);
+                              setState(() {
+                                showCupertinoModalPopup(
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                        height: screenHeight * 0.3,
+                                        child: _estimatePickerMethod(
+                                            gentsResults[indexDetails]
+                                                .laundryItem,
+                                            double.parse(
+                                                gentsResults[indexDetails]
+                                                    .laundryDetails[0]
+                                                    .price)),
+                                      );
+                                    },
+                                    context: context);
+                              });
+                            },
+                            child: EstimatorTile(
+                              laundryItems:
+                                  gentsResults[indexDetails].laundryItem,
+                              laundryType: numbered[
+                                  gentsResults[indexDetails].laundryItem],
+                              price: gentsResults[indexDetails]
+                                  .laundryDetails[0]
+                                  .price,
+                            ),
                           );
                         },
                       ),
@@ -228,46 +241,10 @@ class _EstimatorState extends State<Estimator> {
       ),
     );
   }
-
-  Row buildRow() {
-    return Row(
-      children: <Widget>[
-        new Radio(
-          value: 0,
-          groupValue: _radioValue1,
-          onChanged: _handleRadioValueChange1,
-        ),
-        new Text(
-          'Carnivore',
-          style: new TextStyle(fontSize: 16.0),
-        ),
-        new Radio(
-          value: 1,
-          groupValue: _radioValue1,
-          onChanged: _handleRadioValueChange1,
-        ),
-        new Text(
-          'Herbivore',
-          style: new TextStyle(
-            fontSize: 16.0,
-          ),
-        ),
-        new Radio(
-          value: 2,
-          groupValue: _radioValue1,
-          onChanged: _handleRadioValueChange1,
-        ),
-        new Text(
-          'Omnivore',
-          style: new TextStyle(fontSize: 16.0),
-        ),
-      ],
-    );
-  }
 }
 
 class EstimatorTile extends StatefulWidget {
-  String laundryType;
+  int laundryType;
   String price;
   String id;
   String laundryItems;
@@ -285,29 +262,9 @@ class _EstimatorTileState extends State<EstimatorTile> {
 
   @override
   Widget build(BuildContext context) {
-    items = List<String>.generate(10000, (i) => "Item $i");
+    // items = List<String>.generate(100, (i) => "$i");
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
-    var estimatorPicker = CupertinoPicker(
-      itemExtent: 100,
-      onSelectedItemChanged: (int value) {
-        print(value);
-      },
-      children: <Widget>[
-        Text(
-          '1',
-          style: myTextType.myActionCuperStyle(context),
-        ),
-        Text(
-          '2',
-          style: myTextType.myActionCuperStyle(context),
-        ),
-      ],
-      // itemBuilder: (BuildContext context, int index) {
-      //   return Text("$items");
-      // },
-    );
 
     return Container(
       height: screenHeight * 0.1,
@@ -318,12 +275,16 @@ class _EstimatorTileState extends State<EstimatorTile> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  widget.laundryItems,
-                  style: myTextType.myActionCuperStyle(context),
+                SizedBox(
+                  width: screenWidth * 0.3,
+                  child: Text(
+                    widget.laundryItems,
+                    style: myTextType.myActionCuperStyle(context),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
                 Text(
-                  widget.price,
+                  "GH¢ " + widget.price,
                   style: myTextType.myActionCuperStyle(context),
                 ),
                 GestureDetector(
@@ -331,7 +292,7 @@ class _EstimatorTileState extends State<EstimatorTile> {
                     print('tapped');
                   },
                   child: Text(
-                    '2',
+                    "${widget.laundryType}",
                     style: myTextType.myActionCuperStyle(context),
                   ),
                 ),

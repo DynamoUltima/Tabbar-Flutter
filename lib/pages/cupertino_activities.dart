@@ -24,7 +24,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   }
 
   String tag = "getOrderbyServerCode";
-  String orderStatusText;
+  String orderStatusText ="hi";
   String heyGender;
   String assigneeName;
   String assigneeUrl;
@@ -38,6 +38,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
   List<OrderList> orderDetailList = List<OrderList>();
   List<Assignees> assigneeDetailList = List<Assignees>();
+  String orderProcessStatus;
+  
 
   _getUserOrderStaus() {
     getOrderState(tag, "TU11122664").then((response) {
@@ -56,6 +58,10 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
       orderDetailList = orderStatus.order_list;
 
       assigneeDetailList = orderStatus.assignees;
+
+      setState(() {
+        orderProcessStatus=orderDetailList[0].status;
+      });
 
       print(orderDetailList.length);
       //print(orderDetailList[0].status);
@@ -82,8 +88,14 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     });
   }
 
-  void generateOrderStatusMethod() {
-    String orderProcessStatus = orderDetailList[0].status;
+ generateOrderStatusMethod() {
+
+    
+    //orderProcessStatus = orderDetailList[0].status;
+    // if(orderProcessStatus==null){
+    //   return Center(child: CupertinoActivityIndicator(),);
+    // }
+    
 
     //print(orderProcessStatus);
     print('tapped');
@@ -147,6 +159,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     super.initState();
     _getUserOrderStaus();
     //generateOrderStatusMethod();
+   
+   
   }
 
   double progressPercent = 0;
@@ -191,6 +205,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   }
 
   Future buildShowCupertinoModalPopup(BuildContext context) {
+
     return showCupertinoModalPopup(
       builder: (BuildContext context) {
         return CupertinoActionSheet(
@@ -299,6 +314,10 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
   Center buildCircularProgress(
       Color background, Color foreground, BuildContext context) {
+
+        // if(orderStatusText==null){
+        //  return Center(child: CupertinoActivityIndicator());
+        // }
     return Center(
       child: SizedBox(
         height: 200,

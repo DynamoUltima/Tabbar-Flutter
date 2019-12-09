@@ -42,9 +42,11 @@ class _PricingPagerState extends State<PricingPager> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            CupertinoPageRoute(
-                builder: (BuildContext context) => PricingPageDetails()));
+          context,
+          CupertinoPageRoute(
+            builder: (BuildContext context) => PricingPageDetails(),
+          ),
+        );
       },
       child: AnimatedContainer(
           padding: EdgeInsets.all(16),
@@ -95,11 +97,11 @@ class _PricingPagerState extends State<PricingPager> {
         ],
       ),
       child: Center(
-          child: Text(
-            'Gents',
-            style: _myCuperStyle(context),
-          ),
+        child: Text(
+          'Gents',
+          style: _myCuperStyle(context),
         ),
+      ),
     ); //easoutquit
   }
 
@@ -113,8 +115,49 @@ class _PricingPagerState extends State<PricingPager> {
         'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
 
     return GestureDetector(
-      onTap: (){
-       Navigator.push(
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (BuildContext context) => PricingPageDetails()));
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.bounceOut,
+        margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: DecorationImage(
+                image: NetworkImage(imageUrl), fit: BoxFit.cover),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black87,
+                  blurRadius: blur,
+                  offset: Offset(offset, offset))
+            ]),
+        child: Center(
+          child: Text(
+            'Beddings',
+            style: _myCuperStyle(context),
+          ),
+        ),
+      ),
+    ); //easoutquit
+  }
+
+
+   _buildPricingPage(String ImageUrl, String title) {
+    //Animated Properties
+    // bool active=false;
+    final double blur = activer ? 30 : 0;
+    final double offset = activer ? 20 : 0;
+    final double top = activer ? 50 : 100;
+    String imageUrl =
+        'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
             context,
             CupertinoPageRoute(
                 builder: (BuildContext context) => PricingPageDetails()));
