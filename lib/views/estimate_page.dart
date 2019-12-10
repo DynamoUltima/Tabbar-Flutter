@@ -22,11 +22,6 @@ class _EstimatorState extends State<Estimator> {
   String tag = "getPrices";
   List<Object> gentArray = [];
   List gentsResults = List<LaundryItems>();
-  List LadiesArray = [];
-  List TraditionalArray = [];
-  List ChildWear = [];
-  List BeddingArray = [];
-  List WashAndFoldArray = [];
   double currentPageValue = 0.0;
   String pageTitle;
   int currentIndex = 0;
@@ -52,22 +47,9 @@ class _EstimatorState extends State<Estimator> {
     });
   }
 
-  int _radioValue1 = -1;
+  
 
-  void _handleRadioValueChange1(int value) {
-    setState(() {
-      _radioValue1 = value;
-
-      switch (_radioValue1) {
-        case 0:
-          break;
-        case 1:
-          break;
-        case 2:
-          break;
-      }
-    });
-  }
+  
 
   @override
   void initState() {
@@ -83,8 +65,8 @@ class _EstimatorState extends State<Estimator> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     for (var item in articlePriceList) {
+      //gentArray is an array containing  the category titles
       gentArray.add(item.cartegory);
-      //cartegoryArray.add(item.laundryItem);
 
     }
     _estimatePickerMethod(String priceIndex, double price) {
@@ -130,8 +112,6 @@ class _EstimatorState extends State<Estimator> {
       );
     }
 
-  
-
     List categoryResults = LinkedHashSet.from(gentArray).toList();
     print("Awesome");
     print(categoryResults);
@@ -175,11 +155,10 @@ class _EstimatorState extends State<Estimator> {
                 height: screenHeight * 0.65,
                 child: Column(
                   children: <Widget>[
-                   
                     Row(
                       children: <Widget>[
                         Text("${categoryResults[indexItems]}",
-                            style: myTextType.myActionCuperStyle(context))
+                            style: myTextType.myActionCuperStyle(context),)
                       ],
                     ),
                     Row(
@@ -210,12 +189,13 @@ class _EstimatorState extends State<Estimator> {
                                       return SizedBox(
                                         height: screenHeight * 0.3,
                                         child: _estimatePickerMethod(
-                                            gentsResults[indexDetails]
-                                                .laundryItem,
-                                            double.parse(
-                                                gentsResults[indexDetails]
-                                                    .laundryDetails[0]
-                                                    .price)),
+                                          gentsResults[indexDetails]
+                                              .laundryItem,
+                                          double.parse(
+                                              gentsResults[indexDetails]
+                                                  .laundryDetails[0]
+                                                  .price),
+                                        ),
                                       );
                                     },
                                     context: context);

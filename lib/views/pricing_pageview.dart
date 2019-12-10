@@ -1,7 +1,12 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:tabbar/adaptive_widgets.dart';
+
+import 'package:tabbar/models/prices/laundry_items.dart';
+import 'package:tabbar/models/prices/price_list.dart';
+import 'package:tabbar/services/services.dart';
 import 'package:tabbar/views/pricing_page_details.dart';
 
 class PricingPager extends StatefulWidget {
@@ -13,6 +18,38 @@ class _PricingPagerState extends State<PricingPager> {
   PageController pagePriceController = PageController(viewportFraction: 0.8);
   int currentPage;
   bool activer = false;
+  String tag = "getPrices";
+  List articlePriceList = List<LaundryItems>();
+  List<Object> categoryArray = [];
+  List categoryResults;
+  List<Object> myImage = [];
+  bool active;
+  int currentIndex = 0;
+
+  List articleList =List<LaundryItems>();
+  List imageLinks = [
+    "polo_shirt.jpg",
+    "blouse.png",
+    "kente.png",
+    "child_shorts.png",
+    "bedspread.png",
+    "laundry.jpg"
+  ];
+
+  _getArticlePriceDetails() {
+    getPriceList(tag).then((response) {
+      var priceMap = json.decode(response.body);
+
+      PriceList priceList = PriceList();
+
+      setState(() {
+        priceList = PriceList.fromJson(priceMap);
+      });
+      articlePriceList = priceList.laundryItems;
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
 
   _myCuperStyle(BuildContext context) {
     var cuperStyle = CupertinoTheme.of(context)
@@ -30,105 +67,36 @@ class _PricingPagerState extends State<PricingPager> {
     }
   }
 
-  _buildPricingPage1() {
+  Widget _buildPricingPage(int index) {
     //Animated Properties
-    //bool active=false;
+    // bool active=false;
     final double blur = activer ? 30 : 0;
     final double offset = activer ? 20 : 0;
     final double top = activer ? 50 : 100;
-    String imageUrl =
-        'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
+    String imageUrl = "http://www.forhey.com/clothes/";
 
     return GestureDetector(
+      //http://www.forhey.com/clothes/jackets.png
       onTap: () {
         Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (BuildContext context) => PricingPageDetails(),
+            builder: (BuildContext context) => PricingPageDetails(articleList: articleList,),
           ),
         );
       },
       child: AnimatedContainer(
-          padding: EdgeInsets.all(16),
-          duration: Duration(milliseconds: 500),
-          curve: Curves.bounceOut,
-          margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                  image: NetworkImage(imageUrl), fit: BoxFit.cover),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black87,
-                    blurRadius: blur,
-                    offset: Offset(offset, offset))
-              ]),
-          child: Center(
-            child: Text(
-              'Ladies',
-              style: _myCuperStyle(context),
-            ),
-          )),
-    ); //easoutquit
-  }
-
-  _buildPricingPage0() {
-    //Animated Properties
-    // bool active=false;
-    final double blur = activer ? 30 : 0;
-    final double offset = activer ? 20 : 0;
-    final double top = activer ? 50 : 100;
-    String imageUrl =
-        'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
-
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
-      curve: Curves.bounceOut,
-      margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image:
-            DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black87,
-              blurRadius: blur,
-              offset: Offset(offset, offset))
-        ],
-      ),
-      child: Center(
-        child: Text(
-          'Gents',
-          style: _myCuperStyle(context),
-        ),
-      ),
-    ); //easoutquit
-  }
-
-  _buildPricingPage2() {
-    //Animated Properties
-    // bool active=false;
-    final double blur = activer ? 30 : 0;
-    final double offset = activer ? 20 : 0;
-    final double top = activer ? 50 : 100;
-    String imageUrl =
-        'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            CupertinoPageRoute(
-                builder: (BuildContext context) => PricingPageDetails()));
-      },
-      child: AnimatedContainer(
+        padding: EdgeInsets.all(90),
         duration: Duration(milliseconds: 500),
         curve: Curves.bounceOut,
         margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
-                image: NetworkImage(imageUrl), fit: BoxFit.cover),
+                colorFilter: ColorFilter.mode(
+                    CupertinoColors.activeBlue, BlendMode.dstATop),
+                image: NetworkImage(imageUrl + imageLinks[index]),
+                fit: BoxFit.cover),
             boxShadow: [
               BoxShadow(
                   color: Colors.black87,
@@ -136,49 +104,9 @@ class _PricingPagerState extends State<PricingPager> {
                   offset: Offset(offset, offset))
             ]),
         child: Center(
+          //
           child: Text(
-            'Beddings',
-            style: _myCuperStyle(context),
-          ),
-        ),
-      ),
-    ); //easoutquit
-  }
-
-
-   _buildPricingPage(String ImageUrl, String title) {
-    //Animated Properties
-    // bool active=false;
-    final double blur = activer ? 30 : 0;
-    final double offset = activer ? 20 : 0;
-    final double top = activer ? 50 : 100;
-    String imageUrl =
-        'https://images.unsplash.com/photo-1497367917223-64c44836be50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60';
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            CupertinoPageRoute(
-                builder: (BuildContext context) => PricingPageDetails()));
-      },
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
-        curve: Curves.bounceOut,
-        margin: EdgeInsets.only(top: top, bottom: 50, right: 30),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
-                image: NetworkImage(imageUrl), fit: BoxFit.cover),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black87,
-                  blurRadius: blur,
-                  offset: Offset(offset, offset))
-            ]),
-        child: Center(
-          child: Text(
-            'Beddings',
+            categoryResults[index],
             style: _myCuperStyle(context),
           ),
         ),
@@ -188,7 +116,8 @@ class _PricingPagerState extends State<PricingPager> {
 
   @override
   void initState() {
-    //super.initState();
+    super.initState();
+    _getArticlePriceDetails();
     pagePriceController.addListener(() {
       int next = pagePriceController.page.round();
 
@@ -198,16 +127,32 @@ class _PricingPagerState extends State<PricingPager> {
         });
       }
     });
+    
   }
+  
 
   @override
   Widget build(BuildContext context) {
-    List slideList = <Widget>[
-      _buildPricingPage0(),
-      _buildPricingPage1(),
-      _buildPricingPage2()
-    ];
     double screenHeight = MediaQuery.of(context).size.height;
+
+    for (var item in articlePriceList) {
+      categoryArray.add(item.cartegory);
+    }
+    
+    // myImage =LinkedHashSet.from(myImage).toList();
+    // print("---myImage---");
+
+    // for( var items in articlePriceList){
+    //   imageLinks.add(items.item_icon);
+
+    // }
+
+    setState(() {
+      categoryResults = LinkedHashSet.from(categoryArray).toList();
+    });
+
+    // print("---category Results---");
+    // print(categoryResults);
 
     return Padding(
       padding: const EdgeInsets.all(0.0),
@@ -215,16 +160,39 @@ class _PricingPagerState extends State<PricingPager> {
         height: screenHeight * 0.7,
         // width: 250,
         child: PageView.builder(
+          onPageChanged: (indexer) {
+            
+            setState(() {
+              currentIndex = indexer;
+            });
+            articleList.clear();
+
+            
+          },
           // pageSnapping: true,
           controller: pagePriceController,
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),
-          itemCount: slideList.length,
+          itemCount: categoryResults.length,
           itemBuilder: (BuildContext context, int index) {
-            if (slideList.length >= 1) {
-              bool active = index == currentPage;
+            categoryResults = LinkedHashSet.from(categoryArray).toList();
+
+            articlePriceList.forEach((f) {
+              if (f.cartegory == categoryResults[currentIndex]) {
+                articleList.add(f);
+                articleList = LinkedHashSet.from(articleList).toList();
+              }
+            });
+            // print("--articleModels--");
+            // print(articleList);
+            // print(articleList.length);
+            // print("--cateIndex--");
+            // print(categoryResults[currentIndex]);
+            if (categoryResults.length >= 1) {
+              active = index == currentPage;
+
               _animationContainerState(active);
-              return slideList[index];
+              return _buildPricingPage(index);
             }
           },
         ),
