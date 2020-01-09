@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 //import 'adaptive_widgets.dart';
 //import 'package:cupertino_icons/placeholder.txt';
 import 'package:tabbar/adaptive_widgets.dart';
@@ -12,11 +11,10 @@ import 'package:tabbar/pages/cupertino_profile.dart';
 import 'package:tabbar/views/history_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/views/settings.dart';
-
-
 import 'pages/cupertino_activities.dart';
-
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -25,36 +23,73 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  _myCuperStyle(BuildContext context) {
-    var cuperStyle = CupertinoTheme.of(context)
-        .textTheme
-        .navTitleTextStyle
-        .apply(color: CupertinoColors.activeBlue);
-    return cuperStyle;
-  }
-
+  String user_list_key = "list_key";
+ // List<String> mydetailList = [];
   int sharedValue = 0;
   double progressPercent = 0;
+  String clientEmail;
+
+
+  
+
+  Future<List<String>> getUserList() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getStringList(user_list_key);
+  }
+
+  // loadList() {
+  //   getUserList().then((onValue) {
+  //     setState(() {
+  //       mydetailList = onValue;
+  //     });
+  //   });
+  // }
+  
+
+  @override
+  void initState() {
+    super.initState();
+
+    const MethodChannel('plugins.flutter.io/shared_preferences')
+        .setMockMethodCallHandler(
+      (MethodCall methodCall) async {
+        if (methodCall.method == 'getAll') {
+          return {"flutter." + user_list_key: "No Name saved"};
+        }
+        return null;
+      },
+    );
+
+    //loadList();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
+    print("--Print Preferences---");
+   // print(mydetailList);
     // CupertinoTheme cupertinoTheme;
+
+    // setState(() {
+    //   clientEmail= mydetailList[0];
+    // });
+    
+    // print("---client Email--");
+    // print(clientEmail);
 
     return CupertinoPageScaffold(
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
           items: [
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.home), title: Text('Home')),
+                icon: Icon(CupertinoIcons.home), title: Text('Home'),),
             BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.briefcase),
                 title: Text('Activities')),
             BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.moneyBill),
-                title: Text('Pricing')),
+                icon: Icon(FontAwesomeIcons.moneyBill), title: Text('Pricing')),
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.person), 
-                title: Text('Profile')),
+                icon: Icon(CupertinoIcons.person), title: Text('Profile')),
           ],
         ),
         tabBuilder: (BuildContext context, int index) {
@@ -81,7 +116,8 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (BuildContext context) => OrderHistoryPage(),
+                            builder: (BuildContext context) =>
+                                OrderHistoryPage(clientEmail:clientEmail),
                           ),
                         );
                       },

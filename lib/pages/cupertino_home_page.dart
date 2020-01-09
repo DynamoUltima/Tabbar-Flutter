@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
 import 'package:tabbar/general_page.dart';
 
@@ -8,13 +9,13 @@ class CupertinoHome extends StatefulWidget {
 }
 
 class _CupertinoHomeState extends State<CupertinoHome> {
-   static String cardMessage= "Forhey is the solution you have been waiting for";
+  static String cardMessage =
+      "Forhey is the solution you have been waiting for";
   List<String> myfirstList = [
     'Forhey is the solution you have been waiting for',
     'Forhey is the solution you have been waiting for',
     '${cardMessage}',
     cardMessage,
-    
   ];
   List<Widget> myIntList = [
     VeggieCard(),
@@ -23,14 +24,30 @@ class _CupertinoHomeState extends State<CupertinoHome> {
     VeggieCard(),
   ];
   myTextStyle myTextType = new myTextStyle();
+  String loginKey = "LoginTokener";
+
+  Future<bool> getLoginKey() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var tokenId = preferences.getBool(loginKey);
+
+    print("--tokenId--Cuperhome");
+    print(tokenId);
+
+    return tokenId;
+  }
 
   @override
-  Widget build(BuildContext context) {
+  initState() {
+    // TODO: implement initState
+    super.initState();
+    getLoginKey();
+  }
+
+  @override
+  build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
 
     firstRow(int position) {
-     
-
       return myIntList[position];
     }
 
@@ -84,4 +101,3 @@ class _CupertinoHomeState extends State<CupertinoHome> {
     );
   }
 }
-

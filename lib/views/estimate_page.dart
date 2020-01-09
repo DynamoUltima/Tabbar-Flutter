@@ -29,6 +29,7 @@ class _EstimatorState extends State<Estimator> {
   //this is a map of number of items and articles
   Map<String, int> numbered = {};
   Map<String, double> priceMap = {};
+  double sliderValue= 0.0;
 
   _getArticlePriceDetails() {
     getPriceList(tag).then((response) {
@@ -47,10 +48,6 @@ class _EstimatorState extends State<Estimator> {
     });
   }
 
-  
-
-  
-
   @override
   void initState() {
     // TODO: implement initState
@@ -67,7 +64,6 @@ class _EstimatorState extends State<Estimator> {
     for (var item in articlePriceList) {
       //gentArray is an array containing  the category titles
       gentArray.add(item.cartegory);
-
     }
     _estimatePickerMethod(String priceIndex, double price) {
       return CupertinoPicker.builder(
@@ -157,14 +153,34 @@ class _EstimatorState extends State<Estimator> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Text("${categoryResults[indexItems]}",
-                            style: myTextType.myActionCuperStyle(context),)
+                        Text(
+                          "${categoryResults[indexItems]}",
+                          style: myTextType.myActionCuperStyle(context),
+                        )
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("Total Price " + "GH¢ " + "${finalPrice}",
-                            style: myTextType.myActionCuperStyle(context)),
+                        Text(
+                          "Total Price " + "GH¢ " + "${finalPrice}",
+                          style: myTextType.myActionCuperStyle(context),
+                        ),
+                        CupertinoSlider(
+                          onChanged: (double value) {
+                            setState(() {
+                              sliderValue= value;
+                            });
+                            print(value);
+                          },
+                          value:sliderValue,
+                          min: 0.0,
+                          max: 3,
+                          divisions: 3,
+                          activeColor: CupertinoColors.activeBlue,
+                          
+
+                        )
                       ],
                     ),
                     // buildRow(),

@@ -288,6 +288,50 @@ Future<http.Response> getPriceList(
   return response;
 }
 
+Future<http.Response> updateAccounts(
+  String tag,
+  String email,
+  String name,
+  String location,
+  String phone,
+  String other_location,
+  String street_name,
+  String house_number,
+  String reference,
+  String company_name,
+  String pickupPoint, //watch out this could be pick_up_point
+  String lat,
+  String lng,
+) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+    "email": email,
+    "tag": tag,
+    "email": email,
+    "name": name,
+    "location": location,
+    "phone": phone,
+    "other_location": other_location,
+    "street_name": street_name,
+    "house_number": house_number,
+    "reference": reference,
+    "company_name": company_name,
+    "pickupPoint": pickupPoint,
+    "lat": lat,
+    "lng": lng,
+  };
+
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body,
+  );
+  return response;
+}
+
 /*
 Place Order
 ForheyService.domain+"updated_order_process.php

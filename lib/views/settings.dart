@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
+import 'package:tabbar/main.dart';
 import 'package:tabbar/views/order_page.dart';
 import 'package:tabbar/views/update_accounts_page.dart';
+
+
 
 class AllSettings extends StatefulWidget {
   @override
@@ -225,6 +228,11 @@ class _AllSettingsState extends State<AllSettings> {
             ),
             settingListTiles(OrderPage(), CupertinoColors.activeBlue,
                 'Change password', CupertinoIcons.padlock),
+                SizedBox(
+              height: 10,
+            ),
+            settingListTiles(MyApp(), CupertinoColors.destructiveRed,
+                'Sign Out', CupertinoIcons.person_add_solid),
             SizedBox(
               height: 20,
             ),

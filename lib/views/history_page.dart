@@ -12,6 +12,10 @@ import 'package:tabbar/models/orderHistory/order_history_response.dart';
 import 'package:tabbar/services/services.dart';
 
 class OrderHistoryPage extends StatefulWidget {
+  String clientEmail;
+
+  OrderHistoryPage({this.clientEmail});
+
   @override
   _OrderHistoryPageState createState() => _OrderHistoryPageState();
 }
@@ -22,15 +26,21 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   String tag = "orderDetails";
   String user_list_key = "list_key";
   List<String> mydetailList = [];
-  String email;
+  //String email
+  // String prefEmail = "hh";
 
-   List<OrderHistoryList> orderDetailList = List<OrderHistoryList>();
+  Future<List<String>> getUserList() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getStringList(user_list_key);
+  }
+
+  List<OrderHistoryList> orderDetailList = List<OrderHistoryList>();
 
   _getUserOrderHistory() {
-    
-    getOrderHistory(tag, "dynamo@gmail.com").then((response) {
+    getOrderHistory(tag, widget.clientEmail).then((response) {
       print(response.statusCode);
-      print(mydetailList[0]);
+
+      print(mydetailList);
       var historyMap = json.decode(response.body);
 
       OrderHistory orderHistory = OrderHistory();
@@ -39,9 +49,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         orderHistory = OrderHistory.fromJson(historyMap);
       });
       //print(orderHistory.toJson());
-      
-        orderDetailList = orderHistory.order_list;
-    
+
+      orderDetailList = orderHistory.order_list;
     });
   }
 
@@ -66,11 +75,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   //   super.dispose();
   // }
 
-  Future<List<String>> getUserList() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getStringList(user_list_key);
-  }
-
   loadList() {
     getUserList().then((onValue) {
       setState(() {
@@ -81,8 +85,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight =MediaQuery.of(context).size.height;
-    double screenWidth =MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     var pageTtitleText = Row(
       children: <Widget>[
         Text(
@@ -98,7 +102,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         color: CupertinoColors.lightBackgroundGray,
         padding: EdgeInsets.all(8),
         child: Column(
-          
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,11 +208,9 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         previousPageTitle: 'Activities',
         middle: Text('Order History'),
       ),
-       
-      
       child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-              child: Container(
+        physics: BouncingScrollPhysics(),
+        child: Container(
           padding: EdgeInsets.all(8),
           child: Column(
             children: <Widget>[
@@ -219,20 +220,20 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
               pageTtitleText,
               ListView.builder(
                 physics: BouncingScrollPhysics(),
-                itemCount:orderDetailList.length ,
+                itemCount: orderDetailList.length,
                 shrinkWrap: true,
-                
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: HistoryCardMethod(
-                     orderDetailList[index].pick_up_date,
-                     orderDetailList[index].pick_up_point,
-                     orderDetailList[index].server_code,
-                      "paymentStatus", "orderStatus", "orderType"),
+                        orderDetailList[index].pick_up_date,
+                        orderDetailList[index].pick_up_point,
+                        orderDetailList[index].server_code,
+                        "paymentStatus",
+                        "orderStatus",
+                        "orderType"),
                   );
                 },
-                
               ),
             ],
           ),
