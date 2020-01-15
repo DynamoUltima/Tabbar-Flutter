@@ -8,6 +8,7 @@ import 'package:tabbar/adaptive_widgets.dart';
 import 'package:tabbar/pages/cupertino_home_page.dart';
 import 'package:tabbar/pages/cupertino_pricing.dart';
 import 'package:tabbar/pages/cupertino_profile.dart';
+import 'package:tabbar/pages/home_page.dart';
 import 'package:tabbar/views/history_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -29,6 +30,21 @@ class _HomePageState extends State<HomePage> {
   double progressPercent = 0;
   String clientEmail;
 
+  String userName;
+
+  Future _checkUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString("userName") != null) {
+      setState(() {
+        userName = prefs.getString("userName");
+      });
+    }
+
+    print("printing pref user name--general/HomePage");
+    print(userName);
+  }
+
 
   
 
@@ -44,21 +60,38 @@ class _HomePageState extends State<HomePage> {
   //     });
   //   });
   // }
+
+  Future _checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getBool("isLogin") == false) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => MyHomePage(),
+        ),
+      );
+    }
+  }
   
 
   @override
   void initState() {
     super.initState();
+    _checkUser();
+    _checkLogin();
+    
 
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler(
-      (MethodCall methodCall) async {
-        if (methodCall.method == 'getAll') {
-          return {"flutter." + user_list_key: "No Name saved"};
-        }
-        return null;
-      },
-    );
+
+    // const MethodChannel('plugins.flutter.io/shared_preferences')
+    //     .setMockMethodCallHandler(
+    //   (MethodCall methodCall) async {
+    //     if (methodCall.method == 'getAll') {
+    //       return {"flutter." + user_list_key: "No Name saved"};
+    //     }
+    //     return null;
+    //   },
+    // );
 
     //loadList();
     

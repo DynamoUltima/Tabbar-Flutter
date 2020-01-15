@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
+import 'package:tabbar/general_page.dart';
 import 'package:tabbar/main.dart';
 import 'package:tabbar/views/order_page.dart';
 import 'package:tabbar/views/update_accounts_page.dart';
@@ -16,6 +18,19 @@ class _AllSettingsState extends State<AllSettings> {
   String url =
       'https://blogs.psychcentral.com/life-goals/files/2018/09/mens-dress-guide-768x513.jpg';
   var myTextType = myTextStyle();
+
+
+  Future _Logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isLogin", false);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => HomePage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +123,8 @@ class _AllSettingsState extends State<AllSettings> {
     ) {
       var settingTile = GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (BuildContext context) => pageObject));
+          _Logout();
+          print(tileText);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

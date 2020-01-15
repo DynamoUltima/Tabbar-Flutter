@@ -52,6 +52,9 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
     //     this.homeRef="";
     //   });
     // }
+
+    print("--My detail List--profile.dart--");
+    print(mydetailList);
     
       
     
