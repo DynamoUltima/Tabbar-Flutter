@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,11 +23,14 @@ class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   _HomePageState createState() => _HomePageState();
+
+  // void logout() {}
+
 }
 
 class _HomePageState extends State<HomePage> {
   String user_list_key = "list_key";
- // List<String> mydetailList = [];
+  List<String> mydetailList = [];
   int sharedValue = 0;
   double progressPercent = 0;
   String clientEmail;
@@ -45,21 +50,37 @@ class _HomePageState extends State<HomePage> {
     print(userName);
   }
 
-
-  
-
   Future<List<String>> getUserList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getStringList(user_list_key);
   }
 
-  // loadList() {
-  //   getUserList().then((onValue) {
-  //     setState(() {
-  //       mydetailList = onValue;
-  //     });
-  //   });
-  // }
+  loadList() {
+    getUserList().then((onValue) {
+      setState(() {
+        mydetailList = onValue;
+      });
+    });
+  }
+
+  Future _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isLogin", false);
+    // Navigator.popUntil(context, ModalRoute.withName("MyHome"));
+
+    //Navigator.pop(context);
+
+    //SystemNavigator.pop();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => MyHomePage(),
+      ),
+    );
+
+    // exit(0);
+  }
 
   Future _checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -73,15 +94,12 @@ class _HomePageState extends State<HomePage> {
       );
     }
   }
-  
 
   @override
   void initState() {
     super.initState();
     _checkUser();
     _checkLogin();
-    
-
 
     // const MethodChannel('plugins.flutter.io/shared_preferences')
     //     .setMockMethodCallHandler(
@@ -93,108 +111,126 @@ class _HomePageState extends State<HomePage> {
     //   },
     // );
 
-    //loadList();
-    
+    loadList();
+
+    //_Logout();
   }
 
   @override
   Widget build(BuildContext context) {
     print("--Print Preferences---");
-   // print(mydetailList);
+    // print(mydetailList);
     // CupertinoTheme cupertinoTheme;
 
-    // setState(() {
-    //   clientEmail= mydetailList[0];
-    // });
-    
+    setState(() {
+      clientEmail = mydetailList[0];
+    });
+
     // print("---client Email--");
     // print(clientEmail);
 
-    return CupertinoPageScaffold(
-      child: CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.home), title: Text('Home'),),
-            BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.briefcase),
-                title: Text('Activities')),
-            BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.moneyBill), title: Text('Pricing')),
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.person), title: Text('Profile')),
-          ],
-        ),
-        tabBuilder: (BuildContext context, int index) {
-          assert(index >= 0 && index <= 3);
+    return Container(
+      child: CupertinoPageScaffold(
+        child: CupertinoTabScaffold(
+          tabBar: CupertinoTabBar(
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.home),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(FontAwesomeIcons.briefcase),
+                  title: Text('Activities')),
+              BottomNavigationBarItem(
+                  icon: Icon(FontAwesomeIcons.moneyBill),
+                  title: Text('Pricing')),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.person), title: Text('Profile')),
+            ],
+          ),
+          tabBuilder: (BuildContext context, int index) {
+            assert(index >= 0 && index <= 3);
 
-          switch (index) {
-            case 0:
-              return CupertinoTabView(
-                builder: (context) => CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    middle: (index == 0) ? Text('Home') : Text('School'),
-                  ),
-                  child: CupertinoHome(),
-                ),
-              );
-              break;
-            case 1:
-              return CupertinoTabView(
-                builder: (context) => CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    middle: (index == 1) ? Text('Activities') : null,
-                    trailing: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (BuildContext context) =>
-                                OrderHistoryPage(clientEmail:clientEmail),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Order History',
-                        style: TextStyle(color: CupertinoColors.activeBlue),
+            switch (index) {
+              case 0:
+                return CupertinoTabView(
+                  builder: (context) => CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                      middle: (index == 0) ? Text('Home') : Text('School'),
+                      trailing: GestureDetector(
+                        child: Text("Logout",
+                            style: TextStyle(
+                                color: CupertinoColors
+                                    .activeBlue)), //CupertinoIcons.restart
+                        onTap: () {
+                          _logout();
+                        },
                       ),
                     ),
+                    child: CupertinoHome(),
                   ),
-                  child: CupertinoActivities(),
-                ),
-              );
-              break;
-            case 2:
-              return CupertinoTabView(
-                builder: (context) => CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                      middle: (index == 2) ? Text('Pricing') : null),
-                  child: CupertinoPricing(),
-                  // child: Text('data'),
-                ),
-              );
-              break;
-            case 3:
-              return CupertinoTabView(
-                builder: (context) => CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    middle: (index == 3) ? Text('Profile') : null,
-                    trailing: GestureDetector(
+                );
+                break;
+              case 1:
+                return CupertinoTabView(
+                  builder: (context) => CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                      middle: (index == 1) ? Text('Activities') : null,
+                      trailing: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
                               builder: (BuildContext context) =>
-                                  AllSettings()));
+                                  OrderHistoryPage(clientEmail: clientEmail),
+                            ),
+                          );
                         },
-                        child: Icon(CupertinoIcons.settings,
-                            color: CupertinoColors.activeBlue)),
+                        child: Text(
+                          'Order History',
+                          style: TextStyle(color: CupertinoColors.activeBlue),
+                        ),
+                      ),
+                    ),
+                    child: CupertinoActivities(),
                   ),
-                  child: CupertinoProfile(),
-                ),
-              );
-              break;
-          }
-          return null;
-        },
+                );
+                break;
+              case 2:
+                return CupertinoTabView(
+                  builder: (context) => CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                        middle: (index == 2) ? Text('Pricing') : null),
+                    child: CupertinoPricing(),
+                    // child: Text('data'),
+                  ),
+                );
+                break;
+              case 3:
+                return CupertinoTabView(
+                  builder: (context) => CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                      middle: (index == 3) ? Text('Profile') : null,
+                      trailing: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (BuildContext context) =>
+                                    AllSettings(),
+                              ),
+                            );
+                          },
+                          child: Icon(CupertinoIcons.settings,
+                              color: CupertinoColors.activeBlue)),
+                    ),
+                    child: CupertinoProfile(),
+                  ),
+                );
+                break;
+            }
+            return null;
+          },
+        ),
       ),
     );
   }

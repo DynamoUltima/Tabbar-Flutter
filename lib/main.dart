@@ -13,7 +13,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   // print("--tokenId---");
   // print(tokenId);
- return runApp(InitPage());
+  return runApp(
+    MaterialApp(
+      home: InitPage(),
+      routes: <String, WidgetBuilder>{
+        'MyHome': (context) => MyHomePage(),
+      },
+    ),
+  );
 }
 
 class InitPage extends StatelessWidget {
@@ -24,13 +31,11 @@ class InitPage extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        
         primarySwatch: Colors.blue,
       ),
       home: MyApp(),
     );
   }
-  
 }
 
 class MyApp extends StatefulWidget {
@@ -39,60 +44,47 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String loginKey = "LoginTokener";
-  var tokenId;
-  
+  Future _checkLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
-  
+    print("----this login method being called----");
+
+    if (pref.getBool("isLogin")) {
+      print("-----option 1 bein called----");
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+    } else {
+      print("---alternative been called--");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => MyHomePage(),
+        ),
+      );
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    //_checkLogin();
-
-    //startTimer();
+    _checkLogin();
   }
-
-  // void startTimer() {
-  //   Timer(Duration(seconds: 3), () {
-  //     navigateUser(); //It will redirect  after 3 seconds
-  //   });
-  // }
-
-  // void navigateUser() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-
-  //   setState(() {
-  //     tokenId = preferences.getBool(loginKey);
-  //   });
-  //   print("------tokenId----main.dart--navUser");
-  //   print(tokenId);
-
-  //   var test = preferences.getStringList(user_list_key);
-
-  //   print("---testing prefrences----main.dart");
-  //   print(test);
-
-  //   print("navidgateUser is being called");
-
-  //   //MyHomePage();
-  // }
 
   @override
   Widget build(BuildContext context) {
-    
-
-  
-
     return Container(
-          child: Material(child: MyHomePage())
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //       image: AssetImage("assets/images/clinician_splash.png"),
-          //       fit: BoxFit.cover),
-          // ),
-        
-      
+      child: Material(
+        child: Center(
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/ic_launcher.png"),
+                  fit: BoxFit.contain),
+            ),
+          ),
+        ),
+      ),
     );
 
     // return MaterialApp (

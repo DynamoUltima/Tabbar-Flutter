@@ -4,10 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
 import 'package:tabbar/general_page.dart';
 import 'package:tabbar/main.dart';
+import 'package:tabbar/pages/home_page.dart';
 import 'package:tabbar/views/order_page.dart';
 import 'package:tabbar/views/update_accounts_page.dart';
-
-
 
 class AllSettings extends StatefulWidget {
   @override
@@ -19,18 +18,9 @@ class _AllSettingsState extends State<AllSettings> {
       'https://blogs.psychcentral.com/life-goals/files/2018/09/mens-dress-guide-768x513.jpg';
   var myTextType = myTextStyle();
 
+  HomePage generalPage = new HomePage();
 
-  Future _Logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isLogin", false);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => HomePage(),
-      ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -116,14 +106,61 @@ class _AllSettingsState extends State<AllSettings> {
     );
 
     settingListTiles(
-      Object pageObject,
+      
       Color circleBackgroundColor,
       String tileText,
       IconData tileIcon,
     ) {
       var settingTile = GestureDetector(
         onTap: () {
-          _Logout();
+          //_Logout();
+          //generalPage.logout(context);
+          print(tileText);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                CircleAvatar(
+                  child: Icon(
+                    tileIcon,
+                    color: CupertinoColors.white,
+                  ),
+                  backgroundColor: circleBackgroundColor,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  tileText,
+                  style: myTextType.myDefaultCuperStyle(
+                      context, 20, CupertinoColors.activeBlue),
+                ),
+              ],
+            ),
+            Icon(CupertinoIcons.right_chevron)
+          ],
+        ),
+      );
+
+      return settingTile;
+    }
+
+    editProfileListTiles(
+      //Object pageObject,
+      Color circleBackgroundColor,
+      String tileText,
+      IconData tileIcon,
+    ) {
+      var settingTile = GestureDetector(
+        onTap: () {
+          // _Logout();
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (BuildContext context) => UpdateAccountPage()));
           print(tileText);
         },
         child: Row(
@@ -234,21 +271,16 @@ class _AllSettingsState extends State<AllSettings> {
             SizedBox(
               height: 20,
             ),
-            settingListTiles(UpdateAccountPage(), CupertinoColors.activeOrange,
-                'Edit profile', CupertinoIcons.person),
+            editProfileListTiles(CupertinoColors.activeOrange, 'Edit profile',
+                CupertinoIcons.person),
             SizedBox(
               height: 10,
             ),
-            settingListTiles(OrderPage(), CupertinoColors.activeBlue,
-                'Change password', CupertinoIcons.padlock),
-                SizedBox(
-              height: 10,
-            ),
-            settingListTiles(MyApp(), CupertinoColors.destructiveRed,
-                'Sign Out', CupertinoIcons.person_add_solid),
-            SizedBox(
-              height: 20,
-            ),
+            // settingListTiles( CupertinoColors.destructiveRed,
+            //     'Sign Out', CupertinoIcons.person_add_solid),
+            // SizedBox(
+            //   height: 20,
+            // ),
             Row(children: <Widget>[
               Text(
                 'Notifications',
@@ -258,7 +290,8 @@ class _AllSettingsState extends State<AllSettings> {
             SizedBox(
               height: 20,
             ),
-            NotificationListTiles(CupertinoColors.activeGreen, 'Notification', CupertinoIcons.bell)
+            NotificationListTiles(CupertinoColors.activeGreen, 'Notification',
+                CupertinoIcons.bell)
           ],
         ),
       ),
