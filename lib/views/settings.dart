@@ -18,9 +18,28 @@ class _AllSettingsState extends State<AllSettings> {
       'https://blogs.psychcentral.com/life-goals/files/2018/09/mens-dress-guide-768x513.jpg';
   var myTextType = myTextStyle();
 
-  HomePage generalPage = new HomePage();
+  String userName="";
 
   
+  Future _checkUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString("userName") != null) {
+      setState(() {
+        userName = prefs.getString("userName");
+      });
+    }
+
+    print("printing pref user name--general/HomePage");
+    print(userName);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +70,13 @@ class _AllSettingsState extends State<AllSettings> {
               width: 10,
             ),
             Text(
-              'Johnson James',
+              userName,
               style: myTextType.myDefaultCuperStyle(
                   context, 20, CupertinoColors.activeBlue),
             ),
           ],
         ),
-        Icon(CupertinoIcons.right_chevron)
+        //Icon(CupertinoIcons.right_chevron)
       ],
     );
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tabbar/customWidgets/myTextStyle.dart';
@@ -38,9 +39,9 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
   _getUserOrderHistory() {
     getOrderHistory(tag, widget.clientEmail).then((response) {
-      print(response.statusCode);
+      // print(response.statusCode);
 
-      print(mydetailList);
+      // print(mydetailList);
       var historyMap = json.decode(response.body);
 
       OrderHistory orderHistory = OrderHistory();
@@ -48,7 +49,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       setState(() {
         orderHistory = OrderHistory.fromJson(historyMap);
       });
-      //print(orderHistory.toJson());
+      
 
       orderDetailList = orderHistory.order_list;
     });
@@ -83,10 +84,43 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     });
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
+    if (mydetailList.isEmpty) {
+      //print("list was empty for a while");
+     var id = new DateTime.now().millisecondsSinceEpoch;
+     var now = new DateTime.now();
+     var nowTime = DateFormat("d MMMM yyyy").format(now);
+     var dTime = DateFormat("d ").format(now);
+     var dayTime = DateFormat("EEE ").format(now);
+     var mTime = DateFormat("M").format(now);
+     var hrTime = DateFormat("k ").format(now);
+     var secTime = DateFormat("s  ").format(now);
+
+    
+
+
+    //  print(dayTime);
+    //  print(mTime);
+    //  print(dTime);
+    //  print(hrTime);
+    //  print(secTime);
+
+    //  print(dayTime.substring(0,2).toUpperCase());
+
+      
+
+      return Container(
+        child: Center(
+          child: Text("Loading", style: myTextType.myLargeCuperStyle(context)),
+        ),
+      );
+    }
     var pageTtitleText = Row(
       children: <Widget>[
         Text(

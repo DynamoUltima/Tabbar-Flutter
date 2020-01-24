@@ -17,19 +17,21 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
   @override
   void initState() {
     super.initState();
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler(
-      (MethodCall methodCall) async {
-        if (methodCall.method == 'getAll') {
-          return {"flutter." + user_list_key: "No Name saved"};
-        }
-        return null;
-      },
-    );
+    // const MethodChannel('plugins.flutter.io/shared_preferences')
+    //     .setMockMethodCallHandler(
+    //   (MethodCall methodCall) async {
+    //     if (methodCall.method == 'getAll') {
+    //       return {"flutter." + user_list_key: "No Name saved"};
+    //     }
+    //     return null;
+    //   },
+    // );
     
     
     
     loadList();
+
+    
   }
 
   Future<List<String>> getUserList() async {
@@ -37,10 +39,10 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
     return preferences.getStringList(user_list_key);
   }
 
-  loadList() {
-    getUserList().then((onValue) {
+  loadList() async {
+   await getUserList().then((onValue) {
       setState(() {
-        mydetailList = onValue;
+        mydetailList =  onValue;
       });
     });
   }
@@ -55,6 +57,22 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
 
     print("--My detail List--profile.dart--");
     print(mydetailList);
+
+    if(mydetailList.isEmpty){
+
+      
+
+     return Container(
+       child: Center(
+         child: Text("Loading",style: CupertinoTheme.of(context)
+                    .textTheme
+                    .navActionTextStyle
+                    .apply(color: CupertinoColors.activeBlue, fontSizeDelta: 22)),
+       ),
+     );
+
+   }
+   
     
       
     

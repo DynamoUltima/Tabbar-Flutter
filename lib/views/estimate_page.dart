@@ -29,7 +29,7 @@ class _EstimatorState extends State<Estimator> {
   //this is a map of number of items and articles
   Map<String, int> numbered = {};
   Map<String, double> priceMap = {};
-  double sliderValue= 0.0;
+  double sliderValue = 0.0;
 
   _getArticlePriceDetails() {
     getPriceList(tag).then((response) {
@@ -53,6 +53,10 @@ class _EstimatorState extends State<Estimator> {
     // TODO: implement initState
     super.initState();
     _getArticlePriceDetails();
+
+    if (articlePriceList.isEmpty) {
+      print("article list was empty at a point");
+    }
   }
 
   @override
@@ -60,6 +64,18 @@ class _EstimatorState extends State<Estimator> {
     myTextStyle myTextType = new myTextStyle();
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
+    if (articlePriceList.isEmpty) {
+      
+
+      return Container(
+        child: Center(
+          child: Text("Loading", style: myTextType.myLargeCuperStyle(context)),
+        ),
+      );
+    }
+
+    
 
     for (var item in articlePriceList) {
       //gentArray is an array containing  the category titles
@@ -91,16 +107,16 @@ class _EstimatorState extends State<Estimator> {
                 priceMap.values.reduce((sum, combine) => sum + combine);
           });
 
-          print("--final Price--");
-          print(finalPrice);
+          // print("--final Price--");
+          // print(finalPrice);
 
-          print("--currentPrice--");
-          print(currentPrice);
+          // print("--currentPrice--");
+          // print(currentPrice);
 
-          print("----Price Map---");
-          print(priceMap);
+          // print("----Price Map---");
+          // print(priceMap);
 
-          print(value);
+          // print(value);
         },
         itemBuilder: (BuildContext context, int index) {
           return Text("$index");
@@ -109,8 +125,8 @@ class _EstimatorState extends State<Estimator> {
     }
 
     List categoryResults = LinkedHashSet.from(gentArray).toList();
-    print("Awesome");
-    print(categoryResults);
+    // print("Awesome");
+    // print(categoryResults);
 
     return Container(
       height: screenHeight * 0.8,
@@ -166,21 +182,19 @@ class _EstimatorState extends State<Estimator> {
                           "Total Price " + "GH¢ " + "${finalPrice}",
                           style: myTextType.myActionCuperStyle(context),
                         ),
-                        CupertinoSlider(
-                          onChanged: (double value) {
-                            setState(() {
-                              sliderValue= value;
-                            });
-                            print(value);
-                          },
-                          value:sliderValue,
-                          min: 0.0,
-                          max: 3,
-                          divisions: 3,
-                          activeColor: CupertinoColors.activeBlue,
-                          
-
-                        )
+                        // CupertinoSlider(
+                        //   onChanged: (double value) {
+                        //     setState(() {
+                        //       sliderValue = value;
+                        //     });
+                        //     print(value);
+                        //   },
+                        //   value: sliderValue,
+                        //   min: 0.0,
+                        //   max: 3,
+                        //   divisions: 3,
+                        //   activeColor: CupertinoColors.activeBlue,
+                        // )
                       ],
                     ),
                     // buildRow(),

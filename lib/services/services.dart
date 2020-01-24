@@ -26,6 +26,46 @@ Future<http.Response> postLogin(String email, String password) async {
   return response;
 }
 
+Future<http.Response> postSignUp(String email,
+String password,
+String username,
+String location,
+String other_location,
+String phoneNumber,
+) async {
+  //var loginBody = LoginModel(email: email, password: password,tag: "login");
+  // print(loginBody);
+  //print(json.encode(loginBody));
+
+  Map<String, String> body = {
+    "tag": "register",
+    "email": email,
+    "password": password,
+    "location":location,
+    "other_location":other_location,
+    "phone":phoneNumber,
+    "gcm_regid":"",
+    "new_user":"true",
+    "From": "Email"
+
+
+
+    
+  };
+
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+      // HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded",
+    },
+    body: body,
+  );
+
+  return response;
+}
+
 Future<http.Response> orderPlaced(
   String tag,
   String pick_up_point,
@@ -319,6 +359,28 @@ Future<http.Response> updateAccounts(
     "pickupPoint": pickupPoint,
     "lat": lat,
     "lng": lng,
+  };
+
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body,
+  );
+  return response;
+}
+
+Future<http.Response> cancelOrder(
+  String tag,
+  String server_code,
+  String status,
+) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+    "server_code": server_code,
+    "status": status
   };
 
   final response = await http.post(

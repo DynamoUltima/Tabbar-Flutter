@@ -10,6 +10,8 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'signup.dart';
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -64,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-          body: Container(
+      body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: <Color>[Colors.purple[700], Colors.pink[300]],
@@ -124,63 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Column(
                                 children: <Widget>[
                                   Center(
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15))),
-                                      elevation: 0,
-                                      child: Container(
-                                        margin: EdgeInsets.only(bottom: 30),
-                                        child: Stack(
-                                          children: <Widget>[
-                                            Column(
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 20,
-                                                      left: 20,
-                                                      right: 20),
-                                                  child: TextFormField(
-                                                    controller: _emailController,
-                                                    decoration: InputDecoration(
-                                                      border: InputBorder.none,
-                                                      hintText: 'Email Address',
-                                                      prefixIcon: Icon(
-                                                          Icons.mail_outline),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Divider(
-                                                  height: 5,
-                                                  color: Colors.grey,
-                                                  indent: 15,
-                                                  endIndent: 15,
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 20,
-                                                      left: 20,
-                                                      right: 20),
-                                                  child: TextFormField(
-                                                    controller:
-                                                        _passwordController,
-                                                    decoration: InputDecoration(
-                                                      border: InputBorder.none,
-                                                      hintText: 'Password',
-                                                      prefixIcon: Icon(
-                                                          Icons.lock_outline),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                    child: buildCardFormField(),
                                   ),
                                 ],
                               ),
@@ -191,13 +137,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: RaisedButton(
                                       elevation: 15,
                                       shape: new RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       onPressed: () async {
-
-                                       if(_emailController.value.text =="" ||_passwordController.value.text==""){
+                                        if (_emailController.value.text == "" ||
+                                            _passwordController.value.text ==
+                                                "") {
                                           print("---No Email or Password---");
-                                       }
+                                        }
 
                                         postLogin(_emailController.text,
                                                 _passwordController.text.trim())
@@ -206,9 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                             //Print response
                                             print(response.statusCode);
                                             print(">>>>Normal response<<<<<<");
-                                            
-
-                                           
 
                                             var loginMap =
                                                 json.decode(response.body);
@@ -226,12 +171,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                             print("---");
                                             print(loginResponse.success);
 
-                                            if(loginResponse.success == 0) {
-
+                                            if (loginResponse.success == 0) {
                                               print(loginResponse.success);
-                                              
 
-                                              print("--- status code being called -- false---");
+                                              print(
+                                                  "--- status code being called -- false---");
                                               SharedPreferences prefs =
                                                   await SharedPreferences
                                                       .getInstance();
@@ -244,10 +188,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                                 backgroundColor: Colors.green,
                                               );
-                                              scaffoldKey.currentState.showSnackBar(snackBar);
-                                              
+                                              scaffoldKey.currentState
+                                                  .showSnackBar(snackBar);
                                             }
-                      
 
                                             List<String> myStrings = [
                                               loginResponse.user.email,
@@ -258,24 +201,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                               loginResponse.userId
                                             ];
 
-                                            
-
                                             var loginId =
                                                 loginResponse.user.phone;
 
                                             print("--loginId--");
 
                                             print(loginId);
-                                            
+
                                             print(">>>>Normal response<<<<<<");
                                             print(loginResponse.success);
 
                                             saveListName(myStrings);
 
-                                                                 
-
                                             if (response.statusCode == 200) {
-                                              print("--- status code being called---good ");
+                                              print(
+                                                  "--- status code being called---good ");
                                               SharedPreferences mprefs =
                                                   await SharedPreferences
                                                       .getInstance();
@@ -286,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               mprefs.setString("userName",
                                                   loginResponse.user.name);
 
-                                                  print(loginResponse.success);
+                                              print(loginResponse.success);
 
                                               //  var tokener= mprefs.getBool("LoginTokener");
                                               //  print("--home_page.dart--");
@@ -300,10 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           HomePage(),
                                                 ),
                                               );
-                                             // Navigator.pop(context);
-                                            } 
-
-                                            
+                                              // Navigator.pop(context);
+                                            }
                                           },
                                         ).catchError((onError) {
                                           print(onError);
@@ -362,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ))
                             ],
                           ),
-                          new _widgetSignUp(emailController: _emailController),
+                           widgetSignUp(),
                         ],
                       ),
                     )
@@ -373,150 +311,55 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
 
-class _widgetSignUp extends StatelessWidget {
-  const _widgetSignUp({
-    Key key,
-    @required TextEditingController emailController,
-  })  : _emailController = emailController,
-        super(key: key);
-
-  final TextEditingController _emailController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Column(
+  Card buildCardFormField() {
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15))),
+      elevation: 0,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 30),
+        child: Stack(
           children: <Widget>[
-            Center(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
+            Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Email Address',
+                      prefixIcon: Icon(Icons.mail_outline),
+                    ),
                   ),
                 ),
-                elevation: 0,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 30),
-                  child: Stack(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 20, right: 20),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Name',
-                                prefixIcon: Icon(Icons.person_outline),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Divider(
-                            color: Colors.grey,
-                            indent: 10,
-                            endIndent: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 20, right: 20),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Email Address',
-                                prefixIcon: Icon(Icons.mail_outline),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Divider(
-                            height: 15,
-                            color: Colors.grey,
-                            indent: 15,
-                            endIndent: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 20, right: 20),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Password',
-                                  prefixIcon: Icon(Icons.lock_outline),
-                                  suffixIcon: Icon(Icons.remove_red_eye)),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Divider(
-                            height: 15,
-                            color: Colors.grey,
-                            indent: 15,
-                            endIndent: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: TextFormField(
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Confirmation',
-                                  prefixIcon: Icon(Icons.lock_outline),
-                                  suffixIcon: Icon(Icons.remove_red_eye)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  height: 5,
+                  color: Colors.grey,
+                  indent: 15,
+                  endIndent: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  child: TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Password',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
-        Positioned(
-          top: 337,
-          left: 110,
-          child: InkWell(
-            splashColor: Colors.grey,
-            child: RaisedButton(
-              elevation: 15,
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0),
-              ),
-              onPressed: () {},
-              textColor: Colors.white,
-              padding: const EdgeInsets.all(0.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(color: Colors.black26, offset: Offset(0, 9))
-                  ],
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: LinearGradient(
-                    colors: <Color>[
-                      Colors.purple,
-                      Colors.pink,
-                      // Color(0xFF42A5F5),
-                    ],
-                  ),
-                ),
-                padding: const EdgeInsets.all(10.0),
-                child: const Text('Sign Up',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ),
-        )
-      ],
+      ),
     );
   }
 }

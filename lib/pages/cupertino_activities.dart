@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/cirlcle_animated_progress_bar.dart';
 import 'package:tabbar/models/orderStatus/assignees.dart';
 import 'package:tabbar/models/orderStatus/order_list.dart';
@@ -39,9 +40,20 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   List<OrderList> orderDetailList = List<OrderList>();
   List<Assignees> assigneeDetailList = List<Assignees>();
   String orderProcessStatus;
+
+  String currentServerCode;
   
 
-  _getUserOrderStaus() {
+  _getUserOrderStatus() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    currentServerCode = prefs.getString("persistedCode");
+
+    //currentServerCode is supposed to be where  the current code is at the moment
+
+
+
     getOrderState(tag, "TU11122664").then((response) {
       print(response.statusCode);
       // print(mydetailList[0]);
@@ -157,7 +169,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   @override
   void initState() {
     super.initState();
-    _getUserOrderStaus();
+    _getUserOrderStatus();
     //generateOrderStatusMethod();
    
    
@@ -190,7 +202,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
               pressedOpacity: 0.5,
               child: Text("Tap for Order Details"),
               onPressed: () {
-                _getUserOrderStaus();
+                _getUserOrderStatus();
                 generateAssigneeDetails();
                 generateOrderStatusMethod();
                 buildShowCupertinoModalPopup(context);

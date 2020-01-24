@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tabbar/customWidgets/myTextStyle.dart';
 
 import 'package:tabbar/models/prices/laundry_items.dart';
 import 'package:tabbar/models/prices/price_list.dart';
@@ -134,9 +135,20 @@ class _PricingPagerState extends State<PricingPager> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    myTextStyle myTextType = new myTextStyle();
 
     for (var item in articlePriceList) {
       categoryArray.add(item.cartegory);
+    }
+
+    if (articlePriceList.isEmpty) {
+      
+
+      return Container(
+        child: Center(
+          child: Text("Loading", style: myTextType.myLargeCuperStyle(context)),
+        ),
+      );
     }
     
     // myImage =LinkedHashSet.from(myImage).toList();

@@ -31,7 +31,11 @@ class _OrderPageState extends State<OrderPage> {
   String smsPhoneNumber = "0502911370,0277073834";
   String smsMessage = "this is a test";
   String serverCode = "";
-  String refferalCode="";
+  String refferalCode = "";
+
+  bool isOrderPlaced = false;
+
+  String currentServerCode;
 
   //TODO:serverCode is not upposed to be empty
 
@@ -104,6 +108,102 @@ class _OrderPageState extends State<OrderPage> {
 
 
    */
+
+  generatingServerCode() async {
+    var now = new DateTime.now();
+    //  var nowTime = DateFormat("d MMMM yyyy").format(now);
+    var dTime = DateFormat("d").format(now);
+    var dayTime = DateFormat("EEE ").format(now);
+    var mTime = DateFormat("M").format(now);
+    var hrTime = DateFormat("k").format(now);
+    var secTime = DateFormat("s").format(now);
+
+    var newDayTime = dayTime.substring(0, 2).toUpperCase();
+
+    print(newDayTime + mTime + dTime + hrTime + secTime);
+    var unrefinedCode = newDayTime + mTime + dTime + hrTime + secTime;
+
+    setState(() {
+      serverCode = unrefinedCode;
+    });
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString("persistedCode", serverCode);
+
+    print(unrefinedCode.trim());
+  }
+
+  orderCancelMethod() async {
+    showCancelOrderDialog();
+
+    //  setState(() {
+
+    //  });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+     currentServerCode = prefs.getString("persistedCode"); 
+    });
+
+    
+
+    if (isOrderPlaced == false) {
+      cancelOrder("cancel_order", currentServerCode, "5");
+    } else {
+      return null;
+    }
+  }
+
+  showCancelOrderDialog() {
+    return showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text('CancelOrder'),
+        content: Text("Do you want to cancel this order"),
+        actions: <Widget>[
+          CupertinoButton(
+            child: Text('Yes'),
+            onPressed: () {
+              // setState(() {
+              //   // refferalCode = _promoCodeController.text;
+              // });
+              cancelOrder("cancel_order", currentServerCode, "5")
+                  .then((response) {
+                    if(response.statusCode==200){
+                      
+
+                    }
+                  });
+
+              Navigator.of(context, rootNavigator: true).pop("Discard");
+            },
+          ),
+          CupertinoButton(
+            child: Text('No'),
+            onPressed: () {
+              // setState(() {
+              //   // refferalCode = _promoCodeController.text;
+              // });
+
+              Navigator.of(context, rootNavigator: true).pop("Discard");
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  orderCancelledDialog() {
+    return showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+      
+        content: Text("Order Cancelled"),
+        
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -313,7 +413,21 @@ class _OrderPageState extends State<OrderPage> {
         ),
         //order button
         buildPaddingOrderPlacedButton(),
+        SizedBox(
+          height: 60,
+        ),
+        buildPaddingCancelOrderButton()
       ],
+    );
+  }
+
+  Padding buildPaddingCancelOrderButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: CupertinoButton(
+          child: Text("Cancel Order"),
+          onPressed: isOrderPlaced ? null : orderCancelMethod,
+          color: CupertinoColors.destructiveRed),
     );
   }
   //TODO: on the  the order page display when pick up is due
@@ -332,7 +446,12 @@ class _OrderPageState extends State<OrderPage> {
           //status fixed 1
           //usser_id :obtain eamil from sahred preferences
           //Add promo code section
-          //                                                                                                                                                                                                                                                                                                                                                                         //pressonly       //home_service
+          //
+          setState(() {
+            isOrderPlaced = !isOrderPlaced;
+          });
+
+          generatingServerCode(); //pressonly       //home_service
           orderPlaced(
                   "addOrder",
                   /*pick_up_point*/ mydetailList[1],
@@ -354,7 +473,7 @@ class _OrderPageState extends State<OrderPage> {
                   /* delivery_to_hour*/ "4",
                   /* delivery_to_min*/ "00",
                   /*promotion*/ "promotion",
-                  /*promo_code*/ refferalCode??"no promo",
+                  /*promo_code*/ refferalCode ?? "no promo",
                   "${washAndFold}",
                   "${press}",
                   "${dryCleaning}",
@@ -363,7 +482,7 @@ class _OrderPageState extends State<OrderPage> {
                   /*nameOfUser*/ mydetailList[2],
                   /*location*/ mydetailList[1],
                   /*other_location*/ mydetailList[4] ?? "empty",
-                  /*server_code*/ "")
+                  /*server_code*/ serverCode)
               .then((orderResponse) {
             print(orderResponse.statusCode);
             print(orderResponse.body);
@@ -423,27 +542,30 @@ class _OrderPageState extends State<OrderPage> {
         child: Icon(CupertinoIcons.shopping_cart),
         onTap: () {
           showDialog(
-          context: context,
-          builder: (_) => CupertinoAlertDialog(
-            title: Text('Enter Promo Code'),
-            content: CupertinoTextField(
-              controller: _promoCodeController,
-              maxLength: 5,
-              maxLengthEnforced: true,
-              decoration: BoxDecoration(color: CupertinoColors.lightBackgroundGray),
+            context: context,
+            builder: (_) => CupertinoAlertDialog(
+              title: Text('Enter Promo Code'),
+              content: CupertinoTextField(
+                controller: _promoCodeController,
+                maxLength: 5,
+                maxLengthEnforced: true,
+                decoration:
+                    BoxDecoration(color: CupertinoColors.lightBackgroundGray),
+              ),
+              actions: <Widget>[
+                CupertinoButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    setState(() {
+                      refferalCode = _promoCodeController.text;
+                    });
+
+                    Navigator.of(context, rootNavigator: true).pop("Discard");
+                  },
+                )
+              ],
             ),
-            actions: <Widget>[
-              CupertinoButton(child: Text('Yes'), onPressed: () {
-                setState(() {
-                  refferalCode =_promoCodeController.text;
-                });
-
-                Navigator.of(context, rootNavigator: true).pop("Discard");
-
-              },)
-            ],
-          ),
-        );
+          );
         },
       ),
     );
