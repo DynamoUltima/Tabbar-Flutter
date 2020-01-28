@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 String user_list_key = "list_key";
 
-Future<bool> saveListName(List myStrings) async {
+Future<bool> _saveListName(List myStrings) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
   return await preferences.setStringList(user_list_key, myStrings);
@@ -122,6 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: TabBarView(
                         children: [
                           Stack(
+                            overflow: Overflow.visible,
+                            alignment: Alignment.center,
                             children: <Widget>[
                               Column(
                                 children: <Widget>[
@@ -130,177 +132,119 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ],
                               ),
-                              Positioned(
-                                  top: 157,
-                                  left: 110,
-                                  child: Container(
-                                    child: RaisedButton(
-                                      elevation: 15,
-                                      shape: new RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      onPressed: () async {
-                                        if (_emailController.value.text == "" ||
-                                            _passwordController.value.text ==
-                                                "") {
-                                          print("---No Email or Password---");
-                                        }
+                              RaisedButton(
+                                onPressed: () {
+                                  if (_emailController.value.text == "" ||
+                                      _passwordController.value.text == "") {
+                                    print("---No Email or Password---");
+                                  }
 
-                                        postLogin(_emailController.text,
-                                                _passwordController.text.trim())
-                                            .then(
-                                          (response) async {
-                                            //Print response
-                                            print(response.statusCode);
-                                            print(">>>>Normal response<<<<<<");
+                                  postLogin(_emailController.text,
+                                          _passwordController.text.trim())
+                                      .then(
+                                    (response) async {
+                                      //Print response
+                                      print(response.statusCode);
+                                      print(">>>>Normal response<<<<<<");
 
-                                            var loginMap =
-                                                json.decode(response.body);
+                                      var loginMap = json.decode(response.body);
 
-                                            LoginResponse loginResponse =
-                                                new LoginResponse();
-                                            setState(() {
-                                              loginResponse =
-                                                  LoginResponse.fromJson(
-                                                      loginMap);
-                                            });
+                                      LoginResponse loginResponse =
+                                          new LoginResponse();
+                                      setState(() {
+                                        loginResponse =
+                                            LoginResponse.fromJson(loginMap);
+                                      });
 
-                                            print(loginResponse.toJson());
-                                            print(loginResponse.success);
-                                            print("---");
-                                            print(loginResponse.success);
+                                      print(loginResponse.toJson());
+                                      print(loginResponse.success);
+                                      print("---");
+                                      print(loginResponse.success);
 
-                                            if (loginResponse.success == 0) {
-                                              print(loginResponse.success);
+                                      if (loginResponse.success == 0) {
+                                        print(loginResponse.success);
 
-                                              print(
-                                                  "--- status code being called -- false---");
-                                              SharedPreferences prefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              prefs.setBool("isLogin", false);
-                                              SnackBar snackBar = SnackBar(
-                                                content: Text(
-                                                  "Invalid User",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                backgroundColor: Colors.green,
-                                              );
-                                              scaffoldKey.currentState
-                                                  .showSnackBar(snackBar);
-                                            }
-
-                                            List<String> myStrings = [
-                                              loginResponse.user.email,
-                                              loginResponse.user.location,
-                                              loginResponse.user.name,
-                                              loginResponse.user.phone,
-                                              loginResponse.user.homeReference,
-                                              loginResponse.userId
-                                            ];
-
-                                            var loginId =
-                                                loginResponse.user.phone;
-
-                                            print("--loginId--");
-
-                                            print(loginId);
-
-                                            print(">>>>Normal response<<<<<<");
-                                            print(loginResponse.success);
-
-                                            saveListName(myStrings);
-
-                                            if (response.statusCode == 200) {
-                                              print(
-                                                  "--- status code being called---good ");
-                                              SharedPreferences mprefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              //  mprefs.setString("myLoginToken", loginId);
-                                              // mprefs.setBool("LoginTokener", true);
-
-                                              mprefs.setBool("isLogin", true);
-                                              mprefs.setString("userName",
-                                                  loginResponse.user.name);
-
-                                              print(loginResponse.success);
-
-                                              //  var tokener= mprefs.getBool("LoginTokener");
-                                              //  print("--home_page.dart--");
-                                              //  print(tokener);
-
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          HomePage(),
-                                                ),
-                                              );
-                                              // Navigator.pop(context);
-                                            }
-                                          },
-                                        ).catchError((onError) {
-                                          print(onError);
-                                        });
-
-                                        //  return FutureBuilder(
-                                        //     future: postLogin(_emailController.text, _passwordController.text),
-                                        //     builder: (BuildContext context,AsyncSnapshot snapshot){
-
-                                        //       print(snapshot.data.toString());
-                                        //       print('tapped');
-
-                                        //       if(snapshot.connectionState ==ConnectionState.done){
-
-                                        //           Navigator.push(
-                                        //           context,
-                                        //           MaterialPageRoute(
-                                        //             builder:
-                                        //                 (BuildContext context) =>
-                                        //                     HomePage(),
-                                        //           ),
-                                        //         );
-
-                                        //       } else{
-                                        //         return CircularProgressIndicator()
-                                        //       }
-                                        //     },
-
-                                        //   );
-                                      },
-                                      textColor: Colors.white,
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          gradient: LinearGradient(
-                                            colors: <Color>[
-                                              Colors.purple,
-                                              Colors.pink,
-                                              // Color(0xFF42A5F5),
-                                            ],
+                                        print(
+                                            "--- status code being called -- false---");
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        prefs.setBool("isLogin", false);
+                                        SnackBar snackBar = SnackBar(
+                                          content: Text(
+                                            "Invalid Credentials",
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            right: 20.0,
-                                            left: 25,
-                                            top: 7,
-                                            bottom: 7),
-                                        child: const Text('Login',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                    ),
-                                  ))
+                                          backgroundColor: Colors.green,
+                                        );
+                                        scaffoldKey.currentState
+                                            .showSnackBar(snackBar);
+                                      }
+
+                                      List<String> myStrings = [
+                                        loginResponse.user.email,
+                                        loginResponse.user.location,
+                                        loginResponse.user.name,
+                                        loginResponse.user.phone,
+                                        //loginResponse.user.homeReference,
+                                        loginResponse.user_id
+                                      ];
+
+                                      var loginId = loginResponse.user.phone;
+
+                                      print("--loginId--");
+
+                                      print(loginId);
+
+                                      print(">>>>Normal response<<<<<<");
+                                      print(loginResponse.success);
+
+                                      _saveListName(myStrings);
+
+                                      if (response.statusCode == 200) {
+                                        print(
+                                            "--- status code being called---good ");
+                                        SharedPreferences mprefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        //  mprefs.setString("myLoginToken", loginId);
+                                        // mprefs.setBool("LoginTokener", true);
+
+                                        mprefs.setBool("isLogin", true);
+                                        mprefs.setString("userName",
+                                            loginResponse.user.name);
+
+                                        print(loginResponse.success);
+
+                                        //  var tokener= mprefs.getBool("LoginTokener");
+                                        //  print("--home_page.dart--");
+                                        //  print(tokener);
+
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                HomePage(),
+                                          ),
+                                        );
+                                        // Navigator.pop(context);
+                                      }
+                                    },
+                                  ).catchError((onError) {
+                                    print(onError);
+                                  });
+                                },
+                                child: Text("Login",
+                                    style: TextStyle(color: Colors.white)),
+                                color: Colors.purple,
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              )
                             ],
                           ),
-                           widgetSignUp(),
+                          widgetSignUp(),
                         ],
                       ),
                     )
@@ -324,7 +268,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                      top: 20, left: 20, right: 20, bottom: 15),
                   child: TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -348,6 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: _passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Password',

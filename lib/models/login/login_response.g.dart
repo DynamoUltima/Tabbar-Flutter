@@ -11,7 +11,7 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
       tag: json['tag'] as String,
       success: json['success'] as int,
       error: json['error'] as int,
-      userId: json['userId'] as String,
+      user_id: json['user_id'] as String,
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>));
@@ -22,6 +22,6 @@ Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
       'tag': instance.tag,
       'success': instance.success,
       'error': instance.error,
-      'userId': instance.userId,
+      'user_id': instance.user_id,
       'user': instance.user?.toJson()
     };

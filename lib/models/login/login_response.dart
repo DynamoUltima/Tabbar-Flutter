@@ -8,10 +8,10 @@ class LoginResponse{
   String tag;
   int success;
   int error;
-  String userId;
+  String user_id;
   User user;
 
-  LoginResponse({this.tag, this.success, this.error, this.userId, this.user});
+  LoginResponse({this.tag, this.success, this.error, this.user_id, this.user});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);

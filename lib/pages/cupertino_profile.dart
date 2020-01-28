@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:tabbar/views/update_accounts_page.dart';
 
 class CupertinoProfile extends StatefulWidget {
   @override
@@ -11,8 +12,6 @@ class CupertinoProfile extends StatefulWidget {
 class _CupertinoProfileState extends State<CupertinoProfile> {
   String user_list_key = "list_key";
   List<String> mydetailList = [];
-
-  String homeRef="";
 
   @override
   void initState() {
@@ -26,12 +25,8 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
     //     return null;
     //   },
     // );
-    
-    
-    
-    loadList();
 
-    
+    loadList();
   }
 
   Future<List<String>> getUserList() async {
@@ -40,9 +35,9 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
   }
 
   loadList() async {
-   await getUserList().then((onValue) {
+    await getUserList().then((onValue) {
       setState(() {
-        mydetailList =  onValue;
+        mydetailList = onValue;
       });
     });
   }
@@ -54,28 +49,41 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
     //     this.homeRef="";
     //   });
     // }
+    String homeRef = mydetailList[4]??"empty";
+
+    Widget continueUpdateButton() {
+      if (homeRef == "empty") {
+        return CupertinoButton(
+          child: Text("Click to Complete Profile Update "),
+          onPressed: () {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (BuildContext context) => UpdateAccountPage()));
+
+          },
+          color: CupertinoColors.lightBackgroundGray,
+        );
+      } else if(homeRef!=null){
+        return Container();
+      }
+    }
 
     print("--My detail List--profile.dart--");
     print(mydetailList);
 
-    if(mydetailList.isEmpty){
+    if (mydetailList.isEmpty) {
+      return Container(
+        child: Center(
+          child: Text("Loading",
+              style: CupertinoTheme.of(context)
+                  .textTheme
+                  .navActionTextStyle
+                  .apply(color: CupertinoColors.activeBlue, fontSizeDelta: 22)),
+        ),
+      );
+    }
 
-      
-
-     return Container(
-       child: Center(
-         child: Text("Loading",style: CupertinoTheme.of(context)
-                    .textTheme
-                    .navActionTextStyle
-                    .apply(color: CupertinoColors.activeBlue, fontSizeDelta: 22)),
-       ),
-     );
-
-   }
-   
-    
-      
-    
     return Container(
       child: Container(
         child: Column(
@@ -178,6 +186,15 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
                 ),
               ],
             ),
+             SizedBox(
+              height: 60,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                continueUpdateButton()
+              ],
+            )
 
             //Chip(label: Text('Home'),)
           ],

@@ -44,15 +44,35 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  var isLogin;
   Future _checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
+    setState(() {
+      isLogin =pref.getBool("isLogin");
+    });
+
+    
+
     print("----this login method being called----");
 
-    if (pref.getBool("isLogin")) {
+    if(isLogin == null){
+      print("---null option been called--");
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => MyHomePage(),
+        ),
+      );
+
+    }
+
+    if (isLogin) {
       print("-----option 1 bein called----");
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+         // Navigator.pop(context);
     } else {
       print("---alternative been called--");
       Navigator.pushReplacement(
@@ -61,7 +81,10 @@ class _MyAppState extends State<MyApp> {
           builder: (BuildContext context) => MyHomePage(),
         ),
       );
+     // Navigator.pop(context);
     }
+
+    
   }
 
   @override
