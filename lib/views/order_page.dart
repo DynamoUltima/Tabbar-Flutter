@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:core' as prefix0;
 import 'dart:core';
 
@@ -6,11 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tabbar/models/orderHistory/order_history_list.dart';
+import 'package:tabbar/models/orderHistory/order_history_response.dart';
 import 'package:tabbar/pages/cupertino_activities.dart';
 import 'package:tabbar/services/services.dart';
 
 class OrderPage extends StatefulWidget {
-  OrderPage({Key key}) : super(key: key);
+  String latestServercode;
+
+  OrderPage({Key key, this.latestServercode}) : super(key: key);
 
   _OrderPageState createState() => _OrderPageState();
 }
@@ -33,7 +38,8 @@ class _OrderPageState extends State<OrderPage> {
   String serverCode = "";
   String refferalCode = "";
 
-  bool isOrderPlaced = false;
+  var isOrderPlaced;
+  List<OrderHistoryList> orderDetailList = [];
 
   String currentServerCode;
 
@@ -43,6 +49,7 @@ class _OrderPageState extends State<OrderPage> {
   TextEditingController _promoCodeController = TextEditingController();
 
   DateTime _dateTime = DateTime.now();
+  String isOrderKey="isOrderPlaced";
 
   _myCuperStyle(BuildContext context) {
     var cuperStyle = CupertinoTheme.of(context)
@@ -53,7 +60,11 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   String user_list_key = "list_key";
-  List<String> mydetailList = [];
+  List<String> mydetailList = List();
+
+
+
+
 
   @override
   void initState() {
@@ -69,6 +80,7 @@ class _OrderPageState extends State<OrderPage> {
     );
 
     loadList();
+    //getLatestServerCode();
   }
 
   //check main.dart for positions for sharedpreferences
@@ -84,6 +96,17 @@ class _OrderPageState extends State<OrderPage> {
       });
     });
   }
+
+  Future checkOrderPlacingStatus() async {
+    SharedPreferences mprefs=  await SharedPreferences.getInstance();
+    setState(() {
+      isOrderPlaced=  mprefs.getBool(isOrderKey);
+  
+    });
+    print(isOrderPlaced);
+
+  }
+      
 
   RedirectPage() {
     return Navigator.of(context).push(
@@ -131,11 +154,18 @@ class _OrderPageState extends State<OrderPage> {
 
     prefs.setString("persistedCode", serverCode);
 
+    print("---server code----");
+
     print(unrefinedCode.trim());
   }
 
   orderCancelMethod() async {
     showCancelOrderDialog();
+    SharedPreferences mprefs = await SharedPreferences.getInstance();
+    setState(() {
+      mprefs.setBool(isOrderKey, true);
+    });
+    
 
     //  setState(() {
 
@@ -143,13 +173,11 @@ class _OrderPageState extends State<OrderPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-     currentServerCode = prefs.getString("persistedCode"); 
+      currentServerCode = prefs.getString("persistedCode");
     });
 
-    
-
-    if (isOrderPlaced == false) {
-      cancelOrder("cancel_order", currentServerCode, "5");
+    if (isOrderPlaced = false) {
+      cancelOrder("cancel_order", "2709", "5");
     } else {
       return null;
     }
@@ -168,13 +196,17 @@ class _OrderPageState extends State<OrderPage> {
               // setState(() {
               //   // refferalCode = _promoCodeController.text;
               // });
-              cancelOrder("cancel_order", currentServerCode, "5")
-                  .then((response) {
-                    if(response.statusCode==200){
-                      
-
-                    }
-                  });
+              cancelOrder("cancel_order", "MO2312162708", "5").then((response) {
+                if (response.statusCode == 200) {
+                  print(response.body);
+                }
+              });
+              // cancelOrder("cancel_order", currentServerCode, "5")
+              //     .then((response) {
+              //   if (response.statusCode == 200) {
+              //     print("there is a positve response");
+              //   }
+              // });
 
               Navigator.of(context, rootNavigator: true).pop("Discard");
             },
@@ -198,15 +230,29 @@ class _OrderPageState extends State<OrderPage> {
     return showDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-      
         content: Text("Order Cancelled"),
-        
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (mydetailList.isEmpty) {
+      print("this list is empty");
+      return Container(
+        child: Center(
+          child: Text(
+            "Loading",
+            style: _myCuperStyle(context),
+          ),
+        ),
+      );
+    }
+    print("latest server code is called");
+
+    print(mydetailList);
+    print("--server code---");
+    print(currentServerCode);
     var orderNote = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -422,21 +468,35 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Padding buildPaddingCancelOrderButton() {
+
+    
+    if (isOrderPlaced == false) {
+      return Padding(
+        padding: const EdgeInsets.all(0),
+        child: Container(),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: CupertinoButton(
           child: Text("Cancel Order"),
-          onPressed: isOrderPlaced ? null : orderCancelMethod,
+          onPressed:  orderCancelMethod,
+          //isOrderPlaced ? null ||false : orderCancelMethod,
           color: CupertinoColors.destructiveRed),
     );
   }
   //TODO: on the  the order page display when pick up is due
 
-  Padding buildPaddingOrderPlacedButton() {
+   buildPaddingOrderPlacedButton(){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: CupertinoButton(
         onPressed: () async {
+
+           SharedPreferences mprefs = await SharedPreferences.getInstance();
+           mprefs.setBool("isOrderPlaced", true);
+           
           //pick up point :obtain from sharedprefrences home or office
           //pick up date from date picker
           //pick up from time  and pick up to time is standard which is 7 to 12 am
@@ -447,9 +507,6 @@ class _OrderPageState extends State<OrderPage> {
           //usser_id :obtain eamil from sahred preferences
           //Add promo code section
           //
-          setState(() {
-            isOrderPlaced = !isOrderPlaced;
-          });
 
           generatingServerCode(); //pressonly       //home_service
           orderPlaced(
@@ -487,6 +544,12 @@ class _OrderPageState extends State<OrderPage> {
             print(orderResponse.statusCode);
             print(orderResponse.body);
             if (orderResponse.statusCode == 200) {
+              // setState(() {
+              //   isOrderPlaced = true;
+              // });
+
+
+
               showDialog(
                 context: context,
                 builder: (_) => CupertinoAlertDialog(

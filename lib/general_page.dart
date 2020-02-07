@@ -134,10 +134,10 @@ class _HomePageState extends State<HomePage> {
         child: CupertinoTabScaffold(
           tabBar: CupertinoTabBar(
             items: [
-              BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.home),
-                title: Text('Home'),
-              ),
+              // BottomNavigationBarItem(
+              //   icon: Icon(CupertinoIcons.home),
+              //   title: Text('Home'),
+              // ),
               BottomNavigationBarItem(
                   icon: Icon(FontAwesomeIcons.briefcase),
                   title: Text('Activities')),
@@ -149,33 +149,44 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           tabBuilder: (BuildContext context, int index) {
-            assert(index >= 0 && index <= 3);
+            assert(index >= 0 && index <= 2);
 
             switch (index) {
+              // case 0:
+              //   return CupertinoTabView(
+              //     builder: (context) => CupertinoPageScaffold(
+              //       navigationBar: CupertinoNavigationBar(
+              //         middle: (index == 0) ? Text('Home') : Text('School'),
+              //         trailing: GestureDetector(
+              //           child: Text("Logout",
+              //               style: TextStyle(
+              //                   color: CupertinoColors
+              //                       .activeBlue)), //CupertinoIcons.restart
+              //           onTap: () {
+              //             _logout();
+              //           },
+              //         ),
+              //       ),
+              //       child: CupertinoHome(),
+              //     ),
+              //   );
+              //   break;
               case 0:
                 return CupertinoTabView(
                   builder: (context) => CupertinoPageScaffold(
                     navigationBar: CupertinoNavigationBar(
-                      middle: (index == 0) ? Text('Home') : Text('School'),
-                      trailing: GestureDetector(
-                        child: Text("Logout",
-                            style: TextStyle(
-                                color: CupertinoColors
-                                    .activeBlue)), //CupertinoIcons.restart
+                      leading: GestureDetector(
                         onTap: () {
                           _logout();
                         },
+                        child: Center(
+                          child: Text(
+                            "Logout",
+                            style: TextStyle(color: CupertinoColors.activeBlue),
+                          ),
+                        ),
                       ),
-                    ),
-                    child: CupertinoHome(),
-                  ),
-                );
-                break;
-              case 1:
-                return CupertinoTabView(
-                  builder: (context) => CupertinoPageScaffold(
-                    navigationBar: CupertinoNavigationBar(
-                      middle: (index == 1) ? Text('Activities') : null,
+                      middle: (index == 0) ? Text('Activities') : null,
                       trailing: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -192,7 +203,17 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    child: CupertinoActivities(),
+                    child: CupertinoActivities(clientEmail:clientEmail),
+                  ),
+                );
+                break;
+              case 1:
+                return CupertinoTabView(
+                  builder: (context) => CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                        middle: (index == 1) ? Text('Pricing') : null),
+                    child: CupertinoPricing(),
+                    // child: Text('data'),
                   ),
                 );
                 break;
@@ -200,17 +221,7 @@ class _HomePageState extends State<HomePage> {
                 return CupertinoTabView(
                   builder: (context) => CupertinoPageScaffold(
                     navigationBar: CupertinoNavigationBar(
-                        middle: (index == 2) ? Text('Pricing') : null),
-                    child: CupertinoPricing(),
-                    // child: Text('data'),
-                  ),
-                );
-                break;
-              case 3:
-                return CupertinoTabView(
-                  builder: (context) => CupertinoPageScaffold(
-                    navigationBar: CupertinoNavigationBar(
-                      middle: (index == 3) ? Text('Profile') : null,
+                      middle: (index == 2) ? Text('Profile') : null,
                       trailing: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(

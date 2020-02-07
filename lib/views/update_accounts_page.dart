@@ -22,7 +22,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _latController = TextEditingController();
   TextEditingController _lngController = TextEditingController();
-  String _tag;
+  String _tag ="updateAccount";
   TextEditingController _houseNumberController = TextEditingController();
   TextEditingController _companyNameController = TextEditingController();
   TextEditingController _pickupPointController = TextEditingController();
@@ -163,7 +163,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                 ),
                 CupertinoTextField(
                   placeholder: _location,
-                  controller: _emailController,
+                  controller: _locationController,
                   decoration: BoxDecoration(
                     border: Border.all(color: CupertinoColors.black),
                     borderRadius: BorderRadius.circular(7),
@@ -199,10 +199,10 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                 CupertinoButton(
                   onPressed: () {
                     setState(() {
-                      _email=_emailController.text;
-                      _name =_nameController.text;
-                      _location= _locationController.text;
-                      _phoneNumber=_phoneNumberController.text;
+                      _email=_emailController.text?? mydetailList[0];
+                      _name =_nameController.text?? mydetailList[2];
+                      _location= _locationController.text?? mydetailList[1];
+                      _phoneNumber=_phoneNumberController.text?? mydetailList[3];
                       _streetName= _streetNameController.text;
                       _houseNumber=_houseNumberController.text;
                       _companyName=_companyNameController.text;
@@ -228,7 +228,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                       _lng,
                     ).then((response){
                       print("--updated response---");
-                      print(response);
+                      print(response.body);
 
                     });
                   },

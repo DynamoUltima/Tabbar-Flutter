@@ -52,6 +52,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       
 
       orderDetailList = orderHistory.order_list;
+
+      
     });
   }
 
@@ -93,14 +95,14 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
     if (mydetailList.isEmpty) {
       //print("list was empty for a while");
-     var id = new DateTime.now().millisecondsSinceEpoch;
-     var now = new DateTime.now();
-     var nowTime = DateFormat("d MMMM yyyy").format(now);
-     var dTime = DateFormat("d ").format(now);
-     var dayTime = DateFormat("EEE ").format(now);
-     var mTime = DateFormat("M").format(now);
-     var hrTime = DateFormat("k ").format(now);
-     var secTime = DateFormat("s  ").format(now);
+    //  var id = new DateTime.now().millisecondsSinceEpoch;
+    //  var now = new DateTime.now();
+    //  var nowTime = DateFormat("d MMMM yyyy").format(now);
+    //  var dTime = DateFormat("d ").format(now);
+    //  var dayTime = DateFormat("EEE ").format(now);
+    //  var mTime = DateFormat("M").format(now);
+    //  var hrTime = DateFormat("k ").format(now);
+    //  var secTime = DateFormat("s  ").format(now);
 
     
 

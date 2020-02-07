@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/cirlcle_animated_progress_bar.dart';
+import 'package:tabbar/models/orderHistory/order_history_list.dart';
+import 'package:tabbar/models/orderHistory/order_history_response.dart';
+
 import 'package:tabbar/models/orderStatus/assignees.dart';
 import 'package:tabbar/models/orderStatus/order_list.dart';
 import 'package:tabbar/models/orderStatus/order_status.dart';
@@ -11,6 +14,9 @@ import 'package:tabbar/services/services.dart';
 import 'package:tabbar/views/order_page.dart';
 
 class CupertinoActivities extends StatefulWidget {
+  String clientEmail;
+  CupertinoActivities({this.clientEmail});
+
   @override
   _CupertinoActivitiesState createState() => _CupertinoActivitiesState();
 }
@@ -25,7 +31,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   }
 
   String tag = "getOrderbyServerCode";
-  String orderStatusText ="hi";
+  String orderStatusText = "hi";
   String heyGender;
   String assigneeName;
   String assigneeUrl;
@@ -39,22 +45,59 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
   List<OrderList> orderDetailList = List<OrderList>();
   List<Assignees> assigneeDetailList = List<Assignees>();
+  List<OrderHistoryList> orderDetails = List<OrderHistoryList>();
   String orderProcessStatus;
 
+//List<OrderHistoryList> orderDetailList = [];
+
   String currentServerCode;
-  
+  String latestServerCode;
+  String historyTag = "orderDetails";
+
+  _getUserOrderHistory() {
+    print("=========getUserHistory method being called------");
+    getOrderHistory(historyTag, widget.clientEmail).then((response) {
+      // print(response.statusCode);
+
+      // print(mydetailList);
+      var historyMap = json.decode(response.body);
+
+      OrderHistory orderHistory = OrderHistory();
+
+      setState(() {
+        orderHistory = OrderHistory.fromJson(historyMap);
+      });
+
+      orderDetails = orderHistory.order_list;
+
+
+      print("======printing Order Details=====");
+
+      print(orderDetails.length);
+
+      var latestIndex = orderDetails.length-1;
+
+      print(orderDetails);
+      print(orderDetails[latestIndex].server_code);
+
+      setState(() {
+        latestServerCode = orderDetails[latestIndex].server_code;
+      });
+
+      // print(orderDetails.lastIndexOf(element))
+    });
+  }
 
   _getUserOrderStatus() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     currentServerCode = prefs.getString("persistedCode");
 
     //currentServerCode is supposed to be where  the current code is at the moment
 
+    //we may have to put in the latestserver code there
 
-
-    getOrderState(tag, "TU11122664").then((response) {
+    await getOrderState(tag, "TU11122664").then((response) {
       print(response.statusCode);
       // print(mydetailList[0]);
       var detailMap = json.decode(response.body);
@@ -65,14 +108,15 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
         orderStatus = OrderStatus.fromJson(detailMap);
       });
 
-      print(orderStatus.toJson());
+      // print("========printingg a particular order state===Cupertino Activity====");
+      // print(orderStatus.toJson());
 
       orderDetailList = orderStatus.order_list;
 
       assigneeDetailList = orderStatus.assignees;
 
       setState(() {
-        orderProcessStatus=orderDetailList[0].status;
+        orderProcessStatus = orderDetailList[0].status;
       });
 
       print(orderDetailList.length);
@@ -100,14 +144,11 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     });
   }
 
- generateOrderStatusMethod() {
-
-    
+  generateOrderStatusMethod() {
     //orderProcessStatus = orderDetailList[0].status;
     // if(orderProcessStatus==null){
     //   return Center(child: CupertinoActivityIndicator(),);
     // }
-    
 
     //print(orderProcessStatus);
     print('tapped');
@@ -170,9 +211,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   void initState() {
     super.initState();
     _getUserOrderStatus();
+    _getUserOrderHistory();
     //generateOrderStatusMethod();
-   
-   
   }
 
   double progressPercent = 0;
@@ -217,7 +257,6 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   }
 
   Future buildShowCupertinoModalPopup(BuildContext context) {
-
     return showCupertinoModalPopup(
       builder: (BuildContext context) {
         return CupertinoActionSheet(
@@ -318,7 +357,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
       child: Text('Go To Order'),
       onPressed: () {
         Navigator.of(context).push(
-            CupertinoPageRoute(builder: (BuildContext context) => OrderPage()));
+            CupertinoPageRoute(builder: (BuildContext context) => OrderPage(latestServercode: latestServerCode,)));
       },
       color: currentOrderButtonColor,
     );
@@ -326,10 +365,9 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
   Center buildCircularProgress(
       Color background, Color foreground, BuildContext context) {
-
-        // if(orderStatusText==null){
-        //  return Center(child: CupertinoActivityIndicator());
-        // }
+    // if(orderStatusText==null){
+    //  return Center(child: CupertinoActivityIndicator());
+    // }
     return Center(
       child: SizedBox(
         height: 200,
