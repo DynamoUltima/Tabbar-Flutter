@@ -49,7 +49,7 @@ class _OrderPageState extends State<OrderPage> {
   TextEditingController _promoCodeController = TextEditingController();
 
   DateTime _dateTime = DateTime.now();
-  String isOrderKey="isOrderPlaced";
+  String isOrderKey = "isOrderPlaced";
 
   _myCuperStyle(BuildContext context) {
     var cuperStyle = CupertinoTheme.of(context)
@@ -61,10 +61,6 @@ class _OrderPageState extends State<OrderPage> {
 
   String user_list_key = "list_key";
   List<String> mydetailList = List();
-
-
-
-
 
   @override
   void initState() {
@@ -80,6 +76,7 @@ class _OrderPageState extends State<OrderPage> {
     );
 
     loadList();
+    checkOrderPlacingStatus();
     //getLatestServerCode();
   }
 
@@ -98,15 +95,13 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Future checkOrderPlacingStatus() async {
-    SharedPreferences mprefs=  await SharedPreferences.getInstance();
+    SharedPreferences mprefs = await SharedPreferences.getInstance();
     setState(() {
-      isOrderPlaced=  mprefs.getBool(isOrderKey);
-  
+      isOrderPlaced = mprefs.getBool(isOrderKey);
     });
+    print("=======printing order status======");
     print(isOrderPlaced);
-
   }
-      
 
   RedirectPage() {
     return Navigator.of(context).push(
@@ -154,18 +149,14 @@ class _OrderPageState extends State<OrderPage> {
 
     prefs.setString("persistedCode", serverCode);
 
-    print("---server code----");
+    // print("---server code----");
 
-    print(unrefinedCode.trim());
+    // print(unrefinedCode.trim());
   }
 
   orderCancelMethod() async {
     showCancelOrderDialog();
     SharedPreferences mprefs = await SharedPreferences.getInstance();
-    setState(() {
-      mprefs.setBool(isOrderKey, true);
-    });
-    
 
     //  setState(() {
 
@@ -176,11 +167,11 @@ class _OrderPageState extends State<OrderPage> {
       currentServerCode = prefs.getString("persistedCode");
     });
 
-    if (isOrderPlaced = false) {
-      cancelOrder("cancel_order", "2709", "5");
-    } else {
-      return null;
-    }
+    // if (isOrderPlaced = false) {
+    //   cancelOrder("cancel_order", "FR13113102704", "5");
+    // } else {
+    //   return null;
+    // }
   }
 
   showCancelOrderDialog() {
@@ -192,13 +183,29 @@ class _OrderPageState extends State<OrderPage> {
         actions: <Widget>[
           CupertinoButton(
             child: Text('Yes'),
-            onPressed: () {
+            onPressed: () async {
               // setState(() {
               //   // refferalCode = _promoCodeController.text;
               // });
-              cancelOrder("cancel_order", "MO2312162708", "5").then((response) {
+              SharedPreferences mprefs = await SharedPreferences.getInstance();
+              setState(() {
+                    mprefs.setBool(isOrderKey, false);
+                  });
+
+              //SharedPreferences mprefs = await SharedPreferences.getInstance();
+              cancelOrder("cancel_order", widget.latestServercode, "5")
+                  .then((response) {
                 if (response.statusCode == 200) {
+
+                  print("======Order Page====Order Cancelling results ");
                   print(response.body);
+                  setState(() {
+                    mprefs.setBool(isOrderKey, false);
+                  });
+
+                  
+
+                  RedirectPage();
                 }
               });
               // cancelOrder("cancel_order", currentServerCode, "5")
@@ -468,8 +475,6 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Padding buildPaddingCancelOrderButton() {
-
-    
     if (isOrderPlaced == false) {
       return Padding(
         padding: const EdgeInsets.all(0),
@@ -481,22 +486,21 @@ class _OrderPageState extends State<OrderPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: CupertinoButton(
           child: Text("Cancel Order"),
-          onPressed:  orderCancelMethod,
+          onPressed: orderCancelMethod,
           //isOrderPlaced ? null ||false : orderCancelMethod,
           color: CupertinoColors.destructiveRed),
     );
   }
   //TODO: on the  the order page display when pick up is due
 
-   buildPaddingOrderPlacedButton(){
+  buildPaddingOrderPlacedButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: CupertinoButton(
         onPressed: () async {
+          SharedPreferences mprefs = await SharedPreferences.getInstance();
+          mprefs.setBool("isOrderPlaced", true);
 
-           SharedPreferences mprefs = await SharedPreferences.getInstance();
-           mprefs.setBool("isOrderPlaced", true);
-           
           //pick up point :obtain from sharedprefrences home or office
           //pick up date from date picker
           //pick up from time  and pick up to time is standard which is 7 to 12 am
@@ -547,8 +551,6 @@ class _OrderPageState extends State<OrderPage> {
               // setState(() {
               //   isOrderPlaced = true;
               // });
-
-
 
               showDialog(
                 context: context,

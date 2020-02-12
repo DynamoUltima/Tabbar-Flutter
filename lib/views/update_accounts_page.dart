@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/myTextStyle.dart';
@@ -43,6 +44,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
   String _pickupPoint;
   String _lat = "";
   String _lng = "";
+  String updated_at;
 
   Future<List<String>> getUserList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -142,9 +144,9 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                     border: Border.all(color: CupertinoColors.black),
                     borderRadius: BorderRadius.circular(7),
                   ),
-                  controller: _numberController,
-                  placeholder: _phoneNumber,
-                  placeholderStyle: TextStyle(color: CupertinoColors.black),
+                  controller: _phoneNumberController,
+                  placeholder: "phoneNumber",
+                  placeholderStyle: TextStyle(color: CupertinoColors.lightBackgroundGray),
                 ),
                 SizedBox(
                   height: 20,
@@ -156,19 +158,20 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                   ),
                   placeholder: _email,
                   controller: _emailController,
-                  placeholderStyle: TextStyle(color: CupertinoColors.black),
+                  placeholderStyle: TextStyle(color: CupertinoColors.lightBackgroundGray),
                 ),
                 SizedBox(
                   height: 20,
                 ),
+                //Location
                 CupertinoTextField(
-                  placeholder: _location,
+                  placeholder: "location",
                   controller: _locationController,
                   decoration: BoxDecoration(
                     border: Border.all(color: CupertinoColors.black),
                     borderRadius: BorderRadius.circular(7),
                   ),
-                  placeholderStyle: TextStyle(color: CupertinoColors.black),
+                  placeholderStyle: TextStyle(color: CupertinoColors.lightBackgroundGray),
                 ),
                 SizedBox(
                   height: 20,
@@ -199,17 +202,17 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                 CupertinoButton(
                   onPressed: () {
                     setState(() {
-                      _email=_emailController.text?? mydetailList[0];
-                      _name =_nameController.text?? mydetailList[2];
-                      _location= _locationController.text?? mydetailList[1];
-                      _phoneNumber=_phoneNumberController.text?? mydetailList[3];
+                      _email=_emailController.text;
+                      _name =_nameController.text;
+                      _location= _locationController.text;
+                      _phoneNumber=_phoneNumberController.text;
                       _streetName= _streetNameController.text;
                       _houseNumber=_houseNumberController.text;
                       _companyName=_companyNameController.text;
-                      _pickupPoint =_companyNameController.text;
+                      _pickupPoint =_pickupPointController.text;
                       _reference = _referenceController.text;
                       _otherLocation=_otherLocationController.text;
-                      
+                      updated_at= DateTime.now().toString();                    
 
                     });
                     updateAccount(
@@ -223,12 +226,14 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                       _houseNumber,
                       _reference,
                       _companyName,
-                      _pickupPoint,
+                      chosenLocation,
                       _lat,
                       _lng,
+                      updated_at
                     ).then((response){
                       print("--updated response---");
                       print(response.body);
+                      showUpdateAccountsDialog();
 
                     });
                   },
@@ -264,6 +269,18 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
             height: 20,
           ),
           CupertinoTextField(
+          placeholder: 'Office house number',
+          controller: _houseNumberController,
+          decoration: BoxDecoration(
+            border: Border.all(color: CupertinoColors.black),
+            borderRadius: BorderRadius.circular(7),
+          ),
+          placeholderStyle: TextStyle(color: CupertinoColors.lightBackgroundGray),
+        ),
+        SizedBox(
+            height: 20,
+          ),
+          CupertinoTextField(
             placeholder: 'Street name',
             controller: _streetNameController,
             decoration: BoxDecoration(
@@ -287,6 +304,26 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
           SizedBox(
             height: 20,
           ),
+        ],
+      ),
+    );
+  }
+
+  showUpdateAccountsDialog() {
+    return showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text('Profile Updated'),
+       // content: Text("Profile Updated"),
+        actions: <Widget>[
+          CupertinoButton(
+            child: Text('OK'),
+            onPressed: () async {
+             
+              Navigator.of(context, rootNavigator: true).pop("Discard");
+            },
+          ),
+         
         ],
       ),
     );
@@ -332,6 +369,18 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
         SizedBox(
           height: 20,
         ),
+        CupertinoTextField(
+          placeholder: 'house number',
+          controller: _houseNumberController,
+          decoration: BoxDecoration(
+            border: Border.all(color: CupertinoColors.black),
+            borderRadius: BorderRadius.circular(7),
+          ),
+          placeholderStyle: TextStyle(color: CupertinoColors.lightBackgroundGray),
+        ),
+        SizedBox(
+          height: 20,
+        ),
       ],
     ));
   }
@@ -364,7 +413,7 @@ class _UpdateAccountPageState extends State<UpdateAccountPage> {
                     ),
                     onPressed: () {
                       setState(() {
-                        chosenLocation = "office";
+                        chosenLocation = "Office";
                       });
 
                       Navigator.pop(context, 'Cancel');

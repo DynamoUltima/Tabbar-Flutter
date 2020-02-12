@@ -26,12 +26,13 @@ Future<http.Response> postLogin(String email, String password) async {
   return response;
 }
 
-Future<http.Response> postSignUp(String email,
-String password,
-String username,
-String location,
-String other_location,
-String phoneNumber,
+Future<http.Response> postSignUp(
+  String email,
+  String password,
+  String username,
+  String location,
+  String other_location,
+  String phoneNumber,
 ) async {
   //var loginBody = LoginModel(email: email, password: password,tag: "login");
   // print(loginBody);
@@ -41,16 +42,12 @@ String phoneNumber,
     "tag": "register",
     "email": email,
     "password": password,
-    "location":location,
-    "other_location":other_location,
-    "phone":phoneNumber,
-    "gcm_regid":"",
-    "new_user":"true",
+    "location": location,
+    "other_location": other_location,
+    "phone": phoneNumber,
+    "gcm_regid": "",
+    "new_user": "true",
     "From": "Email"
-
-
-
-    
   };
 
   final response = await http.post(
@@ -243,11 +240,13 @@ Future<http.Response> updateAccount(
   String pickupPoint,
   String lat,
   String lng,
+  String updated_at,
 ) async {
   Map<String, String> body = {
     "tag": tag,
     "email": email,
     "name": name,
+    "location":location,
     "phone": phone,
     "other_location": other_location,
     "street_name": street_name,
@@ -257,6 +256,7 @@ Future<http.Response> updateAccount(
     "pickupPoint": pickupPoint,
     "lat": lat,
     "lng": lng,
+    "updated_at":updated_at
   };
 
   final response = await http.post(
@@ -328,49 +328,47 @@ Future<http.Response> getPriceList(
   return response;
 }
 
-Future<http.Response> updateAccounts(
-  String tag,
-  String email,
-  String name,
-  String location,
-  String phone,
-  String other_location,
-  String street_name,
-  String house_number,
-  String reference,
-  String company_name,
-  String pickupPoint, //watch out this could be pick_up_point
-  String lat,
-  String lng,
-) async {
-  Map<String, dynamic> body = {
-    "tag": tag,
-    "email": email,
-    "tag": tag,
-    "email": email,
-    "name": name,
-    "location": location,
-    "phone": phone,
-    "other_location": other_location,
-    "street_name": street_name,
-    "house_number": house_number,
-    "reference": reference,
-    "company_name": company_name,
-    "pickupPoint": pickupPoint,
-    "lat": lat,
-    "lng": lng,
-  };
+// Future<http.Response> updateAccounts(
+//   String tag,
+//   String email,
+//   String name,
+//   String location,
+//   String phone,
+//   String other_location,
+//   String street_name,
+//   String house_number,
+//   String reference,
+//   String company_name,
+//   String pickupPoint, //watch out this could be pick_up_point
+//   String lat,
+//   String lng,
+// ) async {
+//   Map<String, dynamic> body = {
+//     "tag": tag,
+//     "email": email,
+//     "name": name,
+//     "location": location,
+//     "phone": phone,
+//     "other_location": other_location,
+//     "street_name": street_name,
+//     "house_number": house_number,
+//     "reference": reference,
+//     "company_name": company_name,
+//     "pickupPoint": pickupPoint,
+//     "lat": lat,
+//     "lng": lng,
+//   };
 
-  final response = await http.post(
-    baseUrl + "access_credentials.php",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: body,
-  );
-  return response;
-}
+//   final response = await http.post(
+//     baseUrl + "access_credentials.php",
+//     headers: {
+//       "Accept": "application/json",
+//       "Content-Type": "application/x-www-form-urlencoded"
+//     },
+//     body: body,
+//   );
+//   return response;
+// }
 
 Future<http.Response> cancelOrder(
   String tag,

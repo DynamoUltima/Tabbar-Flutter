@@ -7,23 +7,6 @@ part of 'login_user_model.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) {
-  $checkKeys(json, disallowNullValues: const [
-    'empty1',
-    'empty2',
-    'empty3',
-    'empty4',
-    'empty5',
-    'empty6',
-    'empty7',
-    'empty8',
-    'empty9',
-    'empty',
-    'empty10',
-    'empty11',
-    'empty12',
-    'empty13',
-    'empty14'
-  ]);
   return User(
       name: json['name'] as String,
       email: json['email'] as String,
@@ -33,59 +16,49 @@ User _$UserFromJson(Map<String, dynamic> json) {
       location: json['location'] as String,
       otherLocation: json['otherLocation'] as String,
       gcmId: json['gcmId'] as String,
-      userCode: json['userCode'] as String,
+      user_code: json['user_code'] as String,
       status: json['status'] as String,
-      homeLocation: json['empty1'] as String,
-      homeOtherlocation: json['empty2'] as String,
-      homeStreetName: json['empty3'] as String,
-      homeLatitude: json['empty4'] as String,
-      homeLongitude: json['empty5'] as String,
-      homeReference: json['empty6'] as String,
-      homeHousenumber: json['empty7'] as String,
-      officeLocation: json['empty8'] as String,
-      officeOtherlocation: json['empty9'] as String,
-      officeStreetName: json['empty'] as String,
-      officeLatitude: json['empty10'] as int,
-      officeLongitude: json['empty11'] as int,
-      officeReference: json['empty12'] as String,
-      officeCompanyName: json['empty13'] as String,
-      officeHousenumber: json['empty14'] as int);
+      home_location: json['home_location'] as String,
+      home_otherlocation: json['home_otherlocation'] as String,
+      home_street_name: json['home_street_name'] as String,
+      home_latitude: json['home_latitude'] as String,
+      home_longitude: json['home_longitude'] as String,
+      home_reference: json['home_reference'] as String,
+      home_housenumber: json['home_housenumber'] as String,
+      office_location: json['office_location'] as String,
+      office_otherlocation: json['office_otherlocation'] as String,
+      office_street_name: json['office_street_name'] as String,
+      office_latitude: json['office_latitude'] as String,
+      office_longitude: json['office_longitude'] as String,
+      office_reference: json['office_reference'] as String,
+      office_company_name: json['office_company_name'] as String,
+      office_housenumber: json['office_housenumber'] as String);
 }
 
-Map<String, dynamic> _$UserToJson(User instance) {
-  final val = <String, dynamic>{
-    'name': instance.name,
-    'email': instance.email,
-    'createdAt': instance.createdAt,
-    'updatedAt': instance.updatedAt,
-    'phone': instance.phone,
-    'location': instance.location,
-    'otherLocation': instance.otherLocation,
-    'gcmId': instance.gcmId,
-    'userCode': instance.userCode,
-    'status': instance.status,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('empty1', instance.homeLocation);
-  writeNotNull('empty2', instance.homeOtherlocation);
-  writeNotNull('empty3', instance.homeStreetName);
-  writeNotNull('empty4', instance.homeLatitude);
-  writeNotNull('empty5', instance.homeLongitude);
-  writeNotNull('empty6', instance.homeReference);
-  writeNotNull('empty7', instance.homeHousenumber);
-  writeNotNull('empty8', instance.officeLocation);
-  writeNotNull('empty9', instance.officeOtherlocation);
-  writeNotNull('empty', instance.officeStreetName);
-  writeNotNull('empty10', instance.officeLatitude);
-  writeNotNull('empty11', instance.officeLongitude);
-  writeNotNull('empty12', instance.officeReference);
-  writeNotNull('empty13', instance.officeCompanyName);
-  writeNotNull('empty14', instance.officeHousenumber);
-  return val;
-}
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+      'name': instance.name,
+      'email': instance.email,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
+      'phone': instance.phone,
+      'location': instance.location,
+      'otherLocation': instance.otherLocation,
+      'gcmId': instance.gcmId,
+      'user_code': instance.user_code,
+      'status': instance.status,
+      'home_location': instance.home_location,
+      'home_otherlocation': instance.home_otherlocation,
+      'home_street_name': instance.home_street_name,
+      'home_latitude': instance.home_latitude,
+      'home_longitude': instance.home_longitude,
+      'home_reference': instance.home_reference,
+      'home_housenumber': instance.home_housenumber,
+      'office_location': instance.office_location,
+      'office_otherlocation': instance.office_otherlocation,
+      'office_street_name': instance.office_street_name,
+      'office_latitude': instance.office_latitude,
+      'office_longitude': instance.office_longitude,
+      'office_reference': instance.office_reference,
+      'office_company_name': instance.office_company_name,
+      'office_housenumber': instance.office_housenumber
+    };

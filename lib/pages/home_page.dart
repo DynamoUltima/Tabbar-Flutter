@@ -187,8 +187,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         loginResponse.user.location,
                                         loginResponse.user.name,
                                         loginResponse.user.phone,
-                                        //loginResponse.user.homeReference,
-                                        loginResponse.user_id
+                                        loginResponse.user.home_reference,
+                                        //loginResponse.user_id
                                       ];
 
                                       var loginId = loginResponse.user.phone;
@@ -198,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       print(loginId);
 
                                       print(">>>>Normal response<<<<<<");
-                                      print(loginResponse.success);
+                                      //print(loginResponse.success);
 
                                       _saveListName(myStrings);
 

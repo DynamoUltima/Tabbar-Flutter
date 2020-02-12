@@ -53,6 +53,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
   String currentServerCode;
   String latestServerCode;
   String historyTag = "orderDetails";
+  String isOrderKey = "isOrderPlaced";
 
   _getUserOrderHistory() {
     print("=========getUserHistory method being called------");
@@ -70,12 +71,11 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
       orderDetails = orderHistory.order_list;
 
-
       print("======printing Order Details=====");
 
       print(orderDetails.length);
 
-      var latestIndex = orderDetails.length-1;
+      var latestIndex = orderDetails.length - 1;
 
       print(orderDetails);
       print(orderDetails[latestIndex].server_code);
@@ -97,7 +97,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
     //we may have to put in the latestserver code there
 
-    await getOrderState(tag, "TU11122664").then((response) {
+    await getOrderState(tag, latestServerCode).then((response) {
+      //"TU11122664"
       print(response.statusCode);
       // print(mydetailList[0]);
       var detailMap = json.decode(response.body);
@@ -144,14 +145,15 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     });
   }
 
-  generateOrderStatusMethod() {
+  generateOrderStatusMethod() async {
     //orderProcessStatus = orderDetailList[0].status;
     // if(orderProcessStatus==null){
     //   return Center(child: CupertinoActivityIndicator(),);
     // }
+    SharedPreferences mprefs = await SharedPreferences.getInstance();
 
     //print(orderProcessStatus);
-    print('tapped');
+    // print('tapped');
 
     switch (orderProcessStatus) {
       case "1":
@@ -190,6 +192,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
           foreground = Colors.green;
           currentDetailButtonColor = liveButtonColor;
           currentOrderButtonColor = disabledButtonColor;
+          mprefs.setBool(isOrderKey, false);
         });
         break;
       default:
@@ -357,7 +360,12 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
       child: Text('Go To Order'),
       onPressed: () {
         Navigator.of(context).push(
-            CupertinoPageRoute(builder: (BuildContext context) => OrderPage(latestServercode: latestServerCode,)));
+          CupertinoPageRoute(
+            builder: (BuildContext context) => OrderPage(
+              latestServercode: latestServerCode,
+            ),
+          ),
+        );
       },
       color: currentOrderButtonColor,
     );
