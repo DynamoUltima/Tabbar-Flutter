@@ -4,6 +4,10 @@ import 'package:tabbar/general_page.dart';
 import 'package:tabbar/models/login/login_response.dart';
 import 'package:tabbar/services/services.dart';
 import 'dart:convert';
+import 'dart:convert';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart' as crypto;
+
 
 import 'package:flutter/material.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
@@ -61,6 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // );
     // loadName();
   }
+
+  generateMd5(String data) {
+  var content = new Utf8Encoder().convert(data);
+  var md5 = crypto.sha512;
+  var digest = md5.convert(content);
+  return hex.encode(digest.bytes);
+}
+
+//  String convertToHex(byte[] raw) {
+//         StringBuffer sb = new StringBuffer();
+//         for (int i = 0; i < raw.length; i++) {
+//             sb.write(int.toString((raw[i] & 0xff) + 0x100, 16).substring(1));
+//         }
+//         return sb.toString();
+//     }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }
 
                                   postLogin(_emailController.text,
-                                          _passwordController.text.trim())
+                                          generateMd5(_passwordController.text.trim()))
                                       .then(
                                     (response) async {
                                       //Print response

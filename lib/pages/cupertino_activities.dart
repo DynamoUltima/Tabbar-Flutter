@@ -77,7 +77,7 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
       var latestIndex = orderDetails.length - 1;
 
-      print(orderDetails);
+     // print(orderDetails);
       print(orderDetails[latestIndex].server_code);
 
       setState(() {
@@ -85,6 +85,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
       });
 
       // print(orderDetails.lastIndexOf(element))
+      print("===latestServerCode== from cupertini Activities====");
+      print(latestServerCode);
     });
   }
 
@@ -97,10 +99,10 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
     //we may have to put in the latestserver code there
 
-    await getOrderState(tag, latestServerCode).then((response) {
+     getOrderState(tag, latestServerCode).then((response) {
       //"TU11122664"
       print(response.statusCode);
-      // print(mydetailList[0]);
+      // print(mydetailList[0]);8
       var detailMap = json.decode(response.body);
 
       OrderStatus orderStatus = OrderStatus();
@@ -119,9 +121,11 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
       setState(() {
         orderProcessStatus = orderDetailList[0].status;
       });
+      
 
+      print("===getOrderState===");
       print(orderDetailList.length);
-      //print(orderDetailList[0].status);
+      print(orderDetailList.toString());
     }).catchError((onError) {
       print(onError);
     });
