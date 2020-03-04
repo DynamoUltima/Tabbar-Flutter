@@ -49,11 +49,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       setState(() {
         orderHistory = OrderHistory.fromJson(historyMap);
       });
-      
 
       orderDetailList = orderHistory.order_list;
-
-      
     });
   }
 
@@ -86,8 +83,6 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -95,27 +90,22 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
     if (mydetailList.isEmpty) {
       //print("list was empty for a while");
-    //  var id = new DateTime.now().millisecondsSinceEpoch;
-    //  var now = new DateTime.now();
-    //  var nowTime = DateFormat("d MMMM yyyy").format(now);
-    //  var dTime = DateFormat("d ").format(now);
-    //  var dayTime = DateFormat("EEE ").format(now);
-    //  var mTime = DateFormat("M").format(now);
-    //  var hrTime = DateFormat("k ").format(now);
-    //  var secTime = DateFormat("s  ").format(now);
+      //  var id = new DateTime.now().millisecondsSinceEpoch;
+      //  var now = new DateTime.now();
+      //  var nowTime = DateFormat("d MMMM yyyy").format(now);
+      //  var dTime = DateFormat("d ").format(now);
+      //  var dayTime = DateFormat("EEE ").format(now);
+      //  var mTime = DateFormat("M").format(now);
+      //  var hrTime = DateFormat("k ").format(now);
+      //  var secTime = DateFormat("s  ").format(now);
 
-    
+      //  print(dayTime);
+      //  print(mTime);
+      //  print(dTime);
+      //  print(hrTime);
+      //  print(secTime);
 
-
-    //  print(dayTime);
-    //  print(mTime);
-    //  print(dTime);
-    //  print(hrTime);
-    //  print(secTime);
-
-    //  print(dayTime.substring(0,2).toUpperCase());
-
-      
+      //  print(dayTime.substring(0,2).toUpperCase());
 
       return Container(
         child: Center(
@@ -239,6 +229,19 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       return historyCard;
     }
 
+    if (orderDetailList == null) {
+      print("array is empty");
+      return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          previousPageTitle:"Activities",
+        ),
+          child: Center(
+              child: Text(
+        "No History",
+        style: myTextType.myLargeCuperStyle(context),
+      )));
+    }
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Activities',
@@ -259,6 +262,9 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                 itemCount: orderDetailList.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
+                  // if(orderDetailList==null){
+                  //   print("array is empty");
+                  // }
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: HistoryCardMethod(
