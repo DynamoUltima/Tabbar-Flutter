@@ -13,11 +13,11 @@ class widgetSignUp extends StatefulWidget {
 class _widgetSignUpState extends State<widgetSignUp> {
   final TextEditingController _emailController = TextEditingController();
 
-  TextEditingController _password = TextEditingController();
+  TextEditingController _password     = TextEditingController();
 
-  TextEditingController _phoneNumber = TextEditingController();
+  TextEditingController _phoneNumber   = TextEditingController();
 
-  TextEditingController _username = TextEditingController();
+  TextEditingController _username     = TextEditingController();
 
   String _selectedLocation;
   String user_list_key = "list_key";

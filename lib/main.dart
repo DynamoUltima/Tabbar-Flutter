@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tabbar/authenticate/phone_auth.dart';
 import 'package:tabbar/general_page.dart';
+import 'package:tabbar/home/intro.dart';
 
 import 'package:tabbar/pages/home_page.dart';
 import 'package:tabbar/services/services.dart';
@@ -62,23 +64,24 @@ class _MyAppState extends State<MyApp> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => MyHomePage(),
+          builder: (BuildContext context) => MyHomePage(),//intro
         ),
       );
 
     }
 
     if (isLogin) {
-      print("-----option 1 bein called----");
+      print("-----option 1 bein called----");//if you haven't logged in
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+          MaterialPageRoute(builder: (BuildContext context) =>Intro()));//HomePage()
          // Navigator.pop(context);
     } else {
-      print("---alternative been called--");
+
+      print("---alternative been called--");//if you have logged in
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => MyHomePage(),
+          builder: (BuildContext context) => MyHomePage()// MyHomePage()
         ),
       );
      // Navigator.pop(context);
