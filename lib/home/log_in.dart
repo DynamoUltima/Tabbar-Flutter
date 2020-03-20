@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/models/login/login_response.dart';
+import 'package:tabbar/pages/home_page.dart';
 import 'package:tabbar/services/services.dart';
 import 'package:tabbar/shared/constant.dart';
 
@@ -23,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  FacebookLogin fblogin = new FacebookLogin();
 
   var emailValid = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -48,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> _saveListName(List myStrings) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    return await preferences.setStringList(user_list_key, myStrings);
+    return await preferences.setStringList(UserListKey, myStrings);
   }
 
   Widget _buildEmail() {
@@ -96,8 +101,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _loginButton(double screenWidth) {
     return SizedBox(
-      width: screenWidth*0.5,
-          child: RaisedButton(
+      width: screenWidth * 0.5,
+      child: RaisedButton(
         elevation: 10,
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(25.0),
@@ -125,19 +130,54 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _loginWIthFaceBook(double screenWidth) {
     return SizedBox(
-      width: screenWidth*0.5,
-          child: OutlineButton.icon(
+      width: screenWidth * 0.5,
+      child: OutlineButton.icon(
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(25.0),
         ),
-        onPressed: () async {},
+        onPressed: () async {
+          fblogin.logIn(['email', 'public_profile']).then((result) async {
+            switch (result.status) {
+              case FacebookLoginStatus.loggedIn:
+                final facebookAuthCred = FacebookAuthProvider.getCredential(
+                    accessToken: result.accessToken.token);
+                await FirebaseAuth.instance
+                    .signInWithCredential(facebookAuthCred)
+                    .then((signedInUser) {
+                  print("signed in user" + signedInUser.user.displayName);
+                });
+
+                await _RedirectPage();
+
+                break;
+              case FacebookLoginStatus.cancelledByUser:
+                // TODO: Handle this case.
+                break;
+              case FacebookLoginStatus.error:
+                // TODO: Handle this case.
+                print("error" + FacebookLoginStatus.error.toString());
+                break;
+            }
+          }).catchError((e) {
+            print(e);
+          });
+        },
         textColor: Colors.blue,
-         color: Colors.blueAccent,
+        color: Colors.blueAccent,
         icon: Icon(
           FontAwesomeIcons.facebook,
           color: Colors.blue,
         ),
         label: Text("login"),
+      ),
+    );
+  }
+
+  Future _RedirectPage() {
+    return Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => MyHomePage(), //intro
       ),
     );
   }
@@ -208,10 +248,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     var screenWidth = MediaQuery.of(context).size.width;
 
-    
     return Scaffold(
       //backgroundColor: Colors.indigo,
       key: _scaffoldKey,
@@ -234,8 +272,8 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 "Or",
                 style: TextStyle(
-                 // color: Colors.white,
-                ),
+                    // color: Colors.white,
+                    ),
               ),
               _loginWIthFaceBook(screenWidth)
             ],

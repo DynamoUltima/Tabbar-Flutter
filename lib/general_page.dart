@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   int sharedValue = 0;
   double progressPercent = 0;
   String clientEmail;
+  myTextStyle myTextType;
 
   String userName;
 
@@ -118,6 +119,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    myTextType= myTextStyle();
+  
     print("--Print Preferences---");
     // print(mydetailList);
     // CupertinoTheme cupertinoTheme;

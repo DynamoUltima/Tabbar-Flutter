@@ -71,13 +71,13 @@ class _MyAppState extends State<MyApp> {
     }
 
     if (isLogin) {
-      print("-----option 1 bein called----");//if you haven't logged in
+      print("-----option 1 bein called----");//if you have logged in
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) =>Intro()));//HomePage()
          // Navigator.pop(context);
     } else {
 
-      print("---alternative been called--");//if you have logged in
+      print("---alternative been called--");//if you havem't logged in
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
