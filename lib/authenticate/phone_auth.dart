@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tabbar/home/sign_in.dart';
 
 import '../general_page.dart';
 
@@ -27,7 +28,7 @@ class _PhoneAutherState extends State<PhoneAuther> {
 
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: this.phoneNo, // PHONE NUMBER TO SEND OTP
+          phoneNumber: "+233" + this.phoneNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             //Starts the phone number verification process for the given phone number.
             //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
@@ -57,7 +58,8 @@ class _PhoneAutherState extends State<PhoneAuther> {
             content: Container(
               height: 85,
               child: Column(children: [
-                TextField(
+                TextFormField(
+                  initialValue: smsOTP ?? "",
                   onChanged: (value) {
                     this.smsOTP = value;
                   },
@@ -82,7 +84,7 @@ class _PhoneAutherState extends State<PhoneAuther> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage(),
+                          builder: (BuildContext context) => SignUpPage(number:phoneNo),
                         ),
                       );
                     } else {
@@ -149,12 +151,15 @@ class _PhoneAutherState extends State<PhoneAuther> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(10),
-              child: TextField(
-                decoration: InputDecoration(
-                    hintText: 'Enter Phone Number Eg. +910000000000'),
-                onChanged: (value) {
-                  this.phoneNo = value;
-                },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal:25),
+                              child: TextField(
+                  decoration: InputDecoration(
+                      hintText: 'Enter Phone Number Eg. 024xxxxxxx'),
+                  onChanged: (value) {
+                    this.phoneNo = value;
+                  },
+                ),
               ),
             ),
             (errorMessage != ''

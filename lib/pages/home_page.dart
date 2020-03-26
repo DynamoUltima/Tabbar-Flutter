@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tabbar/shared/constant.dart';
 
 import 'signup.dart';
 
@@ -24,12 +25,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-String user_list_key = "list_key";
+
 
 Future<bool> _saveListName(List myStrings) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
-  return await preferences.setStringList(user_list_key, myStrings);
+  return await preferences.setStringList(UserListKey, myStrings);
 }
 
 class _MyHomePageState extends State<MyHomePage> {

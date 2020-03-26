@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => MyHomePage(),//intro
+          builder: (BuildContext context) =>Intro(),//intro
         ),
       );
 
@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
     if (isLogin) {
       print("-----option 1 bein called----");//if you have logged in
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) =>Intro()));//HomePage()
+          MaterialPageRoute(builder: (BuildContext context) =>HomePage()));//HomePage()
          // Navigator.pop(context);
     } else {
 
@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => MyHomePage()// MyHomePage()
+          builder: (BuildContext context) => Intro()// MyHomePage()
         ),
       );
      // Navigator.pop(context);

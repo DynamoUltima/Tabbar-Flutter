@@ -1,16 +1,16 @@
-import 'dart:io';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-//import 'adaptive_widgets.dart';
-//import 'package:cupertino_icons/placeholder.txt';
 import 'package:tabbar/adaptive_widgets.dart';
+import 'package:tabbar/customWidgets/myTextStyle.dart';
+import 'package:tabbar/home/log_in.dart';
 
-import 'package:tabbar/pages/cupertino_home_page.dart';
+
 import 'package:tabbar/pages/cupertino_pricing.dart';
 import 'package:tabbar/pages/cupertino_profile.dart';
 import 'package:tabbar/pages/home_page.dart';
+import 'package:tabbar/shared/constant.dart';
 import 'package:tabbar/views/history_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -29,12 +29,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String user_list_key = "list_key";
+  
   List<String> mydetailList = [];
   int sharedValue = 0;
   double progressPercent = 0;
   String clientEmail;
-  myTextStyle myTextType;
+  
 
   String userName;
 
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => MyHomePage(),
+        builder: (BuildContext context) => LoginPage(),
       ),
     );
 
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => MyHomePage(),
+          builder: (BuildContext context) => LoginPage(),
         ),
       );
     }
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    myTextType= myTextStyle();
+    
   
     print("--Print Preferences---");
     // print(mydetailList);
@@ -186,7 +186,8 @@ class _HomePageState extends State<HomePage> {
                         child: Center(
                           child: Text(
                             "Logout",
-                            style: TextStyle(color: CupertinoColors.activeBlue),
+                            style: myTextStyle().myCuperStyle(context)
+                            //TextStyle(color: CupertinoColors.activeBlue),
                           ),
                         ),
                       ),

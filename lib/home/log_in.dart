@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tabbar/authenticate/accounts.dart';
 import 'package:tabbar/models/login/login_response.dart';
-import 'package:tabbar/pages/home_page.dart';
 import 'package:tabbar/services/services.dart';
 import 'package:tabbar/shared/constant.dart';
+import 'package:tabbar/shared/loading.dart';
 
 import '../general_page.dart';
 
@@ -21,11 +22,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String _password;
-
   String _email;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool loading = false;
 
   FacebookLogin fblogin = new FacebookLogin();
 
@@ -93,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
           if (val.isEmpty) {
             return "Enter Valid password";
           }
+          return null;
         },
       ),
       padding: EdgeInsets.symmetric(horizontal: 32.0),
@@ -109,6 +112,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onPressed: () async {
           if (_formKey.currentState.validate()) {
+            setState(() {
+              loading = true;
+            });
             postLogin(_email.trim(), generateMd5(_password.trim()))
                 .then(response)
                 .catchError(onError());
@@ -126,7 +132,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  onError() => print(onError);
+  onError() => {
+        print(onError),
+        setState(() {
+          loading = false;
+        })
+      };
 
   Widget _loginWIthFaceBook(double screenWidth) {
     return SizedBox(
@@ -144,10 +155,12 @@ class _LoginPageState extends State<LoginPage> {
                 await FirebaseAuth.instance
                     .signInWithCredential(facebookAuthCred)
                     .then((signedInUser) {
+                  _redirectPage(
+                      signedInUser.user.email,
+                      signedInUser.user.phoneNumber,
+                      signedInUser.user.displayName);
                   print("signed in user" + signedInUser.user.displayName);
                 });
-
-                await _RedirectPage();
 
                 break;
               case FacebookLoginStatus.cancelledByUser:
@@ -173,11 +186,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future _RedirectPage() {
+  Future _redirectPage(String mail, String phoneNumber, String displayName) {
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => MyHomePage(), //intro
+        builder: (BuildContext context) => AccountPage(
+          email: mail,
+          phoneNumber: phoneNumber,
+          displayName: displayName,
+        ), //intro
       ),
     );
   }
@@ -194,6 +211,9 @@ class _LoginPageState extends State<LoginPage> {
     print(loginResponse.success);
     if (loginResponse.success == 0) {
       print(loginResponse.success);
+      setState(() {
+        loading = false;
+      });
 
       print("--- status code being called -- false---");
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -203,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
           "Invalid Credentials",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
       );
       _scaffoldKey.currentState.showSnackBar(snackBar);
     }
@@ -225,17 +245,32 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       print("--- status code being called---good ");
       SharedPreferences mprefs = await SharedPreferences.getInstance();
+      // setState(() {
+      //   loading = false;
+      // });
       mprefs.setBool("isLogin", true);
       mprefs.setString("userName", loginResponse.user.name);
 
       print(loginResponse.success);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => HomePage(),
-        ),
-      );
+      if (loginResponse.success == 1) {
+        setState(() {
+          loading = false;
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => HomePage(),
+          ),
+        );
+      }
+
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (BuildContext context) => HomePage(),
+      //   ),
+      // );
       // Navigator.pop(context);
     }
   }
@@ -250,36 +285,38 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      //backgroundColor: Colors.indigo,
-      key: _scaffoldKey,
-      body: Container(
-        alignment: Alignment.bottomCenter,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _buildEmail(),
-              _buildPassword(),
-              SizedBox(
-                height: 15,
-              ),
-              _loginButton(screenWidth),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Or",
-                style: TextStyle(
-                    // color: Colors.white,
+    return loading
+        ? Loading()
+        : Scaffold(
+            //backgroundColor: Colors.indigo,
+            key: _scaffoldKey,
+            body: Container(
+              alignment: Alignment.bottomCenter,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _buildEmail(),
+                    _buildPassword(),
+                    SizedBox(
+                      height: 15,
                     ),
+                    _loginButton(screenWidth),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Or",
+                      style: TextStyle(
+                          // color: Colors.white,
+                          ),
+                    ),
+                    _loginWIthFaceBook(screenWidth)
+                  ],
+                ),
               ),
-              _loginWIthFaceBook(screenWidth)
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

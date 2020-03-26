@@ -224,7 +224,7 @@ class _widgetSignUpState extends State<widgetSignUp> {
                                   );
                                 }).toList(),
                               ),
-                            )),
+                            ),),
                       ],
                     ),
                   ),
@@ -233,7 +233,9 @@ class _widgetSignUpState extends State<widgetSignUp> {
             ],
           ),
           RaisedButton(
-            onPressed: () {},
+            onPressed: () {
+              
+            },
             child: Text(
               "Sign Up",
               style: TextStyle(color: Colors.white),
@@ -294,8 +296,8 @@ class _widgetSignUpState extends State<widgetSignUp> {
                   signUpResponse.user.location,
                   signUpResponse.user.name,
                   signUpResponse.user.phone,
-                  //signUpResponse.user.homeReference,
-                  signUpResponse.user_id
+                  //signUpResponse.user.home_reference,
+                  // signUpResponse.user_id
                 ];
 
                 _saveListName(myStrings);
