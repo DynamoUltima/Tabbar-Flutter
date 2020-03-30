@@ -8,6 +8,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/authenticate/accounts.dart';
+import 'package:tabbar/home/intro.dart';
 import 'package:tabbar/models/login/login_response.dart';
 import 'package:tabbar/services/services.dart';
 import 'package:tabbar/shared/constant.dart';
@@ -23,9 +24,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _password;
   String _email;
+  String errorText="";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  SnackBar snackBar;
 
   bool loading = false;
 
@@ -117,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
             });
             postLogin(_email.trim(), generateMd5(_password.trim()))
                 .then(response)
-                .catchError(onError());
+                .catchError(onError);
           }
         },
         child: Padding(
@@ -132,12 +135,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  onError() => {
-        print(onError),
-        setState(() {
-          loading = false;
-        })
-      };
+ dynamic onError() {
+        print(onError);
+        // setState(() {
+        //   loading = false;
+        // })
+      //   SnackBar snackBar = SnackBar(
+      //   content: Text(
+      //     "Invalid Credentials",
+      //     style: TextStyle(color: Colors.white),
+      //   ),
+      //   backgroundColor: Colors.red,
+      // );
+      setState(() {
+        errorText="Invalid credentials";
+      });
+      _scaffoldKey.currentState.showSnackBar(snackBar);
+      }
 
   Widget _loginWIthFaceBook(double screenWidth) {
     return SizedBox(
@@ -159,7 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                       signedInUser.user.email,
                       signedInUser.user.phoneNumber,
                       signedInUser.user.displayName);
-                  print("signed in user" + signedInUser.user.displayName);
+                  print("signed in user as " + signedInUser.user.displayName);
+                  //print("signed in user's number " + signedInUser.user.phoneNumber);
+                   print("signed in user's email " + signedInUser.user.email);
                 });
 
                 break;
@@ -218,13 +234,7 @@ class _LoginPageState extends State<LoginPage> {
       print("--- status code being called -- false---");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool("isLogin", false);
-      SnackBar snackBar = SnackBar(
-        content: Text(
-          "Invalid Credentials",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.red,
-      );
+      
       _scaffoldKey.currentState.showSnackBar(snackBar);
     }
 
@@ -284,6 +294,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
+     snackBar = SnackBar(
+        content: Text(
+          "Invalid Credentials",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      );
 
     return loading
         ? Loading()
@@ -312,11 +329,34 @@ class _LoginPageState extends State<LoginPage> {
                           // color: Colors.white,
                           ),
                     ),
-                    _loginWIthFaceBook(screenWidth)
+                    _loginWIthFaceBook(screenWidth),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    buildClickableText(context),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(errorText,style: TextStyle(color:Colors.red)),
+
+                    
                   ],
                 ),
               ),
             ),
           );
+  }
+
+  GestureDetector buildClickableText(BuildContext context) {
+    return GestureDetector(
+      child: Text("Create an Acoount with Forhey"),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => Intro(),
+          ),
+        );
+      },
+    );
   }
 }

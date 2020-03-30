@@ -136,7 +136,9 @@ class _HomePageState extends State<HomePage> {
     return Container(
       child: CupertinoPageScaffold(
         child: CupertinoTabScaffold(
+         // backgroundColor: CupertinoColors.white,
           tabBar: CupertinoTabBar(
+            backgroundColor: CupertinoColors.white,
             items: [
               // BottomNavigationBarItem(
               //   icon: Icon(CupertinoIcons.home),

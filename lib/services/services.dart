@@ -292,6 +292,26 @@ Future<http.Response> getOrderState(
   return response;
 }
 
+Future<http.Response> getUserCode(
+  String tag,
+  String email,
+) async {
+  Map<String, dynamic> body = {
+    "tag": tag,
+    "email": email,
+  };
+
+  final response = await http.post(
+    baseUrl + "access_credentials.php",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body,
+  );
+  return response;
+}
+
 Future<http.Response> getOrderHistory(
   String tag,
   String email,

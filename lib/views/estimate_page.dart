@@ -66,16 +66,12 @@ class _EstimatorState extends State<Estimator> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     if (articlePriceList.isEmpty) {
-      
-
       return Container(
         child: Center(
           child: Text("Loading", style: myTextType.myLargeCuperStyle(context)),
         ),
       );
     }
-
-    
 
     for (var item in articlePriceList) {
       //gentArray is an array containing  the category titles
@@ -164,88 +160,88 @@ class _EstimatorState extends State<Estimator> {
             });
 
             return Container(
-                height: screenHeight * 0.65,
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "${categoryResults[indexItems]}",
-                          style: myTextType.myActionCuperStyle(context),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "Total Price " + "GH¢ " + "${finalPrice}",
-                          style: myTextType.myActionCuperStyle(context),
-                        ),
-                        // CupertinoSlider(
-                        //   onChanged: (double value) {
-                        //     setState(() {
-                        //       sliderValue = value;
-                        //     });
-                        //     print(value);
-                        //   },
-                        //   value: sliderValue,
-                        //   min: 0.0,
-                        //   max: 3,
-                        //   divisions: 3,
-                        //   activeColor: CupertinoColors.activeBlue,
-                        // )
-                      ],
-                    ),
-                    // buildRow(),
-                    SizedBox(
-                      height: 400,
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: gentsResults.length,
-                        itemBuilder: (BuildContext context, int indexDetails) {
-                          //indexDetails
-                          numbered.putIfAbsent(
-                              gentsResults[indexDetails].laundryItem, () => 0);
-                          // print(numbered);
-
-                          return GestureDetector(
-                            onTap: () {
-                              print(gentsResults[indexDetails].laundryItem);
-                              setState(() {
-                                showCupertinoModalPopup(
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                        height: screenHeight * 0.3,
-                                        child: _estimatePickerMethod(
-                                          gentsResults[indexDetails]
-                                              .laundryItem,
-                                          double.parse(
-                                              gentsResults[indexDetails]
-                                                  .laundryDetails[0]
-                                                  .price),
-                                        ),
-                                      );
-                                    },
-                                    context: context);
-                              });
-                            },
-                            child: EstimatorTile(
-                              laundryItems:
-                                  gentsResults[indexDetails].laundryItem,
-                              laundryType: numbered[
-                                  gentsResults[indexDetails].laundryItem],
-                              price: gentsResults[indexDetails]
-                                  .laundryDetails[0]
-                                  .price,
-                            ),
-                          );
-                        },
+              height: screenHeight * 0.65,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "${categoryResults[indexItems]}",
+                        style: myTextType.myActionCuperStyle(context),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Total Price " + "GH¢ " + "${finalPrice}",
+                        style: myTextType.myActionCuperStyle(context),
                       ),
-                    )
-                  ],
-                ));
+                      // CupertinoSlider(
+                      //   onChanged: (double value) {
+                      //     setState(() {
+                      //       sliderValue = value;
+                      //     });
+                      //     print(value);
+                      //   },
+                      //   value: sliderValue,
+                      //   min: 0.0,
+                      //   max: 3,
+                      //   divisions: 3,
+                      //   activeColor: CupertinoColors.activeBlue,
+                      // )
+                    ],
+                  ),
+                  // buildRow(),
+                  SizedBox(
+                    height: 500,
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: gentsResults.length,
+                      itemBuilder: (BuildContext context, int indexDetails) {
+                        //indexDetails
+                        numbered.putIfAbsent(
+                            gentsResults[indexDetails].laundryItem, () => 0);
+                        // print(numbered);
+
+                        return GestureDetector(
+                          onTap: () {
+                            print(gentsResults[indexDetails].laundryItem);
+                            setState(() {
+                              showCupertinoModalPopup(
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: screenHeight * 0.3,
+                                      child: _estimatePickerMethod(
+                                        gentsResults[indexDetails].laundryItem,
+                                        double.parse(gentsResults[indexDetails]
+                                            .laundryDetails[0]
+                                            .price),
+                                      ),
+                                    );
+                                  },
+                                  context: context);
+                            });
+                          },
+                          child: EstimatorTile(
+                            laundryItems:
+                                gentsResults[indexDetails].laundryItem,
+                            laundryType: numbered[
+                                gentsResults[indexDetails].laundryItem],
+                            price: gentsResults[indexDetails]
+                                .laundryDetails[0]
+                                .price,
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            );
           },
         ),
       ),

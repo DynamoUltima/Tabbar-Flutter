@@ -232,14 +232,14 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     if (orderDetailList == null) {
       print("array is empty");
       return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          previousPageTitle:"Activities",
-        ),
+          navigationBar: CupertinoNavigationBar(
+            previousPageTitle: "Activities",
+          ),
           child: Center(
               child: Text(
-        "No History",
-        style: myTextType.myLargeCuperStyle(context),
-      )));
+            "No History",
+            style: myTextType.myLargeCuperStyle(context),
+          )));
     }
 
     return CupertinoPageScaffold(
@@ -259,7 +259,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
               pageTtitleText,
               ListView.builder(
                 physics: BouncingScrollPhysics(),
-                itemCount: orderDetailList.length,
+                itemCount: orderDetailList.length ?? 0,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   // if(orderDetailList==null){

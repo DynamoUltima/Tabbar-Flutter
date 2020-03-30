@@ -9,6 +9,7 @@ import 'package:tabbar/general_page.dart';
 import 'package:tabbar/models/update/update_response.dart';
 import 'package:tabbar/pages/home_page.dart';
 import 'package:tabbar/services/services.dart';
+import 'package:tabbar/shared/loading.dart';
 //import 'services'
 
 class AccountPage extends StatefulWidget {
@@ -57,6 +58,8 @@ class _AccountPageState extends State<AccountPage> {
   String _lng = "";
   String updated_at;
 
+  bool loading = false;
+
   Future<List<String>> getUserList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getStringList(user_list_key);
@@ -96,12 +99,14 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     myTextStyle myTextType = myTextStyle();
 
-    print("-----pref details at update Accounts-----");
-    print(mydetailList);
+    // print("-----pref details at update Accounts-----");
+    // print(mydetailList);
+    setState(() {
+      _name = widget.displayName;
+      _phoneNumber = widget.phoneNumber;
+      _email = widget.email;
+    });
 
-    _name = widget.displayName;
-    _phoneNumber = widget.phoneNumber;
-    _email = widget.email;
     // _location = mydetailList[1];
 
     Widget _locationChoiceTextField() {
@@ -112,191 +117,203 @@ class _AccountPageState extends State<AccountPage> {
       }
     }
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('Update Accounts'),
-        previousPageTitle: "Settings",
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 80,
-                ),
-                Padding(
+    return loading
+        ? Loading()
+        : CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              middle: Text('Update Accounts'),
+              previousPageTitle: "Settings",
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Container(
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
+                  child: Column(
                     children: <Widget>[
-                      Text(
-                        'Update Accounts',
-                        style: myTextType.myLargeCuperStyle(context),
+                      SizedBox(
+                        height: 80,
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CupertinoTextField(
-                  //name
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CupertinoColors.black),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  controller: _nameController,
-                  placeholder: _name,
-                  placeholderStyle:
-                      TextStyle(color: CupertinoColors.lightBackgroundGray),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CupertinoTextField(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CupertinoColors.black),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  controller: _phoneNumberController,
-                  placeholder: "phoneNumber",
-                  placeholderStyle:
-                      TextStyle(color: CupertinoColors.lightBackgroundGray),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CupertinoTextField(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CupertinoColors.black),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  placeholder: _email,
-                  controller: _emailController,
-                  placeholderStyle:
-                      TextStyle(color: CupertinoColors.lightBackgroundGray),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                //Location
-                CupertinoTextField(
-                  placeholder: "location",
-                  controller: _locationController,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CupertinoColors.black),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  placeholderStyle:
-                      TextStyle(color: CupertinoColors.lightBackgroundGray),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Pick up Address',
-                        style: myTextType.myCuperStyle(context),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              'Update Accounts',
+                              style: myTextType.myLargeCuperStyle(context),
+                            ),
+                          ],
+                        ),
                       ),
-                      CupertinoLocationChoiceButton(context)
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                _locationChoiceTextField(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CupertinoTextField(
+                        //name
+                        //enabled: false,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CupertinoColors.black),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        controller: _nameController,
+                        placeholder: _name,
+                        placeholderStyle: TextStyle(
+                            color: CupertinoColors.lightBackgroundGray),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CupertinoTextField(
+                        //enabled: false,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CupertinoColors.black),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        controller: _phoneNumberController,
+                        placeholder: widget.phoneNumber ??"number",
+                        placeholderStyle: TextStyle(
+                            color: CupertinoColors.darkBackgroundGray),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CupertinoTextField(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CupertinoColors.black),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        placeholder: _email,
+                        controller: _emailController,
+                        placeholderStyle: TextStyle(
+                            color: CupertinoColors.darkBackgroundGray),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      //Location
+                      CupertinoTextField(
+                        placeholder: "location",
+                        controller: _locationController,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CupertinoColors.black),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        placeholderStyle: TextStyle(
+                            color: CupertinoColors.lightBackgroundGray),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Pick up Address',
+                              style: myTextType.myCuperStyle(context),
+                            ),
+                            CupertinoLocationChoiceButton(context)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _locationChoiceTextField(),
 
-                /**
+                      /**
                  * pickup address
                  * reference
                  * use google maps to get cordinates 
                  */
-                CupertinoButton(
-                  onPressed: () async {
-                    setState(() {
-                      _email = _emailController.text;
-                      _name = _nameController.text;
-                      _location = _locationController.text;
-                      _phoneNumber = _phoneNumberController.text;
-                      _streetName = _streetNameController.text;
-                      _houseNumber = _houseNumberController.text;
-                      _companyName = _companyNameController.text;
-                      _pickupPoint = _pickupPointController.text;
-                      _reference = _referenceController.text;
-                      _otherLocation = _otherLocationController.text;
-                      updated_at = DateTime.now().toString();
-                    });
+                      CupertinoButton(
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          setState(() {
+                            _email = _emailController.text;
+                            _name = _nameController.text;
+                            _location = _locationController.text;
+                            _phoneNumber = _phoneNumberController.text;
+                            _streetName = _streetNameController.text;
+                            _houseNumber = _houseNumberController.text;
+                            _companyName = _companyNameController.text;
+                            _pickupPoint = _pickupPointController.text;
+                            _reference = _referenceController.text;
+                            _otherLocation = _otherLocationController.text;
+                            updated_at = DateTime.now().toString();
+                          });
 
-                    List<String> myStrings = [
-                      widget.email,
-                      _location,
-                      widget.displayName,
-                      widget.phoneNumber,
-                      _houseNumber
-                     ];
-
-                     _saveListName(myStrings);
-                    updateAccount(
-                            _tag,
-                            _email,
-                            _name,
+                          List<String> myStrings = [
+                            widget.email,
                             _location,
-                            _phoneNumber,
-                            _otherLocation,
-                            _streetName,
-                            _houseNumber,
-                            _reference,
-                            _companyName,
-                            chosenLocation,
-                            _lat,
-                            _lng,
-                            updated_at)
-                        .then((response) {
-                      print("--updated response---");
-                      print(response.body);
-                      var updateMap = json.decode(response.body);
-                      UpdateResponse updateResponse = new UpdateResponse();
-                      setState(() {
-                        updateResponse = UpdateResponse.fromJson(updateMap);
-                      });
-                      if(updateResponse.success== 1){
-                        Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage(), //intro
-                        ),
-                      );
+                            widget.displayName,
+                            widget.phoneNumber,
+                            _houseNumber
+                          ];
 
-                      }else{
-                        showUpdateAccountsDialog();
+                          _saveListName(myStrings);
+                          updateAccount(
+                                  _tag,
+                                  _email,
+                                  _name,
+                                  _location,
+                                  _phoneNumber,
+                                  _otherLocation,
+                                  _streetName,
+                                  _houseNumber,
+                                  _reference,
+                                  _companyName,
+                                  chosenLocation,
+                                  _lat,
+                                  _lng,
+                                  updated_at)
+                              .then((response) {
+                            print("--updated response---");
+                            print(response.body);
+                            var updateMap = json.decode(response.body);
+                            UpdateResponse updateResponse =
+                                new UpdateResponse();
+                            setState(() {
+                              updateResponse =
+                                  UpdateResponse.fromJson(updateMap);
+                            });
+                            if (updateResponse.success == 1) {
+                              setState(() {
+                                loading = false;
+                              });
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomePage(), //intro
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                loading = false;
+                              });
+                              showUpdateAccountsDialog();
+                            }
 
-                      }
-
-                   
-
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(
-                      //     builder: (BuildContext context) => HomePage(), //intro
-                      //   ),
-                      // );
-                      //showUpdateAccountsDialog();
-                    });
-                  },
-                  child: Text('Update Accounts'),
-                  color: CupertinoColors.activeBlue,
-                )
-              ],
+                            // Navigator.of(context).pushReplacement(
+                            //   MaterialPageRoute(
+                            //     builder: (BuildContext context) => HomePage(), //intro
+                            //   ),
+                            // );
+                            //showUpdateAccountsDialog();
+                          });
+                        },
+                        child: Text('Update Accounts'),
+                        color: CupertinoColors.activeBlue,
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   Container officeContainer() {

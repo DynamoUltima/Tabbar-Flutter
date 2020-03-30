@@ -23,6 +23,7 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     final Map<int, Widget> logoWidgets = <int, Widget>{
       0: Text(
         'Price',
@@ -48,10 +49,12 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
     ];
 
     return Container(
+      height:screenHeight,
       child: Column(
+        
         children: <Widget>[
           SizedBox(
-            height: 100,
+            height: 90,
           ),
           SizedBox(
             width: 500,
@@ -68,7 +71,7 @@ class _CupertinoPricingState extends State<CupertinoPricing> {
           ),
           Column(
             children: <Widget>[
-              SizedBox(height: 40,),
+              //SizedBox(height: 40,),
               Center(
                 child: pages[sharedValue],
               ),

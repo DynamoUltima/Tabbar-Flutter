@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
+
+import 'package:tabbar/services/services.dart';
 import 'package:tabbar/views/update_accounts_page.dart';
+import 'package:share/share.dart';
 
 class CupertinoProfile extends StatefulWidget {
   @override
@@ -13,6 +17,7 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
   String user_list_key = "list_key";
   List<String> mydetailList = [];
   String refrencePoint;
+  String refferalCode = "";
 
   @override
   void initState() {
@@ -26,9 +31,18 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
     //     return null;
     //   },
     // );
-   
 
     loadList();
+  }
+
+  Future retrieveCode(String email) async {
+    getUserCode('get_user_code', mydetailList[0]).then((response) {
+      print(response.body);
+      print(json.decode(response.body)["code"]);
+      setState(() {
+        refferalCode = json.decode(response.body)["code"];
+      });
+    });
   }
 
   Future<List<String>> getUserList() async {
@@ -43,7 +57,6 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
       });
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -65,34 +78,31 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
       );
     }
 
+    retrieveCode(mydetailList[0]);
 
+    String homeRef = mydetailList[4] ?? "empty";
 
-
-     String homeRef = mydetailList[4]??"empty";
-    
-
-     continueUpdateButton() {
+    Widget continueUpdateButton() {
       if (homeRef == "empty") {
         return CupertinoButton(
           child: Text("Click to Complete Profile Update "),
           onPressed: () {
             Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (BuildContext context) => UpdateAccountPage()));
-
+                context,
+                CupertinoPageRoute(
+                    builder: (BuildContext context) => UpdateAccountPage()));
           },
           color: CupertinoColors.lightBackgroundGray,
         );
-      } else if(homeRef!=null){
+      } else if (homeRef != null) {
         return Container();
       }
+      return null;
     }
 
     print("--My detail List--profile.dart--");
     print(mydetailList);
 
-    
     return Container(
       child: Container(
         child: Column(
@@ -102,9 +112,11 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
             ),
             Center(
               child: CircleAvatar(
-                radius: 70,
-                backgroundImage: NetworkImage(
-                    'https://blogs.psychcentral.com/life-goals/files/2018/09/mens-dress-guide-768x513.jpg'),
+                radius: 50,
+
+                child: Icon(CupertinoIcons.person, size: 50),
+                //   NetworkImage(
+                //       'https://blogs.psychcentral.com/life-goals/files/2018/09/mens-dress-guide-768x513.jpg'),
               ),
             ),
             Text(
@@ -118,7 +130,7 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
               height: 20,
             ),
             CupertinoButton(
-              child: Text('Home'),
+              child: Text('Location'),
               onPressed: () {},
               color: CupertinoColors.activeBlue,
             ),
@@ -185,24 +197,38 @@ class _CupertinoProfileState extends State<CupertinoProfile> {
               children: <Widget>[
                 Icon(CupertinoIcons.flag, color: CupertinoColors.activeBlue),
                 Text(
-                  homeRef,
+                  refferalCode,
                   style: CupertinoTheme.of(context)
                       .textTheme
-                      .navActionTextStyle
+                      .navLargeTitleTextStyle
                       .apply(
                         color: CupertinoColors.activeBlue,
                       ),
                 ),
               ],
             ),
-             SizedBox(
+            SizedBox(
+              height: 20,
+            ),
+            CupertinoButton(
+              child: Text("Share Code"),
+              onPressed: () async {
+                final RenderBox box = context.findRenderObject();
+                String subject = "Forhey Refferal";
+                String message =
+                    "Use Forhey for your laundry convenience. Download the app here http://bit.ly/1ESCI03 and enter this code ${refferalCode} to get 20% discount on your first order.";
+              await  Share.share(message,
+                    subject: subject,
+                    sharePositionOrigin:box.localToGlobal(Offset.zero) & box.size);      
+              },
+              color: CupertinoColors.activeBlue,
+            ),
+            SizedBox(
               height: 60,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                continueUpdateButton()
-              ],
+              children: <Widget>[continueUpdateButton()],
             )
 
             //Chip(label: Text('Home'),)
