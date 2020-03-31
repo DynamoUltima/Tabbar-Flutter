@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/customWidgets/cirlcle_animated_progress_bar.dart';
 import 'package:tabbar/models/orderHistory/order_history_list.dart';
 import 'package:tabbar/models/orderHistory/order_history_response.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:tabbar/models/orderStatus/assignees.dart';
 import 'package:tabbar/models/orderStatus/order_list.dart';
 import 'package:tabbar/models/orderStatus/order_status.dart';
@@ -60,6 +60,8 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     getOrderHistory(historyTag, widget.clientEmail).then((response) {
       // print(response.statusCode);
 
+      try{
+
       // print(mydetailList);
       var historyMap = json.decode(response.body);
 
@@ -71,22 +73,40 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
 
       orderDetails = orderHistory.order_list;
 
-      print("======printing Order Details=====");
+     // print("======printing Order Details=====");
 
-      print(orderDetails.length);
+      // print(orderDetails.length);
 
-      var latestIndex = orderDetails.length - 1;
+      
+        var latestIndex = orderDetails.length - 1;
 
-     // print(orderDetails);
+      
+
+      
+
+      print("=======Cuper Activities======");
       print(orderDetails[latestIndex].server_code);
+         var timeStamp= orderDetails[latestIndex].created_at;
+
+         var date2= DateTime.now();
+
+         var different=date2.difference(DateTime.parse(timeStamp));
+         print(different.inHours);
+
+        //  print(timeStamp);
+        //  print(DateTime.parse(timeStamp));
+          //print(timeago.format(timeStamp.));
 
       setState(() {
         latestServerCode = orderDetails[latestIndex].server_code;
       });
 
       // print(orderDetails.lastIndexOf(element))
-      print("===latestServerCode== from cupertini Activities====");
-      print(latestServerCode);
+      // print("===latestServerCode== from cupertini Activities====");
+      // print(latestServerCode);
+      }catch(e){
+        print(e);
+      }
     });
   }
 
@@ -363,13 +383,16 @@ class _CupertinoActivitiesState extends State<CupertinoActivities> {
     return CupertinoButton(
       child: Text('Go To Order'),
       onPressed: () {
-        Navigator.of(context).push(
+        
+          Navigator.of(context).push(
           CupertinoPageRoute(
             builder: (BuildContext context) => OrderPage(
               latestServercode: latestServerCode,
             ),
           ),
         );
+     
+        
       },
       color: currentOrderButtonColor,
     );

@@ -61,9 +61,12 @@ class _AllSettingsState extends State<AllSettings> {
         Row(
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(
-                url,
-              ),
+             
+              backgroundColor: CupertinoColors.activeBlue,
+              child: Icon(CupertinoIcons.person, size: 30),
+              // NetworkImage(
+              //   url,
+              // ),
               radius: 30,
             ),
             SizedBox(
@@ -213,7 +216,7 @@ class _AllSettingsState extends State<AllSettings> {
       return settingTile;
     }
 
-    NotificationListTiles(
+    notificationListTiles(
       Color circleBackgroundColor,
       String tileText,
       IconData tileIcon,
@@ -300,17 +303,17 @@ class _AllSettingsState extends State<AllSettings> {
             // SizedBox(
             //   height: 20,
             // ),
-            Row(children: <Widget>[
-              Text(
-                'Notifications',
-                style: myTextType.myActionCuperStyle(context),
-              )
-            ]),
-            SizedBox(
-              height: 20,
-            ),
-            NotificationListTiles(CupertinoColors.activeGreen, 'Notification',
-                CupertinoIcons.bell)
+            // Row(children: <Widget>[
+            //   Text(
+            //     'Notifications',
+            //     style: myTextType.myActionCuperStyle(context),
+            //   )
+            // ]),
+            // SizedBox(
+            //   height: 20,
+            // ),
+            // notificationListTiles(CupertinoColors.activeGreen, 'Notification',
+            //     CupertinoIcons.bell)
           ],
         ),
       ),

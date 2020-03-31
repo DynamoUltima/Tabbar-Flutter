@@ -9,12 +9,12 @@ import 'package:tabbar/home/log_in.dart';
 
 import 'package:tabbar/pages/cupertino_pricing.dart';
 import 'package:tabbar/pages/cupertino_profile.dart';
-import 'package:tabbar/pages/home_page.dart';
+
 import 'package:tabbar/shared/constant.dart';
 import 'package:tabbar/views/history_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:flutter/services.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabbar/views/settings.dart';
 import 'pages/cupertino_activities.dart';

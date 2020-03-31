@@ -23,12 +23,11 @@ class OrderHistoryPage extends StatefulWidget {
 
 class _OrderHistoryPageState extends State<OrderHistoryPage> {
   myTextStyle myTextType = new myTextStyle();
-  //var date = new DateTime.now();
+  
   String tag = "orderDetails";
   String user_list_key = "list_key";
   List<String> mydetailList = [];
-  //String email
-  // String prefEmail = "hh";
+  
 
   Future<List<String>> getUserList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -122,7 +121,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       ],
     );
 
-    HistoryCardMethod(String date, String address, String orderId,
+    historyCardMethod(String date, String address, String orderId,
         String paymentStatus, String orderStatus, String orderType) {
       var historyCard = Container(
         color: CupertinoColors.lightBackgroundGray,
@@ -267,7 +266,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                   // }
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: HistoryCardMethod(
+                    child: historyCardMethod(
                         orderDetailList[index].pick_up_date,
                         orderDetailList[index].pick_up_point,
                         orderDetailList[index].server_code,

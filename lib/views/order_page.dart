@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tabbar/general_page.dart';
 import 'package:tabbar/models/orderHistory/order_history_list.dart';
 import 'package:tabbar/models/orderHistory/order_history_response.dart';
 import 'package:tabbar/pages/cupertino_activities.dart';
@@ -103,10 +104,10 @@ class _OrderPageState extends State<OrderPage> {
     print(isOrderPlaced);
   }
 
-  RedirectPage() {
-    return Navigator.of(context).push(
+  redirectPage() {
+    return Navigator.of(context).pushReplacement(
       CupertinoPageRoute(
-        builder: (BuildContext context) => CupertinoActivities(),
+        builder: (BuildContext context) =>HomePage(),
       ),
     );
   }
@@ -149,23 +150,22 @@ class _OrderPageState extends State<OrderPage> {
 
     prefs.setString("persistedCode", serverCode);
 
-    // print("---server code----");
-
-    // print(unrefinedCode.trim());
   }
 
-  orderCancelMethod() async {
-    showCancelOrderDialog();
-    SharedPreferences mprefs = await SharedPreferences.getInstance();
+  orderCancelMethod(BuildContext pageContext) async {
+    print("==cancel button===");
+    print(widget.latestServercode);
+    showCancelOrderDialog(pageContext);
+    //SharedPreferences mprefs = await SharedPreferences.getInstance();
 
     //  setState(() {
 
     //  });
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    setState(() {
-      currentServerCode = prefs.getString("persistedCode");
-    });
+    // setState(() {
+    //   currentServerCode = prefs.getString("persistedCode");
+    // });
 
     // if (isOrderPlaced = false) {
     //   cancelOrder("cancel_order", "FR13113102704", "5");
@@ -174,7 +174,7 @@ class _OrderPageState extends State<OrderPage> {
     // }
   }
 
-  showCancelOrderDialog() {
+  showCancelOrderDialog(BuildContext pageContext) {
     return showDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
@@ -188,24 +188,35 @@ class _OrderPageState extends State<OrderPage> {
               //   // refferalCode = _promoCodeController.text;
               // });
               SharedPreferences mprefs = await SharedPreferences.getInstance();
-              setState(() {
-                    mprefs.setBool(isOrderKey, false);
-                  });
+              // setState(() {
+              //       mprefs.setBool(isOrderKey, false);
+              //     });
 
               //SharedPreferences mprefs = await SharedPreferences.getInstance();
               cancelOrder("cancel_order", widget.latestServercode, "5")
                   .then((response) {
+                    print("======Order Page====Order Cancelling results ");
+                    print(response.body);
                 if (response.statusCode == 200) {
-
-                  print("======Order Page====Order Cancelling results ");
-                  print(response.body);
-                  setState(() {
+                  
+                  if(json.decode(response.body)["success"]==1){
+                    
+                    setState(() {
                     mprefs.setBool(isOrderKey, false);
                   });
+                   Navigator.pop(pageContext);
+                 // redirectPage();
+                  }
+
+                  // print("======Order Page====Order Cancelling results ");
+                  // print(response.body);
+                  // setState(() {
+                  //   mprefs.setBool(isOrderKey, false);
+                  // });
 
                   
 
-                  RedirectPage();
+                  
                 }
               });
               // cancelOrder("cancel_order", currentServerCode, "5")
@@ -469,12 +480,13 @@ class _OrderPageState extends State<OrderPage> {
         SizedBox(
           height: 60,
         ),
-        buildPaddingCancelOrderButton()
+        buildPaddingCancelOrderButton(context)
       ],
     );
   }
 
-  Padding buildPaddingCancelOrderButton() {
+  Padding buildPaddingCancelOrderButton(BuildContext context) {
+    var pagContext =context;
     if (isOrderPlaced == false) {
       return Padding(
         padding: const EdgeInsets.all(0),
@@ -486,7 +498,7 @@ class _OrderPageState extends State<OrderPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: CupertinoButton(
           child: Text("Cancel Order"),
-          onPressed: orderCancelMethod,
+          onPressed: ()=>{orderCancelMethod(pagContext)},
           //isOrderPlaced ? null ||false : orderCancelMethod,
           color: CupertinoColors.destructiveRed),
     );
@@ -587,7 +599,7 @@ class _OrderPageState extends State<OrderPage> {
               .then((notifySupportValue) {
             print(notifySupportValue);
           }).catchError((onError) {
-            print("notify support :" + onError);
+            print("notify support :" + onError.toString());
           });
 
           Navigator.pop(context);

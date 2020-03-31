@@ -167,7 +167,7 @@ class _EstimatorState extends State<Estimator> {
                     children: <Widget>[
                       Text(
                         "${categoryResults[indexItems]}",
-                        style: myTextType.myActionCuperStyle(context),
+                        style: myTextType.myLargeCuperStyle(context),
                       )
                     ],
                   ),
@@ -176,7 +176,7 @@ class _EstimatorState extends State<Estimator> {
                     children: <Widget>[
                       Text(
                         "Total Price " + "GH¢ " + "${finalPrice}",
-                        style: myTextType.myActionCuperStyle(context),
+                        style: myTextType.myCuperStyle(context),
                       ),
                       // CupertinoSlider(
                       //   onChanged: (double value) {
@@ -238,7 +238,9 @@ class _EstimatorState extends State<Estimator> {
                         );
                       },
                     ),
-                  )
+                  ),
+
+                  CupertinoButton(child: Text("Tap on articles to calculate price"), onPressed: (){})
                 ],
               ),
             );
@@ -305,6 +307,7 @@ class _EstimatorTileState extends State<EstimatorTile> {
               ],
             ),
           ),
+          Divider(color:CupertinoColors.activeBlue)
           //Text('data')
         ],
       ),
